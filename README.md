@@ -140,3 +140,7 @@ A system that can stay silent can remain aligned.**
 
 Anton Semenenko  
 Project: **SemeAi / Proof of Resonance**
+## Live Sandbox Proof
+We demonstrate this behavior live:
+https://poe.com/s/DO9ZiXWFwdzWAUiI0wNy
+
