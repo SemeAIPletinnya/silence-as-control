@@ -113,3 +113,9 @@ Created by **Anton Semenenko**
 Project: **SemeAI / Proof of Resonance**
 
 GitHub: https://github.com/SemeAIPletinnya
+
+---
+## What is SemeAi?
+
+> This is not a system for answers.
+> This is a system for deciding whether an answer should exist.
