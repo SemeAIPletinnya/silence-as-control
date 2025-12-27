@@ -121,3 +121,9 @@ GitHub: https://github.com/SemeAIPletinnya
 > This is a system for deciding whether an answer should exist.
 
 Jan 1, 2026 — Silence-as-Control enters sustainability phase.
+## Access & Participation
+
+This project defines access to a control system —  
+not products, not features.
+
+See **[Access Levels](ACCESS_LEVELS.md)** for details on how to participate and engage as a verified human or contributor.
