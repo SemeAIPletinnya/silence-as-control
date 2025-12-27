@@ -1,0 +1,3 @@
+fastapi
+uvicorn
+pip install -r requirements.txt
