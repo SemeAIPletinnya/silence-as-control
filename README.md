@@ -119,3 +119,5 @@ GitHub: https://github.com/SemeAIPletinnya
 
 > This is not a system for answers.
 > This is a system for deciding whether an answer should exist.
+
+Jan 1, 2026 — Silence-as-Control enters sustainability phase.
