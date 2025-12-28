@@ -1,0 +1,11 @@
+name: base
+channels:
+  - defaults
+dependencies:
+  - python=3.10
+  - numpy
+  - pandas
+  - scipy
+  - pip
+  - pip:
+      - some-pypi-package
