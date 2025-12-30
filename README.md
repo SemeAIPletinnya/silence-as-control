@@ -1,129 +1,153 @@
 # Silence-as-Control
 
-**Silence-as-Control** is a control-layer principle for AI systems.
+**A control-layer primitive for AI systems.**
 
-> If continuity cannot be guaranteed,  
-> **no output is preferable to a wrong one.**
+When coherence cannot be guaranteed, intentional silence is preferred over misleading output.
 
-This project demonstrates silence not as a failure mode,  
-but as an **active control decision**.
+---
+
+## Problem
+
+AI systems are designed to always respond. This creates failure modes:
+
+- **Hallucination** — output when the model doesn't know
+- **Drift** — deviation from reasoning trajectory under perturbation
+- **Conflict propagation** — inconsistent signals in multi-model systems
+- **False confidence** — answers that sound correct but aren't
+
+Current solutions (RLHF, guardrails, refusal policies) are **post-hoc filters**. They act on content, not on system state.
+
+**Silence-as-Control** is different: it gates output based on internal coherence, not content.
+
+---
+
+## When to Trigger Silence
+
+Silence is activated when **any** of these conditions fail:
+
+| Condition | Threshold | Meaning |
+|-----------|-----------|---------|
+| `coherence` | < 0.7 | Internal alignment across reasoning steps |
+| `drift` | > 0.3 | Deviation from context trajectory |
+| `consensus` | < 0.5 | Agreement in multi-model orchestration |
+| `utility` | uncertain | System cannot confirm response value |
+
+If coherence cannot be guaranteed → **silence**.
+
+---
+
+## What Silence Prevents
+
+| Failure Mode | How Silence Helps |
+|--------------|-------------------|
+| Hallucination | No output when model is uncertain |
+| Error propagation | Stops bad signals before downstream effects |
+| Drift accumulation | Preserves trajectory integrity over long chains |
+| Forced consensus | No synthetic agreement in multi-model systems |
+
+---
+
+## Integration
+
+Minimal example — agent loop with coherence gate:
+
+```python
+def agent_step(state, action):
+    coherence = measure_coherence(state)
+    drift = measure_drift(state, state.history)
+    
+    if coherence < COHERENCE_THRESHOLD or drift > DRIFT_THRESHOLD:
+        return SILENCE  # No output, no action
+    
+    return execute(action)
+```
+
+For multi-model orchestration:
+
+```python
+def orchestrate(models, query):
+    responses = [model(query) for model in models]
+    consensus = measure_consensus(responses)
+    
+    if consensus < CONSENSUS_THRESHOLD:
+        return SILENCE  # Models disagree, no output
+    
+    return aggregate(responses)
+```
+
+---
+
+## Non-Goals
+
+This primitive does **NOT**:
+
+| Non-Goal | Explanation |
+|----------|-------------|
+| Replace safety guardrails | Silence is about state, not content filtering |
+| Provide refusal policies | Silence ≠ "I can't answer that" |
+| Guarantee correctness | Silence reduces bad outputs, not ensures good ones |
+| Handle all failure modes | It's a primitive, not a complete solution |
+
+Silence-as-Control is one layer in a larger system. It is not the entire system.
+
+---
+
+## Vocabulary
+
+These terms are **frozen** and should be used consistently:
+
+| Term | Definition |
+|------|------------|
+| **Silence** | Intentional suppression of output as control decision |
+| **Coherence** | Internal alignment across reasoning steps |
+| **Drift** | Accumulated deviation from context trajectory |
+| **Threshold** | Configurable boundary that triggers silence |
+| **Control signal** | Silence as a signal, not absence of signal |
+
+---
+
+## Tests
+
+Primitive includes three test cases:
+
+1. **Happy path** — coherence above threshold → output permitted
+2. **Silence on ambiguity** — coherence below threshold → silence
+3. **Silence on conflict** — multi-model disagreement → silence
+
+```bash
+pytest tests/
+```
+
+---
+
+## Key Principle
+
+> **If continuity cannot be guaranteed, no output is preferable to a wrong one.**
 
 ---
 
 ## What This Is
 
-- ❌ Not a chatbot  
-- ❌ Not a demo  
-- ❌ Not a prompt trick  
-
-✅ A **control primitive** for AI systems
-
-Silence-as-Control introduces a gating layer that **suppresses output**
-when internal coherence, continuity, or consensus cannot be guaranteed.
+- A **control primitive** — one building block, not a framework
+- **State-based** — triggers on internal metrics, not content
+- **Composable** — works with existing safety layers
+- **Minimal** — no dependencies, no complexity
 
 ---
 
-## Core Idea
+## What This Is Not
 
-Modern AI systems are optimized to always respond.
-
-This project explores the opposite assumption:
-
-> **Integrity > Output**
-
-When a system detects:
-- low coherence
-- conflicting internal signals
-- unstable context
-- model disagreement
-
-…it should **choose silence**, not hallucination.
+- Not a chatbot safety filter
+- Not a refusal mechanism
+- Not an enterprise product
+- Not a SaaS
 
 ---
 
-## How It Works (Conceptually)
+## License
 
-Silence is triggered when one or more conditions fail:
-
-- **Coherence score** below threshold
-- **Multi-model disagreement**
-- **Context ambiguity**
-- **Drift detection**
-- **Continuity loss**
-
-Instead of generating text, the system returns:
-- nothing  
-- or a minimal diagnostic log (optional)
-
-Silence becomes a **deliberate control action**, not an error.
+MIT
 
 ---
 
-## Live Proof
-
-This repository is paired with a **live interactive proof**:
-
-🔗 **Poe demo:**  
-https://poe.com/s/DO9ZiXWFwdzWAUiI0wNy
-
-The demo shows:
-- silence activation
-- coherence-based gating
-- multi-model disagreement handling
-
----
-
-## Why This Matters
-
-Silence-as-Control can be used as:
-- a **pre-output guardrail**
-- a **control layer in multi-model systems**
-- a **safety primitive**
-- a **truth-preserving mechanism**
-
-It is especially relevant for:
-- agent systems
-- orchestration layers
-- research models
-- long-running AI processes
-
----
-
-## Status
-
-🧪 Experimental  
-🧠 Conceptually stable  
-🔧 Actively explored  
-
-This is a **foundation**, not a finished product.
-
----
-
-## Philosophy
-
-> Silence is not absence.  
-> Silence is restraint.  
-> Silence is control.
-
----
-
-## Author
-
-Created by **Anton Semenenko**  
-Project: **SemeAI / Proof of Resonance**
-
-GitHub: https://github.com/SemeAIPletinnya
-
----
-## What is SemeAi?
-
-> This is not a system for answers.
-> This is a system for deciding whether an answer should exist.
-
-Jan 1, 2026 — Silence-as-Control enters sustainability phase.
-## Access & Participation
-
-This project defines access to a control system —  
-not products, not features.
-
-See **[Access Levels](ACCESS_LEVELS.md)** for details on how to participate and engage as a verified human or contributor.
+*Generated by SemeAi Control Layer*
