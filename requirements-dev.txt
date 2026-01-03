@@ -1,0 +1,18 @@
+# Development dependencies for silence-as-control
+
+# Testing
+pytest>=7.0
+pytest-cov>=4.0
+pytest-asyncio>=0.21.0
+
+# Linting & Formatting
+black>=23.0
+ruff>=0.1.0
+mypy>=1.0
+
+# Build tools
+build>=1.0.0
+twine>=4.0.0
+
+# Type stubs
+types-requests>=2.31.0
