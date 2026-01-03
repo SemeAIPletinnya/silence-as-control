@@ -1,3 +1,12 @@
-fastapi
-uvicorn
-pytest
+# Core dependencies (none required for basic usage)
+
+# Development dependencies
+pytest>=7.0
+pytest-cov>=4.0
+black>=23.0
+ruff>=0.1.0
+mypy>=1.0
+
+# Optional: Embedding-based metrics
+# numpy>=1.24
+# sentence-transformers>=2.2
