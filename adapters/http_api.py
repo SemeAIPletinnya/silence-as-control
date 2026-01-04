@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request
-from core.policy import decide, Signals, Thresholds
+from silence_as_control.core import decide, Signals, Thresholds
 
 app = FastAPI()
 
