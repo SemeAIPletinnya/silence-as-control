@@ -1,2 +1,19 @@
+# Build
+dist/
+build/
+*.egg-info/
+src/*.egg-info/
+
+# Python
 __pycache__/
+*.py[cod]
 .pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+
+# Coverage
+.coverage
+htmlcov/
+coverage.xml

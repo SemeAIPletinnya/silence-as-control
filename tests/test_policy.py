@@ -1,4 +1,4 @@
-from core.policy import Decision, Signals, Thresholds, decide
+from silence_as_control.core import Decision, Signals, Thresholds, decide
 
 
 def test_respond_when_all_signals_ok():
