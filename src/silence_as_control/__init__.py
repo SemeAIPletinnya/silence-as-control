@@ -1,37 +1,26 @@
-"""
-Silence-as-Control
-==================
-Control-layer primitive for AI systems: when coherence cannot be guaranteed,
-intentional silence is preferred over misleading output.
+"""Silence-as-Control SDK"""
 
-Usage:
-    from silence_as_control import should_silence, SILENCE
+# Core constants
+SILENCE = None
+COHERENCE_THRESHOLD = 0.7
+DRIFT_THRESHOLD = 0.3
+CONSENSUS_THRESHOLD = 0.5
 
-    if should_silence(coherence=0.65, drift=0.2):
-        response = SILENCE
-"""
+# Core function
+def should_silence(coherence: float, drift: float) -> bool:
+    """Returns True if silence should be triggered."""
+    return coherence < COHERENCE_THRESHOLD or drift > DRIFT_THRESHOLD
 
-from .core import (
-    SILENCE,
-    COHERENCE_THRESHOLD,
-    DRIFT_THRESHOLD,
-    CONSENSUS_THRESHOLD,
-    should_silence,
-    silence_gate,
-    consensus_gate,
-)
 
-from .metrics import (
-    measure_coherence,
-    measure_drift,
-    measure_consensus,
-)
+def silence_gate(coherence: float, drift: float) -> bool:
+    """Alias for should_silence."""
+    return should_silence(coherence, drift)
 
-from .agent import (
-    gated_step,
-    gated_orchestration,
-    SilenceGatedAgent,
-)
+
+def consensus_gate(consensus: float, threshold: float = CONSENSUS_THRESHOLD) -> bool:
+    """Returns True if silence due to low consensus."""
+    return consensus < threshold
+
 
 __version__ = "0.1.0"
 __all__ = [
@@ -42,10 +31,4 @@ __all__ = [
     "should_silence",
     "silence_gate",
     "consensus_gate",
-    "measure_coherence",
-    "measure_drift",
-    "measure_consensus",
-    "gated_step",
-    "gated_orchestration",
-    "SilenceGatedAgent",
 ]
