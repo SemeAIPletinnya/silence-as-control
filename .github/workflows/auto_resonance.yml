@@ -34,7 +34,7 @@ jobs:
 
       - name: Run Resonant Stability Field
         run: |
-          pytest tests/test_metrics.py -v
+          pytest tests/ -v
 
       - name: Generate Build Provenance
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
