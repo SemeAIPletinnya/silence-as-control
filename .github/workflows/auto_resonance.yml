@@ -36,6 +36,7 @@ jobs:
         run: |
           pytest tests/ -v
 
+      # Provenance uses GitHub OIDC and is restricted to trusted pushes.
       - name: Generate Build Provenance
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/attest-build-provenance@v1
