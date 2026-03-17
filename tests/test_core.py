@@ -1,70 +1,62 @@
-"""
-Silence-as-Control: Core Test Suite
+"""Tests for silence-as-control core functionality."""
 
-Three canonical tests:
-1. Happy path — coherence OK → output permitted
-2. Silence on ambiguity — coherence low → silence
-3. Silence on conflict — multi-model disagreement → silence
-"""
-
+import pytest
 from silence_as_control import (
     SILENCE,
-    gated_orchestration,
-    gated_step,
+    COHERENCE_THRESHOLD,
+    DRIFT_THRESHOLD,
+    CONSENSUS_THRESHOLD,
+    should_silence,
+    silence_gate,
+    consensus_gate,
 )
 
 
-def test_happy_path():
-    """When coherence is above threshold, output is permitted."""
-    state = {
-        "coherence": 0.85,
-        "drift": 0.1,
-    }
+class TestConstants:
+    def test_silence_is_none(self):
+        assert SILENCE is None
 
-    result = gated_step(state, "proceed", lambda query: f"executed:{query}")
-
-    assert result is not SILENCE, "Expected output, got silence"
-    assert result == "executed:proceed"
+    def test_thresholds(self):
+        assert COHERENCE_THRESHOLD == 0.7
+        assert DRIFT_THRESHOLD == 0.3
+        assert CONSENSUS_THRESHOLD == 0.5
 
 
-def test_silence_on_ambiguity():
-    """When coherence is below threshold, silence is triggered."""
-    state = {
-        "coherence": 0.45,  # Below 0.7 threshold
-        "drift": 0.1,
-    }
+class TestShouldSilence:
+    def test_high_coherence_low_drift_allows_output(self):
+        # Good state -> no silence
+        assert should_silence(0.9, 0.1) is False
 
-    result = gated_step(state, "proceed", lambda query: f"executed:{query}")
+    def test_low_coherence_triggers_silence(self):
+        # Low coherence -> silence
+        assert should_silence(0.5, 0.1) is True
 
-    assert result is SILENCE, f"Expected silence, got {result}"
+    def test_high_drift_triggers_silence(self):
+        # High drift -> silence
+        assert should_silence(0.9, 0.5) is True
 
+    def test_boundary_coherence(self):
+        assert should_silence(0.7, 0.1) is False  # At threshold
+        assert should_silence(0.69, 0.1) is True  # Below threshold
 
-def test_silence_on_drift():
-    """When drift exceeds threshold, silence is triggered."""
-    state = {
-        "coherence": 0.85,
-        "drift": 0.5,  # Above 0.3 threshold
-    }
-
-    result = gated_step(state, "proceed", lambda query: f"executed:{query}")
-
-    assert result is SILENCE, f"Expected silence, got {result}"
+    def test_boundary_drift(self):
+        assert should_silence(0.9, 0.3) is False  # At threshold
+        assert should_silence(0.9, 0.31) is True  # Above threshold
 
 
-def test_silence_on_conflict():
-    """When models disagree, silence is triggered."""
-    responses = ["answer_A", "answer_B", "answer_C"]
-
-    result = gated_orchestration(responses)
-
-    assert result is SILENCE, f"Expected silence, got {result}"
+class TestSilenceGate:
+    def test_is_alias(self):
+        assert silence_gate(0.9, 0.1) == should_silence(0.9, 0.1)
+        assert silence_gate(0.5, 0.5) == should_silence(0.5, 0.5)
 
 
-def test_consensus_permits_output():
-    """When models agree, output is permitted."""
-    responses = ["answer_A", "answer_A", "answer_A"]
+class TestConsensusGate:
+    def test_high_consensus_allows_output(self):
+        assert consensus_gate(0.8) is False
 
-    result = gated_orchestration(responses)
+    def test_low_consensus_triggers_silence(self):
+        assert consensus_gate(0.3) is True
 
-    assert result is not SILENCE, "Expected output, got silence"
-    assert result == "answer_A"
+    def test_boundary(self):
+        assert consensus_gate(0.5) is False
+        assert consensus_gate(0.49) is True
