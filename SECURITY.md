@@ -16,7 +16,7 @@ If you discover a security issue, please do NOT open a public issue.
 
 Instead, report it privately by emailing:
 
-**adelayida0403@gmail.net**
+**adelayida0403@gmail.com**
 
 Please include:
 - A clear description of the issue
