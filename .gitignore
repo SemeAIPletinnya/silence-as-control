@@ -1,19 +1,10 @@
-# Build
+venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
 dist/
 build/
 *.egg-info/
-src/*.egg-info/
-
-# Python
-__pycache__/
-*.py[cod]
-.pytest_cache/
-
-# IDE
-.vscode/
-.idea/
-
-# Coverage
-.coverage
-htmlcov/
-coverage.xml
+logs/
+.DS_Store

@@ -1,153 +1,74 @@
-# Silence-as-Control
+Silence-as-Control is a control-layer middleware that decides whether to return or suppress AI output based on explicit stability signals.
 
-**A control-layer primitive for AI systems.**
+## What it is
+A minimal Python middleware layer with deterministic gating logic:
+- Accepts an output candidate plus stability signals (`coherence`, `drift`)
+- Returns output when signals are within bounds
+- Returns an explicit abstention state when signals are unstable
 
-When coherence cannot be guaranteed, intentional silence is preferred over misleading output.
+## Why abstention is a valid state
+Abstention is a first-class response that prevents unstable output from being returned. The middleware returns:
+- `{"status": "ok", "output": ...}` for stable conditions
+- `{"status": "abstained", "reason": "control_abstention"}` when thresholds are violated
 
----
-
-## Problem
-
-AI systems are designed to always respond. This creates failure modes:
-
-- **Hallucination** — output when the model doesn't know
-- **Drift** — deviation from reasoning trajectory under perturbation
-- **Conflict propagation** — inconsistent signals in multi-model systems
-- **False confidence** — answers that sound correct but aren't
-
-Current solutions (RLHF, guardrails, refusal policies) are **post-hoc filters**. They act on content, not on system state.
-
-**Silence-as-Control** is different: it gates output based on internal coherence, not content.
-
----
-
-## When to Trigger Silence
-
-Silence is activated when **any** of these conditions fail:
-
-| Condition | Threshold | Meaning |
-|-----------|-----------|---------|
-| `coherence` | < 0.7 | Internal alignment across reasoning steps |
-| `drift` | > 0.3 | Deviation from context trajectory |
-| `consensus` | < 0.5 | Agreement in multi-model orchestration |
-| `utility` | uncertain | System cannot confirm response value |
-
-If coherence cannot be guaranteed → **silence**.
-
----
-
-## What Silence Prevents
-
-| Failure Mode | How Silence Helps |
-|--------------|-------------------|
-| Hallucination | No output when model is uncertain |
-| Error propagation | Stops bad signals before downstream effects |
-| Drift accumulation | Preserves trajectory integrity over long chains |
-| Forced consensus | No synthetic agreement in multi-model systems |
-
----
-
-## Integration
-
-Minimal example — agent loop with coherence gate:
-
-```python
-def agent_step(state, action):
-    coherence = measure_coherence(state)
-    drift = measure_drift(state, state.history)
-    
-    if coherence < COHERENCE_THRESHOLD or drift > DRIFT_THRESHOLD:
-        return SILENCE  # No output, no action
-    
-    return execute(action)
+## Repository structure
+```text
+silence-as-control/
+├── src/silence_as_control/
+│   ├── __init__.py
+│   ├── control.py
+│   ├── abstention.py
+│   ├── schema.py
+│   └── logging_utils.py
+├── api/main.py
+├── tests/
+│   ├── test_control.py
+│   └── test_api.py
+├── .github/workflows/ci.yml
+├── .gitignore
+├── README.md
+├── requirements.txt
+├── pyproject.toml
+└── Dockerfile
 ```
 
-For multi-model orchestration:
-
-```python
-def orchestrate(models, query):
-    responses = [model(query) for model in models]
-    consensus = measure_consensus(responses)
-    
-    if consensus < CONSENSUS_THRESHOLD:
-        return SILENCE  # Models disagree, no output
-    
-    return aggregate(responses)
-```
-
----
-
-## Non-Goals
-
-This primitive does **NOT**:
-
-| Non-Goal | Explanation |
-|----------|-------------|
-| Replace safety guardrails | Silence is about state, not content filtering |
-| Provide refusal policies | Silence ≠ "I can't answer that" |
-| Guarantee correctness | Silence reduces bad outputs, not ensures good ones |
-| Handle all failure modes | It's a primitive, not a complete solution |
-
-Silence-as-Control is one layer in a larger system. It is not the entire system.
-
----
-
-## Vocabulary
-
-These terms are **frozen** and should be used consistently:
-
-| Term | Definition |
-|------|------------|
-| **Silence** | Intentional suppression of output as control decision |
-| **Coherence** | Internal alignment across reasoning steps |
-| **Drift** | Accumulated deviation from context trajectory |
-| **Threshold** | Configurable boundary that triggers silence |
-| **Control signal** | Silence as a signal, not absence of signal |
-
----
-
-## Tests
-
-Primitive includes three test cases:
-
-1. **Happy path** — coherence above threshold → output permitted
-2. **Silence on ambiguity** — coherence below threshold → silence
-3. **Silence on conflict** — multi-model disagreement → silence
-
+## Quickstart
 ```bash
-pytest tests/
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+pip install -e .
+
+uvicorn api.main:app --reload
 ```
 
----
+## API example
+Request:
+```json
+{
+  "output": "text",
+  "coherence": 0.82,
+  "drift": 0.15
+}
+```
 
-## Key Principle
+Response (stable):
+```json
+{
+  "status": "ok",
+  "output": "text"
+}
+```
 
-> **If continuity cannot be guaranteed, no output is preferable to a wrong one.**
+Response (abstained):
+```json
+{
+  "status": "abstained",
+  "reason": "control_abstention"
+}
+```
 
----
-
-## What This Is
-
-- A **control primitive** — one building block, not a framework
-- **State-based** — triggers on internal metrics, not content
-- **Composable** — works with existing safety layers
-- **Minimal** — no dependencies, no complexity
-
----
-
-## What This Is Not
-
-- Not a chatbot safety filter
-- Not a refusal mechanism
-- Not an enterprise product
-- Not a SaaS
-
----
-
-## License
-
-MIT
-
----
-
-*Generated by SemeAi Control Layer*
+## Test command
+```bash
+pytest
+```
