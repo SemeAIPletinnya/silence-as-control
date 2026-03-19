@@ -13,25 +13,26 @@ def rate(values):
 
 
 def main() -> None:
-    runs = 0
-    silence_count = 0
     drift_success = []
     drift_fail = []
+    silence_count = 0
+    total = 0
+
     no_control = []
     with_control = []
 
     with LOG_FILE.open("r", encoding="utf-8") as f:
         for line in f:
             data = json.loads(line)
-            runs += 1
+            total += 1
 
             if data["silence"]:
                 silence_count += 1
 
             if data["raw_success"]:
-                drift_success.append(data["drift"])
+                drift_success.append(data["semantic_proxy_drift"])
             else:
-                drift_fail.append(data["drift"])
+                drift_fail.append(data["semantic_proxy_drift"])
 
             no_control.append(1 if data["no_control_success"] else 0)
             with_control.append(1 if data["with_control_success"] else 0)
@@ -40,8 +41,8 @@ def main() -> None:
     avg_fail = avg(drift_fail)
     effective_quality = avg_success
 
-    print(f"Total tasks: {runs}")
-    print(f"Silence rate: {rate([1 if x else 0 for x in [v == 1 for v in no_control]]) if False else round((silence_count / runs) * 100, 2)} %")
+    print(f"Total tasks: {total}")
+    print(f"Silence rate: {round((silence_count / total) * 100, 2)} %")
     print(f"Avg drift (success): {avg_success:.3f}")
     print(f"Avg drift (fail): {avg_fail:.3f}")
     print(f"No control success rate: {rate(no_control):.2f} %")
