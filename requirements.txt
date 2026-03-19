@@ -1,3 +1,4 @@
-# No external dependencies required
+fastapi
+pydantic
+uvicorn
 pytest==8.3.5
-
