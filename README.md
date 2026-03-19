@@ -72,3 +72,22 @@ Response (abstained):
 ```bash
 pytest
 ```
+## PoR Demo – First Results
+
+Setup:
+- Runs: 30
+- Signal: drift-based threshold
+- Control: Silence-as-Control (abstention)
+
+Results:
+- Silence rate: 20%
+- No control success rate: 70%
+- With control success rate: 70%
+
+Observations:
+- Avg drift (success): 0.144
+- Avg drift (fail): 0.386
+
+Conclusion:
+Drift shows strong separation between successful and failed runs.
+A moderate silence threshold (drift > 0.35) maintains stability without degrading performance.
