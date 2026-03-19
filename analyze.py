@@ -37,12 +37,17 @@ def main() -> None:
             no_control.append(1 if data["no_control_success"] else 0)
             with_control.append(1 if data["with_control_success"] else 0)
 
-    print("Total runs:", total)
-    print("Silence rate:", round((silence_count / total) * 100, 2), "%")
-    print("Avg drift (success):", avg(drift_success))
-    print("Avg drift (fail):", avg(drift_fail))
-    print("No control success rate:", rate(no_control), "%")
-    print("With control success rate:", rate(with_control), "%")
+    avg_success = avg(drift_success)
+    avg_fail = avg(drift_fail)
+    effective_quality = avg_success
+
+    print(f"Total runs: {total}")
+    print(f"Silence rate: {round((silence_count / total) * 100, 2)} %")
+    print(f"Avg drift (success): {avg_success:.3f}")
+    print(f"Avg drift (fail): {avg_fail:.3f}")
+    print(f"No control success rate: {rate(no_control):.2f} %")
+    print(f"With control success rate: {rate(with_control):.2f} %")
+    print(f"Effective quality (lower drift better): {effective_quality:.3f}")
 
 
 if __name__ == "__main__":
