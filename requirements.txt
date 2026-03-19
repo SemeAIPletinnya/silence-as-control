@@ -1,5 +1,5 @@
-fastapi==0.115.12
-uvicorn==0.34.0
-pydantic==2.11.1
+fastapi
+pydantic
+uvicorn
+httpx
 pytest==8.3.5
-httpx==0.28.1
