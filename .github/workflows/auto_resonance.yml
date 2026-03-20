@@ -46,8 +46,8 @@ jobs:
           if-no-files-found: warn
 
       - name: Generate Build Provenance
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: actions/attest-build-provenance@v1
+  if: github.event_name == 'push' && github.ref == 'refs/heads/main' && false
+  uses: actions/attest-build-provenance@v1
         with:
           subject-path: |
             resonance_output/**
