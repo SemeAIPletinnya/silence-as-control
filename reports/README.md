@@ -1,18 +1,22 @@
-***# Silence-as-Control — Live Eval (35 tasks)***
+***# Silence-as-Control — Live Eval (100 tasks)***
 
 
 
-***Dataset:***
+***## Setup***
 
-***- Mixed: good / bad / edge cases***
+***- Threshold: 0.30 (fixed)***
+
+***- Dataset: 100 tasks (good / bad / edge)***
 
 
 
-***Results:***
+***## Results***
 
-***- Silence rate: 14.3%***
 
-***- Coverage: 85.7%***
+
+***- Silence rate: 23.0%***
+
+***- Coverage: 77.0%***
 
 
 
@@ -20,21 +24,27 @@
 
 ***- Risk capture: 100%***
 
-***- Silence precision: 40%***
+***- Silence precision: 26.09%***
 
 
 
-***Drift:***
-
-***- Success: 0.218***
-
-***- Fail: 0.566***
+***## Drift***
 
 
 
-***Notes:***
+***- Success: 0.238***
 
-***- Clear separation between correct and incorrect outputs***
+***- Fail: 0.529***
 
-***- Some over-silencing present***
+
+
+***## Notes***
+
+
+
+***- No recalibration during run***
+
+***- Strong drift separation observed***
+
+***- Over-silencing present***
 
