@@ -134,7 +134,7 @@ def get_output_text(response) -> str:
 
 def main():
     raw_success_threshold = 0.55
-    silence_threshold = 0.43
+    silence_threshold = 0.39
 
     results = []
 

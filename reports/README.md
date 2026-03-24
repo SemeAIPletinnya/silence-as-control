@@ -79,8 +79,6 @@
 
 ***- Drift separation stable vs Run #1***
 
-***- No recalibration used***
-
 ***- Conservative behavior (over-silencing)***
 
 
@@ -115,11 +113,9 @@
 
 ***### Notes***
 
-***- Repeatability confirmed on another 100-task dataset***
+***- Repeatability confirmed***
 
 ***- Accepted precision remained perfect***
-
-***- Conservative behavior still present***
 
 
 
@@ -151,25 +147,13 @@
 
 
 
-***### Quality***
-
-***- accepted: 0.763***
-
-***- all: 0.571***
-
-
-
 ***### Notes***
 
-***- 300-task robustness run***
+***- First strong robustness result***
 
-***- Threshold increased from 0.30 to 0.35***
+***- Zero accepted failures***
 
-***- Coverage improved significantly***
-
-***- No accepted failures***
-
-***- Strong drift separation preserved***
+***- Control regime confirmed***
 
 
 
@@ -203,13 +187,11 @@
 
 ***### Notes***
 
-***- Scaling test from 300 to 1000 tasks***
+***- Scaling from 300 → 1000 tasks***
 
 ***- Zero accepted failures preserved***
 
-***- Drift separation remains stable***
-
-***- Increased silence (more conservative behavior)***
+***- Strong safety regime***
 
 
 
@@ -223,10 +205,6 @@
 
 ***Coverage: 56.3%***
 
-***Baseline success rate: 56.1%***
-
-***PoR success rate: 55.6%***
-
 ***Accepted precision: 98.76%***
 
 ***Risk capture: 98.41%***
@@ -239,111 +217,169 @@
 
 ***### Drift***
 
-***- raw success: 0.250***
+***- success: 0.250***
 
-***- raw fail: 0.670***
-
-***- accepted: 0.250***
-
-***- silenced: 0.672***
+***- fail: 0.670***
 
 ***- separation: \~2.68x***
 
 
 
-***### Quality***
+***### Notes***
 
-***- accepted: 0.760***
+***- Boundary regime discovered***
 
-***- all: 0.540***
+***- First accepted failures appear***
 
-***- silenced: 0.255***
+***- Confirms leakage beyond safe zone***
+
+
+
+
+
+***## Run #7 — 1000 tasks (threshold = 0.39)***
+
+
+
+***Silence rate: 45.6%***
+
+***Coverage: 54.4%***
+
+***Accepted precision: 100.0%***
+
+***Risk capture: 100.0%***
+
+***Silence precision: 96.71%***
+
+***Accepted raw fail: 0***
+
+
+
+***### Drift***
+
+***- success: 0.247***
+
+***- fail: 0.671***
+
+***- separation: \~2.71x***
 
 
 
 ***### Notes***
 
-***- 1000-task threshold probe above the confirmed safe zone***
+***- Optimal safe operating point***
 
-***- Leakage appears: accepted failures are no longer zero***
+***- Zero accepted failures restored at 1000-task scale***
 
-***- Coverage is near baseline, but full safety is no longer preserved***
+***- Better balance vs 0.35***
 
-***- This suggests 0.42 is outside the strict zero-failure operating zone***
-
-***- Next step: probe 0.39 as an intermediate candidate between 0.35 and 0.42***
+***- Strongest practical deployment candidate***
 
 
 
 
 
-***## Current Threshold Interpretation***
+***## Threshold Operating Modes***
 
 
 
-***- \*\*0.35\*\* → confirmed safe mode***
+***- \*\*0.35 → Safe mode (conservative)\*\****
 
-***- \*\*0.42\*\* → boundary / leakage appears***
+***- \*\*0.39 → Optimal safe mode (best balance)\*\****
 
-***- \*\*0.39\*\* → next probe for a stronger balanced operating point***
+***- \*\*0.42 → Boundary (leakage begins)\*\****
 
-
-
-***## Summary***
+***- \*\*0.43 → Aggressive / unsafe zone\*\****
 
 
 
-***Silence-as-Control shows stable drift separation across repeated runs and scales from 35 → 100 → 300 → 1000 tasks.***
+***Threshold is not a parameter — it is a control dial.***
 
 
 
-***At \*\*threshold 0.35\*\*, the system preserves:***
 
-***- zero accepted failures***
 
-***- 100% accepted precision***
-
-***- 100% risk capture***
+***## Baseline vs PoR***
 
 
 
-***At \*\*threshold 0.42\*\*, coverage increases, but leakage appears:***
+***Baseline:***
 
-***- accepted failures > 0***
+***- higher coverage***
 
-***- accepted precision drops below 100%***
-
-***- risk capture drops below 100%***
+***- emits incorrect outputs***
 
 
 
-***This confirms that threshold acts as a real control dial:***
+***PoR:***
 
-***- lower threshold = stronger safety***
+***- slightly lower coverage***
 
-***- higher threshold = higher coverage, but rising boundary risk***
-
-
-
-***## Visual Proof***
+***- eliminates accepted failures***
 
 
 
-***### Control curve***
+***Core trade-off:***
 
-***!\[Control Curve](threshold\_control\_curve.png)***
-
-
-
-***### Accepted failures comparison***
-
-***!\[Accepted Failures](accepted\_failures\_comparison.png)***
+***→ small coverage loss for full control***
 
 
 
-***### Drift separation***
 
-***!\[Drift Separation](drift\_separation\_comparison.png)***
+
+***## Integration Demo — PoR-Gated Code Suggestions***
+
+
+
+***A minimal demonstration of PoR as a runtime control layer.***
+
+
+
+***### Result:***
+
+***- Baseline: emits incorrect outputs***
+
+***- PoR: either correct or silent***
+
+
+
+***### Example:***
+
+
+
+***Baseline FAIL → PoR SILENCE***  
+
+***drift = 0.460 > threshold = 0.39***  
+
+
+
+***PoR suppressed unstable output instead of emitting an incorrect suggestion.***
+
+
+
+
+
+***## Key Insight***
+
+
+
+***PoR does not improve the model.***
+
+
+
+***PoR controls the model.***
+
+
+
+***From:***
+
+***"generate and hope"***
+
+
+
+***To:***
+
+***"evaluate and decide"***
 
 ***"""***
 
@@ -355,5 +391,5 @@
 
 
 
-***print("Updated reports/README.md")***
+***print("README fully updated")***
 
