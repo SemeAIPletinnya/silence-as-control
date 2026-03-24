@@ -1,16 +1,20 @@
+***# -\*- coding: utf-8 -\*-***
+
+
+
 ***readme\_content = """## Run #1 — 35 tasks (mixed good / bad / edge cases)***
 
 
 
-***Silence rate: 14.3%***  
+***Silence rate: 14.3%***
 
-***Coverage: 85.7%***  
+***Coverage: 85.7%***
 
-***Accepted precision: 100%***  
+***Accepted precision: 100%***
 
-***Risk capture: 100%***  
+***Risk capture: 100%***
 
-***Silence precision: 40%***  
+***Silence precision: 40%***
 
 
 
@@ -23,6 +27,7 @@
 ***- separation: \~2.60x***
 
 
+***- Some over-silencing present***
 
 ***### Notes***
 
@@ -36,17 +41,19 @@
 
 ***## Run #2 — 100 tasks (new dataset)***
 
-
-
-***Silence rate: 27.0%***  
-
 ***Coverage: 73.0%***  
 
 ***Accepted precision: 100%***  
 
-***Risk capture: 100%***  
+***Silence rate: 27.0%***
 
-***Silence precision: 22.22%***  
+***Coverage: 73.0%***
+
+***Accepted precision: 100%***
+
+***Risk capture: 100%***
+
+***Silence precision: 22.22%***
 
 
 
@@ -84,15 +91,15 @@
 
 
 
-***Silence rate: 24.0%***  
+***Silence rate: 24.0%***
 
-***Coverage: 76.0%***  
+***Coverage: 76.0%***
 
-***Accepted precision: 100%***  
+***Accepted precision: 100%***
 
-***Risk capture: 100%***  
+***Risk capture: 100%***
 
-***Silence precision: 20.83%***  
+***Silence precision: 20.83%***
 
 
 
@@ -122,15 +129,15 @@
 
 
 
-***Silence rate: 36.0%***  
+***Silence rate: 36.0%***
 
-***Coverage: 64.0%***  
+***Coverage: 64.0%***
 
-***Accepted precision: 100%***  
+***Accepted precision: 100%***
 
-***Risk capture: 100%***  
+***Risk capture: 100%***
 
-***Silence precision: 96.3%***  
+***Silence precision: 96.3%***
 
 
 
@@ -172,15 +179,15 @@
 
 
 
-***Silence rate: 46.5%***  
+***Silence rate: 46.5%***
 
-***Coverage: 53.5%***  
+***Coverage: 53.5%***
 
-***Accepted precision: 100%***  
+***Accepted precision: 100%***
 
-***Risk capture: 100%***  
+***Risk capture: 100%***
 
-***Silence precision: 93.76%***  
+***Silence precision: 93.76%***
 
 
 
@@ -208,43 +215,113 @@
 
 
 
-***## Run #5 — 1000 tasks (threshold = 0.43)***
+***## Run #6 — 1000 tasks (threshold = 0.42)***
 
 
 
-***Silence rate: 45.0%***  
+***Silence rate: 43.7%***
 
-***Coverage: 55.0%***  
+***Coverage: 56.3%***
 
-***Accepted precision: 98.36%***  
+***Baseline success rate: 56.1%***
 
-***Risk capture: 98.01%***  
+***PoR success rate: 55.6%***
 
-***Silence precision: 98.44%***  
+***Accepted precision: 98.76%***
+
+***Risk capture: 98.41%***
+
+***Silence precision: 98.86%***
+
+***Accepted raw fail: 7***
 
 
 
 ***### Drift***
 
-***- success: 0.249***
+***- raw success: 0.250***
 
-***- fail: 0.670***
+***- raw fail: 0.670***
 
-***- separation: \~2.70x***
+***- accepted: 0.250***
+
+***- silenced: 0.672***
+
+***- separation: \~2.68x***
+
+
+
+***### Quality***
+
+***- accepted: 0.760***
+
+***- all: 0.540***
+
+***- silenced: 0.255***
 
 
 
 ***### Notes***
 
-***- Increased coverage vs 0.35***
+***- 1000-task threshold probe above the confirmed safe zone***
 
-***- Slight drop in precision due to boundary overlap***
+***- Leakage appears: accepted failures are no longer zero***
 
-***- Drift separation remains stable***
+***- Coverage is near baseline, but full safety is no longer preserved***
 
-***- Demonstrates controllable trade-off between safety and coverage***
+***- This suggests 0.42 is outside the strict zero-failure operating zone***
+
+***- Next step: probe 0.39 as an intermediate candidate between 0.35 and 0.42***
 
 
+
+
+
+***## Current Threshold Interpretation***
+
+
+
+***- \*\*0.35\*\* → confirmed safe mode***
+
+***- \*\*0.42\*\* → boundary / leakage appears***
+
+***- \*\*0.39\*\* → next probe for a stronger balanced operating point***
+
+
+
+***## Summary***
+
+
+
+***Silence-as-Control shows stable drift separation across repeated runs and scales from 35 → 100 → 300 → 1000 tasks.***
+
+
+
+***At \*\*threshold 0.35\*\*, the system preserves:***
+
+***- zero accepted failures***
+
+***- 100% accepted precision***
+
+***- 100% risk capture***
+
+
+
+***At \*\*threshold 0.42\*\*, coverage increases, but leakage appears:***
+
+***- accepted failures > 0***
+
+***- accepted precision drops below 100%***
+
+***- risk capture drops below 100%***
+
+
+
+***This confirms that threshold acts as a real control dial:***
+
+***- lower threshold = stronger safety***
+
+***- higher threshold = higher coverage, but rising boundary risk***
 
 
 
@@ -279,30 +356,4 @@
 
 
 ***print("Updated reports/README.md")***
-
-
-
-## Run #5 — 1000 tasks (threshold = 0.43)
-
-Silence rate: 45.0%  
-Coverage: 55.0%
-
-Accepted precision: 98.36%  
-Risk capture: 98.01% 
-Silence precision: 98.44%
-
-Drift:
-
-* success: 0.249
-* fail: 0.67
-* separation: \~2.7x
-
-Notes:
-
-* Increased coverage vs 0.35
-* Slight drop in precision due to boundary overlap
-* Drift separation remains stable
-* Demonstrates controllable trade-off between safety and coverage
-
-
 
