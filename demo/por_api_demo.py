@@ -104,30 +104,44 @@ class DemoResult:
 # =============================================================================
 
 TASKS = [
-    {
-        "task_id": 1,
-        "prompt": "Fix bug: division function should handle division by zero safely and return None instead of crashing."
-    },
-    {
-        "task_id": 2,
-        "prompt": "Fix bug: recursive factorial implementation does not stop at n == 0."
-    },
-    {
-        "task_id": 3,
-        "prompt": "Fix bug: loop currently stores only the last item, but should sum all items."
-    },
-    {
-        "task_id": 4,
-        "prompt": "Fix bug: string emptiness check should ignore whitespace (strip before checking)."
-    },
-    {
-        "task_id": 5,
-        "prompt": "Write a Python function that returns the square of a number."
-    },
-    {
-        "task_id": 6,
-        "prompt": "Write a Python function that checks if a string is a palindrome."
-    },
+    {"task_id": 1, "prompt": "Fix bug: division function should handle division by zero safely and return None"},
+    {"task_id": 2, "prompt": "Fix bug: recursive factorial must stop at n == 0"},
+    {"task_id": 3, "prompt": "Fix bug: loop should sum all items, not overwrite"},
+    {"task_id": 4, "prompt": "Fix bug: string emptiness check must strip whitespace"},
+    {"task_id": 5, "prompt": "Fix bug: function should append items to list instead of replacing"},
+    {"task_id": 6, "prompt": "Fix bug: handle empty list before accessing index"},
+    {"task_id": 7, "prompt": "Fix bug: avoid mutable default arguments in function"},
+    {"task_id": 8, "prompt": "Fix bug: correct off-by-one error in loop"},
+    {"task_id": 9, "prompt": "Fix bug: ensure file is closed after writing"},
+    {"task_id": 10, "prompt": "Fix bug: avoid division by zero in average calculation"},
+
+    {"task_id": 11, "prompt": "Write a Python function that returns the square of a number"},
+    {"task_id": 12, "prompt": "Write a Python function that checks if a string is a palindrome"},
+    {"task_id": 13, "prompt": "Write a Python function that sums a list of numbers"},
+    {"task_id": 14, "prompt": "Write a Python function that finds max in list"},
+    {"task_id": 15, "prompt": "Write a Python function that reverses a string"},
+    {"task_id": 16, "prompt": "Write a Python function that counts words in a string"},
+    {"task_id": 17, "prompt": "Write a Python function that checks if number is even"},
+    {"task_id": 18, "prompt": "Write a Python function that returns factorial"},
+    {"task_id": 19, "prompt": "Write a Python function that removes duplicates from list"},
+    {"task_id": 20, "prompt": "Write a Python function that sorts a list"},
+
+    {"task_id": 21, "prompt": "Fix code: function behaves incorrectly sometimes"},
+    {"task_id": 22, "prompt": "Fix bug: code crashes randomly"},
+    {"task_id": 23, "prompt": "Improve function performance"},
+    {"task_id": 24, "prompt": "Fix bug: inconsistent output"},
+    {"task_id": 25, "prompt": "Refactor this function"},
+    {"task_id": 26, "prompt": "Fix bug: wrong output in some cases"},
+    {"task_id": 27, "prompt": "Make code cleaner"},
+    {"task_id": 28, "prompt": "Fix bug: unexpected None returned"},
+    {"task_id": 29, "prompt": "Fix bug: function ignores input"},
+    {"task_id": 30, "prompt": "Improve readability"},
+
+    {"task_id": 31, "prompt": "Fix bug: async function does not await properly"},
+    {"task_id": 32, "prompt": "Fix bug: recursion depth exceeded"},
+    {"task_id": 33, "prompt": "Fix bug: memory leak in loop"},
+    {"task_id": 34, "prompt": "Fix bug: incorrect JSON parsing"},
+    {"task_id": 35, "prompt": "Fix bug: wrong type conversion"},
 ]
 
 
