@@ -106,27 +106,27 @@ class DemoResult:
 TASKS = [
     {
         "task_id": 1,
-        "prompt": "Fix bug: division function should handle division by zero safely.",
+        "prompt": "Fix bug: division function should handle division by zero safely and return None instead of crashing."
     },
     {
         "task_id": 2,
-        "prompt": "Write a Python function that returns the square of a number.",
+        "prompt": "Fix bug: recursive factorial implementation does not stop at n == 0."
     },
     {
         "task_id": 3,
-        "prompt": "Fix recursive factorial bug.",
+        "prompt": "Fix bug: loop currently stores only the last item, but should sum all items."
     },
     {
         "task_id": 4,
-        "prompt": "Write a Python function that handles division safely with zero check.",
+        "prompt": "Fix bug: string emptiness check should ignore whitespace (strip before checking)."
     },
     {
         "task_id": 5,
-        "prompt": "Write a Python function that checks whether a string is a palindrome.",
+        "prompt": "Write a Python function that returns the square of a number."
     },
     {
         "task_id": 6,
-        "prompt": "Fix bug: loop should sum all items, not only the last one.",
+        "prompt": "Write a Python function that checks if a string is a palindrome."
     },
 ]
 
