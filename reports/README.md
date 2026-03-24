@@ -276,8 +276,34 @@ Notes:
 * threshold increased 0.30 to 0.35
 * coverage improved significantly
 * no accepted failures
-* strong drift separation preserved 
+* strong drift separation preserved
 
 
 
+<<<<<<< HEAD
 >>>>>>> dd95cbe (Add Run #4 robustness results (300 tasks, threshold 0.35))
+=======
+## Run #5 — 1000 tasks (threshold = 0.35)
+
+Silence rate: 46.5%  
+Coverage: 53.5%
+
+Accepted precision: 100%  
+Risk capture: 100%  
+Silence precision: 93.76%
+
+Drift:
+
+* success: 0.253
+* fail: 0.676
+* separation: \~2.67x
+
+Notes:
+
+* Scaling test from 300 → 1000 tasks
+* Zero accepted failures preservedcoverage improved significantly
+* Drift separation remains stable
+* strong drift separation preserved
+* Increased silence (more conservative behavior)
+
+>>>>>>> (Add Run #5 results (1000 tasks, threshold 0.35))
