@@ -125,3 +125,29 @@ Notes:
 * strong drift separation preserved
 * Increased silence (more conservative behavior)
 
+
+
+## Run #5 — 1000 tasks (threshold = 0.43)
+
+Silence rate: 45.0%  
+Coverage: 55.0%
+
+Accepted precision: 98.36%  
+Risk capture: 98.01% 
+Silence precision: 98.44%
+
+Drift:
+
+* success: 0.249
+* fail: 0.67
+* separation: \~2.7x
+
+Notes:
+
+* Increased coverage vs 0.35
+* Slight drop in precision due to boundary overlap
+* Drift separation remains stable
+* Demonstrates controllable trade-off between safety and coverage
+
+
+
