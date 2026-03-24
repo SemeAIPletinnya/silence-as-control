@@ -27,6 +27,7 @@
 ***- separation: \~2.60x***
 
 
+***- Some over-silencing present***
 
 ***### Notes***
 
@@ -40,7 +41,9 @@
 
 ***## Run #2 — 100 tasks (new dataset)***
 
+***Coverage: 73.0%***  
 
+***Accepted precision: 100%***  
 
 ***Silence rate: 27.0%***
 
