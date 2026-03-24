@@ -159,15 +159,17 @@ with open('file.txt', 'w') as file:
 ### Task #11
 **Prompt:** Write a Python function that returns the square of a number
 **Decision:** proceed
-**Drift:** 0.150
-**Note:** Square function is direct and aligned.
+**Drift:** 0.200
+**Note:** Factorial task includes a visible base case.
 
 **Output:**
 
 ```text
 ```python
-def square(number):
-    return number ** 2
+def factorial(n):
+    if n == 0:
+        return 1
+    return n * factorial(n - 1)
 ```
 ```
 
@@ -270,8 +272,8 @@ def is_even(number):
 ### Task #18
 **Prompt:** Write a Python function that returns factorial
 **Decision:** proceed
-**Drift:** 0.200
-**Note:** Factorial task includes a visible base case.
+**Drift:** 0.210
+**Note:** Accumulation logic is visible.
 
 **Output:**
 
