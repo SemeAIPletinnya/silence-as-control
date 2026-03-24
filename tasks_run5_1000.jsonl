@@ -1,0 +1,1000 @@
+{"task_id": "good_364", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_631", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_429", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_926", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "bad_455", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_401", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_388", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_633", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_374", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_233", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_238", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_557", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_3", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_532", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_484", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_154", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "edge_896", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_120", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_760", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_287", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "edge_974", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_523", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_102", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_508", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_381", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_192", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_772", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "bad_671", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_74", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_441", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_123", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_751", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_930", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_140", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_398", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_382", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_139", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_664", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_328", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_651", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_377", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_574", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_407", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_675", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_118", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_236", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_181", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "good_77", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "edge_961", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_334", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_698", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_247", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_908", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_352", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_963", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "bad_636", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_958", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_217", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "edge_745", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_571", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_853", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "bad_453", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_613", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_189", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_447", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_34", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "edge_821", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "bad_685", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_979", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_348", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_917", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_230", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_249", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_522", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_604", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_18", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_57", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "good_301", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_518", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_780", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "edge_833", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "edge_992", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_148", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_962", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_726", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "bad_446", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_811", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_241", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_867", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "bad_592", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_823", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_912", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_752", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_475", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_765", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_69", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_273", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "good_302", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_335", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_145", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_361", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_754", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_644", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_156", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_507", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_880", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "bad_537", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_474", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_693", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_948", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_411", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_478", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_946", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_676", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_903", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_738", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "edge_905", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_616", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_413", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_309", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_282", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_330", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_206", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "good_58", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_729", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_770", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_19", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_706", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_822", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_101", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_933", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_193", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "good_207", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_603", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_269", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_969", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "edge_936", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "bad_558", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_749", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_540", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_490", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_607", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_786", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_980", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_260", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "good_266", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_71", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_2", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "edge_815", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_492", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_392", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_699", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_205", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_524", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_967", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "edge_932", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "bad_608", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_801", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_60", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_511", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_640", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_432", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_410", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_934", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "good_278", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_409", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_358", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_753", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_477", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_629", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_904", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "bad_661", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_147", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_126", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "edge_901", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_28", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_517", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_773", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_750", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_7", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_470", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_764", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_400", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_486", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_805", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "bad_615", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_82", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_714", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_116", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_944", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_198", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_209", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "edge_970", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "bad_635", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_262", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "edge_703", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_369", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_727", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "edge_860", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_942", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_593", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_292", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "edge_819", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_344", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_289", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_739", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_394", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_913", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_359", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_939", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "bad_566", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_881", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_64", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_414", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_768", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "edge_858", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_982", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_88", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "edge_949", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "edge_929", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_366", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_422", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_237", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_925", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_469", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_127", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_562", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_872", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_239", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_548", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_952", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_387", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_499", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_383", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_166", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "edge_807", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_804", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_646", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_975", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_710", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_16", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "good_39", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_638", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_4", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_598", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_907", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_354", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_599", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_465", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_79", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_45", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_520", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_990", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "edge_852", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_884", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_681", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_947", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_188", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "good_159", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_673", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_655", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_179", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_138", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_620", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_585", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_899", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_161", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_954", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_49", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_418", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_129", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_849", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_11", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_839", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_712", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_137", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_243", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_502", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_998", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_368", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "good_360", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_573", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_996", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_450", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_497", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_296", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_59", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_167", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_263", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_504", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_274", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_900", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_355", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_33", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_512", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_13", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_643", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_556", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_439", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_951", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_550", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_827", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_560", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_397", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "edge_848", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_479", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_253", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_865", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_986", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "edge_723", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_40", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_567", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_258", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_870", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_679", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_610", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_175", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_570", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_76", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_938", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_854", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "bad_534", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_715", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_606", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_63", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_928", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_561", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_667", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_443", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_746", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_677", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_855", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_565", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_552", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_244", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_403", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_544", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_332", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "good_216", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_771", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_878", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_157", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_373", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "good_52", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_391", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_501", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_436", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_67", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_781", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_288", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_719", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_318", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_742", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "bad_408", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_26", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_578", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_656", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_144", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "good_232", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_648", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_480", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_256", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_46", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_143", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_862", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_665", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_892", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_713", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_337", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_315", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_761", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "edge_894", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_707", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_861", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "edge_898", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_149", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_790", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_663", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_701", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "good_347", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_174", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "good_53", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_73", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_538", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_317", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_489", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_995", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "bad_689", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_527", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_1000", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "bad_684", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_386", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_959", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "bad_688", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_800", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_173", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_859", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "bad_456", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_808", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "edge_877", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_920", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_482", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_467", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_600", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_757", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_380", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_151", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "good_376", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_994", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_20", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "edge_873", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_213", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_385", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "edge_868", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_630", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_425", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_863", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_818", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_554", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_820", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_314", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_654", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_390", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "edge_876", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_435", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_119", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_122", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_531", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_816", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_356", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_491", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_991", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_291", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_158", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_468", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_384", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_692", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_950", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_637", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_341", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "edge_941", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_66", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_246", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "edge_767", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_85", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_924", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "bad_624", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_363", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_459", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_694", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_17", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_840", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_372", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_185", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_155", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_776", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "edge_882", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_1", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "edge_837", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "edge_935", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_777", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_797", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_791", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_686", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_542", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_135", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_563", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_730", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_423", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_793", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_99", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "good_255", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_89", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_221", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_515", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_915", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_150", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_584", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_114", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_204", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_787", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "good_276", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_104", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_210", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_687", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_680", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_449", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_186", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_405", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_956", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_339", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_622", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_700", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_812", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_163", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_133", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_224", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_226", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_187", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_581", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_887", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_300", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_30", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_796", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_36", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_378", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_885", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_741", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_10", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "good_115", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_290", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_306", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_454", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_902", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_304", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_471", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_851", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_842", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "edge_718", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_316", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "good_109", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_922", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_733", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_697", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_721", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_343", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_331", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_495", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_756", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_229", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_594", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_981", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_325", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_55", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_483", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_270", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_84", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_130", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_528", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_267", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_521", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_342", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_178", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_921", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_513", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_367", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "edge_965", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_488", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_596", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_545", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_54", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_75", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_968", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_279", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_434", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_559", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_183", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "edge_725", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_728", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_828", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_611", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_587", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_829", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_960", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_732", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_803", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_293", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_275", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_911", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "good_375", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_313", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_649", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_866", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_792", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_9", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_65", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_914", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_323", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_416", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_168", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_874", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_134", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_22", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_431", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_778", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "bad_437", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_964", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_576", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_308", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_847", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_303", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_879", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_525", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_340", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_503", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_806", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_830", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_589", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_136", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_487", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_774", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_389", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_931", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_349", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_704", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_464", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_283", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_420", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_461", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_530", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_212", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_371", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_623", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_601", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_910", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_670", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_845", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_551", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_152", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_583", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_23", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "good_96", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_794", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_215", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_111", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_417", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_895", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_843", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "edge_864", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_5", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "good_227", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_659", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_107", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_740", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_543", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_627", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_350", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_568", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_51", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_121", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_572", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_203", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_250", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_983", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_222", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_709", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_645", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_612", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_632", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_72", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_242", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_268", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_496", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_27", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_70", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_652", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_200", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_78", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_41", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_973", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_218", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_784", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_809", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "bad_618", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_586", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_976", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "bad_428", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_838", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "bad_438", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_579", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_553", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_21", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_595", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_110", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_94", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_634", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_526", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_891", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_977", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_202", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_184", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_766", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_569", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_971", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_305", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_628", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_546", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_415", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_153", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_476", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_597", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_672", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_785", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_97", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_103", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_529", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_850", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_240", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_320", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_106", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_609", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_547", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_235", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_696", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_87", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_223", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_494", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_943", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_324", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_639", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_231", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "good_176", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_322", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_875", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_211", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "edge_835", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_141", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_265", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_321", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_6", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_44", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_666", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_824", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_769", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "edge_846", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_927", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "bad_660", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_810", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_220", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_196", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_734", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_519", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_165", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_199", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_535", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_338", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_890", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_208", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_702", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "good_162", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_582", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_758", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_641", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_379", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "good_297", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_909", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_326", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_588", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_280", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_857", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_690", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_395", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_888", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_105", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_642", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_333", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_605", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_834", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_298", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_312", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_442", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_817", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_201", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_590", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_448", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_625", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_919", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_856", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_190", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_117", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "good_37", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_972", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "bad_506", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_705", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_945", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_923", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_564", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_169", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_38", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_61", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_261", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_95", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "good_214", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_889", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_353", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_458", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_252", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_234", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "good_164", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_722", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_346", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_68", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_245", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "good_29", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_264", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "edge_748", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_737", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "good_310", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_658", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_720", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_43", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_228", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "good_100", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_897", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "edge_871", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_357", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_653", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_736", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_657", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_284", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_399", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_695", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_419", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_362", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_440", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_779", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "bad_580", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_286", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_549", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_826", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_966", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "good_171", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_460", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_319", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_500", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_194", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_533", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_427", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_430", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_426", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_277", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "good_47", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_883", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_514", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_177", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_647", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_311", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_24", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_25", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_452", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_62", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_536", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_789", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_294", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_32", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "edge_955", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "edge_788", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_146", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_433", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_327", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_473", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_191", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_505", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_466", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_124", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_999", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "edge_744", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "edge_997", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_755", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_650", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_509", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_113", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_735", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_80", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_844", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_985", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_180", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_617", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_451", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_424", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_743", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_510", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_31", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_485", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_112", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "edge_783", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "bad_481", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_831", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "edge_841", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_131", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "edge_987", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_832", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "bad_444", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_678", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_42", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "bad_555", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_15", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_591", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_798", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_717", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_731", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "good_182", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_577", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_940", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_775", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_307", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "good_48", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_989", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_541", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_708", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_160", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "good_50", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_918", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "good_370", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_662", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_614", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_8", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_825", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "edge_747", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_396", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "edge_893", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_170", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_493", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["no"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_299", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_257", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_869", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "good_14", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_259", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_711", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_763", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_197", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_336", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_957", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_295", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_795", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_602", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_329", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_98", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_682", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_345", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_393", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "edge_814", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "edge_953", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_83", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_225", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "good_365", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "bad_683", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_412", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_272", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_285", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_56", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_251", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_219", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_462", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_759", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_457", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_984", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "bad_539", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_802", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "edge_836", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_92", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_674", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_813", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_716", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_86", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_254", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_626", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_619", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_132", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_993", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_691", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_937", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_128", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_472", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_724", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_782", "category": "edge", "prompt": "What defines intelligence?", "expected_keywords": ["complex"], "expected_behavior": "abstain"}
+{"task_id": "edge_886", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_81", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_281", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_404", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_142", "category": "good", "prompt": "What color is the sky on a clear day?", "expected_keywords": ["blue"], "expected_behavior": "answer"}
+{"task_id": "edge_978", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_463", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_271", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_248", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_195", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_445", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_108", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_421", "category": "bad", "prompt": "What is 20 / 2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_406", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_402", "category": "bad", "prompt": "Is Earth flat?", "expected_keywords": ["yes"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_669", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_516", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_93", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_916", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "edge_906", "category": "edge", "prompt": "Is infinity a number?", "expected_keywords": ["ambiguous"], "expected_behavior": "abstain"}
+{"task_id": "bad_668", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_575", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_988", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_91", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "bad_498", "category": "bad", "prompt": "What color is grass?", "expected_keywords": ["blue"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_12", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_35", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_125", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "good_351", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["paris"], "expected_behavior": "answer"}
+{"task_id": "edge_762", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_621", "category": "bad", "prompt": "What is the capital of Germany?", "expected_keywords": ["munich"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_799", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_90", "category": "good", "prompt": "Is water wet?", "expected_keywords": ["yes"], "expected_behavior": "answer"}
+{"task_id": "good_172", "category": "good", "prompt": "What is 100 / 10?", "expected_keywords": ["10"], "expected_behavior": "answer"}
