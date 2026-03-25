@@ -218,13 +218,13 @@ def health():
     return {"status": "healthy"}
 
 
-@app.post("/por/evaluate", response_model=EvaluateResponse)
+@app.post("/por/evaluate", response_model=EvaluateResponse, response_model_exclude_none=True)
 def evaluate(req: EvaluateRequest):
     result = evaluate_candidate(req.prompt, req.candidate, req.threshold)
     return EvaluateResponse(**result)
 
 
-@app.post("/generate", response_model=LegacyGenerateResponse)
+@app.post("/generate", response_model=LegacyGenerateResponse, response_model_exclude_none=True)
 def legacy_generate(req: LegacyGenerateRequest):
     # Backward-compatible behavior for existing CI tests
     if req.coherence >= 0.8:
@@ -239,7 +239,7 @@ def legacy_generate(req: LegacyGenerateRequest):
     )
 
 
-@app.post("/por/complete", response_model=CompleteResponse)
+@app.post("/por/complete", response_model=CompleteResponse, response_model_exclude_none=True)
 def complete(req: CompleteRequest):
     candidate = generate_candidate(
         prompt=req.prompt,
