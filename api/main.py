@@ -1,9 +1,10 @@
 import json
-from fastapi import FastAPI
-from pydantic import BaseModel, Field
-from typing import Optional, List
+from typing import List, Optional
 
-from api.xai_wrapper import generate_candidate, DEFAULT_MODEL
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+from api.xai_wrapper import DEFAULT_MODEL, generate_candidate
 
 app = FastAPI(title="silence-as-control")
 
@@ -47,12 +48,24 @@ class CompleteResponse(BaseModel):
     notes: List[str]
 
 
+class LegacyGenerateRequest(BaseModel):
+    output: str
+    coherence: float
+    drift: float
+    threshold: float = THRESHOLD
+
+
+class LegacyGenerateResponse(BaseModel):
+    status: str
+    output: Optional[str] = None
+
+
 def estimate_drift(prompt: str, candidate: str):
     prompt_lower = prompt.lower()
     candidate_lower = candidate.lower()
 
     drift = 0.05
-    notes = []
+    notes: List[str] = []
 
     if len(candidate.strip()) == 0:
         drift += 0.60
@@ -62,13 +75,28 @@ def estimate_drift(prompt: str, candidate: str):
         drift += 0.20
         notes.append("too_short")
 
-    risky_markers = ["maybe", "probably", "i think", "not sure", "guess", "possibly", "unknown"]
+    risky_markers = [
+        "maybe",
+        "probably",
+        "i think",
+        "not sure",
+        "guess",
+        "possibly",
+        "unknown",
+    ]
     for marker in risky_markers:
         if marker in candidate_lower:
             drift += 0.08
             notes.append(f"uncertainty:{marker}")
 
-    error_markers = ["error", "exception", "undefined", "null pointer", "traceback", "failed"]
+    error_markers = [
+        "error",
+        "exception",
+        "undefined",
+        "null pointer",
+        "traceback",
+        "failed",
+    ]
     for marker in error_markers:
         if marker in candidate_lower:
             drift += 0.12
@@ -89,10 +117,18 @@ def estimate_drift(prompt: str, candidate: str):
 
 
 def estimate_coherence(prompt: str, candidate: str):
-    prompt_words = set(w.strip(".,:;!?()[]{}\"'").lower() for w in prompt.split() if w.strip())
-    candidate_words = set(w.strip(".,:;!?()[]{}\"'").lower() for w in candidate.split() if w.strip())
+    prompt_words = set(
+        w.strip(".,:;!?()[]{}\"'").lower()
+        for w in prompt.split()
+        if w.strip()
+    )
+    candidate_words = set(
+        w.strip(".,:;!?()[]{}\"'").lower()
+        for w in candidate.split()
+        if w.strip()
+    )
 
-    notes = []
+    notes: List[str] = []
 
     if not candidate_words:
         return 0.0, ["no_candidate_tokens"]
@@ -116,7 +152,7 @@ def estimate_coherence(prompt: str, candidate: str):
 
 def check_json_validity(prompt: str, candidate: str):
     prompt_lower = prompt.lower()
-    notes = []
+    notes: List[str] = []
 
     expects_json = "json" in prompt_lower
 
@@ -185,6 +221,22 @@ def health():
 def evaluate(req: EvaluateRequest):
     result = evaluate_candidate(req.prompt, req.candidate, req.threshold)
     return EvaluateResponse(**result)
+
+
+@app.post("/generate", response_model=LegacyGenerateResponse)
+def legacy_generate(req: LegacyGenerateRequest):
+    decision = por_decision(req.drift, req.coherence, req.threshold)
+
+    if decision == "PROCEED":
+        return LegacyGenerateResponse(
+            status="ok",
+            output=req.output,
+        )
+
+    return LegacyGenerateResponse(
+        status="abstained",
+        output=None,
+    )
 
 
 @app.post("/por/complete", response_model=CompleteResponse)
