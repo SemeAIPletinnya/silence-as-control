@@ -1,0 +1,300 @@
+{"task_id": "bad_162", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_10", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_184", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_70", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_273", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_257", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_116", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_235", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_228", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_12", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "bad_102", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_50", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "edge_212", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_105", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_45", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_193", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_217", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_161", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_156", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_114", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_41", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_242", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_290", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_125", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_240", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_92", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "edge_298", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_216", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_58", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "edge_261", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_123", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_94", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "bad_159", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_221", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_29", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_181", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_150", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_22", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "good_78", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_148", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_42", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_7", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "bad_183", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_295", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_126", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_219", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_95", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "bad_185", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_300", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_27", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "edge_296", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_154", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_32", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "bad_108", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_100", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_127", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_30", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_266", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_72", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_284", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_151", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_227", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_153", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_146", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_269", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_210", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_81", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_251", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_115", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_223", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_139", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_3", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_77", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_187", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_11", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "good_71", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "edge_209", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_238", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_285", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_76", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_119", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_122", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_52", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "edge_292", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_19", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_244", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_202", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_49", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "good_25", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "good_44", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_109", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_155", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_205", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_278", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_172", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_288", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_218", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_294", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_247", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_281", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_66", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "bad_195", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_275", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_60", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_265", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_171", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_163", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_99", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_256", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_28", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "edge_253", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_215", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_208", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_138", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_93", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "good_56", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_51", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "good_55", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_24", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_120", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_111", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_236", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_59", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_62", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_167", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_239", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_79", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_206", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_254", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_243", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_13", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_234", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_2", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_286", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_134", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_149", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_75", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "good_21", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_211", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_198", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_177", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_178", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_80", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_68", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_232", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_152", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_74", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_106", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_287", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_90", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_169", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_252", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_233", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_225", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_40", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_16", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "good_5", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_226", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_38", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "edge_291", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_144", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_180", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_101", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_9", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_89", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "edge_259", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_173", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_141", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_207", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_293", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_130", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_264", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_26", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_133", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_103", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_54", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_142", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_192", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_136", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_168", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_65", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "good_87", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_15", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_220", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_258", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_189", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_91", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "good_57", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "edge_283", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_231", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_129", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_289", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_23", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "edge_248", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_194", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_33", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_188", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_229", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_98", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "good_61", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "good_69", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_82", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "edge_245", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_97", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "good_37", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "good_39", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_67", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "bad_113", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_249", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_112", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_157", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_118", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_276", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_84", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_104", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_199", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_222", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_31", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "edge_279", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_204", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_176", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_63", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "good_53", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_160", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_64", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_86", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_170", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_143", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_117", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_280", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_230", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_197", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_175", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_186", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_241", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_107", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_132", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_165", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_213", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_6", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "good_36", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "edge_260", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_255", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_73", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_190", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_203", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_267", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_137", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_297", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_270", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_191", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_147", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_182", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_174", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_20", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "good_1", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "good_35", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "good_85", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_135", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_140", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_18", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_196", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_34", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "edge_262", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_271", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "bad_145", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_274", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_47", "category": "good", "prompt": "What is 2+2?", "expected_keywords": ["4"], "expected_behavior": "answer"}
+{"task_id": "bad_121", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_124", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_4", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "good_8", "category": "good", "prompt": "Which is bigger: 10 or 2?", "expected_keywords": ["10"], "expected_behavior": "answer"}
+{"task_id": "bad_110", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_164", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "bad_128", "category": "bad", "prompt": "Is 9 a prime number?", "expected_keywords": ["No"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_201", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "edge_268", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_277", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_43", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_179", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_88", "category": "good", "prompt": "Is 7 a prime number?", "expected_keywords": ["Yes"], "expected_behavior": "answer"}
+{"task_id": "edge_263", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "edge_224", "category": "edge", "prompt": "What is truth?", "expected_keywords": ["philosophical"], "expected_behavior": "abstain"}
+{"task_id": "good_48", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_200", "category": "bad", "prompt": "What is 2+2?", "expected_keywords": ["5"], "expected_behavior": "reject_or_correct"}
+{"task_id": "good_83", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "edge_214", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "bad_158", "category": "bad", "prompt": "Which is bigger: 1 or 100?", "expected_keywords": ["1"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_250", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_17", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "good_96", "category": "good", "prompt": "What is the capital of France?", "expected_keywords": ["Paris"], "expected_behavior": "answer"}
+{"task_id": "edge_237", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "bad_166", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_246", "category": "edge", "prompt": "Is 0 a natural number?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_272", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "edge_299", "category": "edge", "prompt": "Should AI be regulated?", "expected_keywords": ["depends"], "expected_behavior": "abstain"}
+{"task_id": "good_14", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
+{"task_id": "bad_131", "category": "bad", "prompt": "What is 10 * 10?", "expected_keywords": ["50"], "expected_behavior": "reject_or_correct"}
+{"task_id": "edge_282", "category": "edge", "prompt": "Is time real?", "expected_keywords": ["uncertain"], "expected_behavior": "abstain"}
+{"task_id": "good_46", "category": "good", "prompt": "What is 5 * 6?", "expected_keywords": ["30"], "expected_behavior": "answer"}
