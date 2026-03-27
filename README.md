@@ -1,174 +1,125 @@
-from pathlib import Path
+# Silence-as-Control
 
-readme_content = """# Silence-as-Control
+Silence-as-Control is a runtime control-layer middleware that decides whether to return or suppress model output based on explicit stability signals such as drift and coherence.
 
-Silence-as-Control is a control-layer middleware that decides whether to return or suppress AI output based on explicit stability signals.
+**Either correct, or silent.**
 
 ## What it is
 
-A minimal Python middleware layer with deterministic gating logic:
-- Accepts an output candidate plus stability signals (coherence, drift)
-- Returns output when signals are within bounds
-- Returns an explicit abstention state when signals are unstable
+Silence-as-Control is a **control-layer primitive** and **runtime gating mechanism** that sits between model generation and output release. It evaluates stability signals and returns either:
+- `status: ok` (release), or
+- `status: abstained` (suppress release).
+
+It is an **abstention-based release control layer**.
+
+## What it is not
+
+- Not a model-training method.
+- Not a replacement for core model architecture.
+- Not a claim of model improvement.
+- Not a new product feature layer.
 
 ## Core idea
 
-LLMs should not always answer.
+- unstable state -> abstain
+- stable state -> proceed
 
-If the system state is unstable -> abstain  
-If the system state is stable -> proceed  
+Silence is a control signal, not a failure.
 
-Silence is not failure - it is a control signal.
+## Why abstention matters
 
-## Why abstention is a valid state
-
-Abstention is a first-class response that prevents unstable output from being returned.
-
-The middleware returns:
-- {"status": "ok", "output": ...}
-- {"status": "abstained", "reason": "control_abstention"}
+When runtime stability is weak, releasing output can amplify error impact. Abstention prevents unstable outputs from being emitted and turns uncertainty into an explicit, auditable control decision.
 
 ## Repository structure
 
+```text
 silence-as-control/
-├── src/silence_as_control/
-│   ├── __init__.py
-│   ├── control.py
-│   ├── abstention.py
-│   ├── schema.py
-│   └── logging_utils.py
-├── api/main.py
-├── tests/
-│   ├── test_control.py
-│   └── test_api.py
-├── .github/workflows/ci.yml
-├── .gitignore
-├── README.md
-├── requirements.txt
-├── pyproject.toml
-└── Dockerfile
+├── src/silence_as_control/      # core control layer (unchanged by docs work)
+├── api/                         # API wrapper and integration entrypoints
+├── tests/                       # behavior checks for control/API surfaces
+├── reports/                     # evaluation artifacts and plots
+├── demo_outputs*/               # demo run outputs
+├── .github/workflows/           # CI and automation workflows
+└── README.md
+```
 
 ## Quickstart
 
+```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 pip install -e .
 uvicorn api.main:app --reload
+```
+
+Run tests:
+
+```bash
+pytest -q
+```
 
 ## API example
 
 Request:
+
+```json
 {"output":"text","coherence":0.82,"drift":0.15}
+```
 
-Response (stable):
+Stable response:
+
+```json
 {"status":"ok","output":"text"}
+```
 
-Response (abstained):
+Abstained response:
+
+```json
 {"status":"abstained","reason":"control_abstention"}
+```
 
-## Test command
+## Evaluation summary
 
-pytest
+Main reported runs and thresholds are summarized below.
 
-# Evaluation Results (PoR)
+| Run | Tasks | Threshold | Coverage | Accepted Precision | Risk Capture | Notes |
+|---|---:|---:|---:|---:|---:|---|
+| Run #1 | 35 | n/a | 85.7% | 100% | 100% | Initial mixed-task check |
+| Run #2 | 100 | n/a | 73.0% | 100% | 100% | Conservative behavior |
+| Run #3 | 100 | n/a | 76.0% | 100% | 100% | Repeatability confirmation |
+| Run #4 | 300 | 0.35 | 64.0% | 100% | 100% | Strong robustness result |
+| Run #5 | 1000 | 0.35 | 53.5% | 100% | 100% | Scaled safe regime |
+| Run #6 | 1000 | 0.43 | 55.0% | 98.36% | 98.01% | Boundary/unsafe leakage appears |
+| Run #7 | 1000 | 0.39 | 54.4% | 100.0% | 100.0% | Optimal safe balance |
 
-## Run #1 — 35 tasks
-- Silence rate: 14.3%
-- Coverage: 85.7%
-- Accepted precision: 100%
-- Risk capture: 100%
-- Silence precision: 40%
-Drift:
-success: 0.218
-fail: 0.566
-separation: ~2.60x
+Additional reported drift separations (success vs fail):
+- Run #1: `0.218` vs `0.566` (~2.60x)
+- Run #2: `0.245` vs `0.540` (~2.20x)
+- Run #3: `0.242` vs `0.571` (~2.36x)
+- Run #4: `0.254` vs `0.716` (~2.82x)
+- Run #5: `0.253` vs `0.676` (~2.67x)
+- Run #6: `0.249` vs `0.670` (~2.70x)
+- Run #7: `0.247` vs `0.671` (~2.71x)
 
-## Run #2 — 100 tasks
-- Silence rate: 27.0%
-- Coverage: 73.0%
-- Accepted precision: 100%
-- Risk capture: 100%
-- Silence precision: 22.22%
-Drift:
-success: 0.245
-fail: 0.540
-separation: ~2.20x
+## Threshold map
 
-## Run #3 — 100 tasks
-- Silence rate: 24.0%
-- Coverage: 76.0%
-- Accepted precision: 100%
-- Risk capture: 100%
-- Silence precision: 20.83%
-Drift:
-success: 0.242
-fail: 0.571
-separation: ~2.36x
+- 0.35 = safe
+- 0.39 = optimal
+- 0.43 = boundary
 
-## Run #4 — 300 tasks (threshold = 0.35)
-- Silence rate: 36.0%
-- Coverage: 64.0%
-- Accepted precision: 100%
-- Risk capture: 100%
-- Silence precision: 96.3%
-Drift:
-success: 0.254
-fail: 0.716
-separation: ~2.82x
+## Key insight
 
-## Run #5 — 1000 tasks (threshold = 0.35)
-- Silence rate: 46.5%
-- Coverage: 53.5%
-- Accepted precision: 100%
-- Risk capture: 100%
-- Silence precision: 93.76%
-Drift:
-success: 0.253
-fail: 0.676
-separation: ~2.67x
+PoR does not improve the model itself. It controls when the model is allowed to release output.
 
-## Run #5 — 1000 tasks (threshold = 0.43)
-- Silence rate: 45.0%
-- Coverage: 55.0%
-- Accepted precision: 98.36%
-- Risk capture: 98.01%
-- Silence precision: 98.44%
-Drift:
-success: 0.249
-fail: 0.670
-separation: ~2.70x
+## Visual proof
 
-## Key Insight
-
-PoR does not improve the model.
-
-It controls when the model is allowed to produce output.
-
-This creates a tunable trade-off between safety and usability.
-
-## Visual Proof
-
-Control curve:
-![Control Curve](reports/threshold_control_curve.png)
-
-Accepted failures:
-![Accepted Failures](reports/accepted_failures_comparison.png)
-
-Drift separation:
-![Drift Separation](reports/drift_separation_comparison.png)
+Existing report visuals:
+- Control curve: `reports/threshold_control_curve.png`
+- Accepted failures comparison: `reports/accepted_failures_comparison.png`
+- Drift separation comparison: `reports/drift_separation_comparison.png`
+- Additional plots: `reports/metrics.png`, `reports/drift.png`, `reports/drift_clean.png`
 
 ## Conclusion
 
-Proof-of-Resonance (PoR) demonstrates:
-- drift is measurable
-- drift correlates with correctness
-- threshold gating controls unsafe outputs
-- abstention is a precise control mechanism
-
-PoR acts as a control layer primitive for LLM systems.
-"""
-
-Path("README.md").write_text(readme_content, encoding="utf-8")
-
-print("README.md updated (single-block clean version) ✅")
+Silence-as-Control demonstrates a release-control framing for LLM systems: **either correct, or silent**. The objective is controlled output release under stability constraints, not model improvement.
