@@ -28,6 +28,17 @@ PoR does not improve the model itself. It controls when the model is allowed to 
 - `wiki/index.md`: concepts, architecture, runs, and supporting evidence.
 - `wiki/meta/Evidence_Map.md`: claim-to-artifact audit trail.
 
+## Repository layout
+
+- `api/` -> runtime API surface
+- `src/` -> core package implementation
+- `tests/` -> automated verification
+- `demo/` -> runnable demonstration entry points
+- `reports/` -> tracked artifacts and visuals
+- `scripts/` -> support evaluation and analysis utilities
+- `archive/` -> preserved historical and legacy material
+- `wiki/` -> concepts, architecture, runs, and evidence
+
 ## API surface
 
 - `GET /health`
