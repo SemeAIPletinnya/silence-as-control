@@ -1,6 +1,6 @@
 # Silence-as-Control
 
-Silence-as-Control is a runtime control-layer primitive for LLM systems that gates output release using stability signals.
+Silence-as-Control is a runtime control-layer primitive for LLM systems. It applies Proof-of-Resonance (PoR) stability signals as a release gate between generation and user-visible output. It is release control, not model improvement.
 
 **Either correct, or silent.**
 
@@ -8,17 +8,27 @@ PoR does not improve the model itself. It controls when the model is allowed to 
 
 **Same model. Different decision.**
 
-## Core idea
+## What this is
 
-- Unstable output -> **silence**
-- Stable output -> **proceed**
-- Silence is **not** failure; it is an explicit control signal
+- A PoR-based release gate.
+- A decision layer for whether output is released.
+- An explicit silence outcome when output is unstable.
+- A separation between generation and release.
 
-This repository implements Proof-of-Resonance (PoR) as a release gate between model generation and user-visible output.
+## What this is not
+
+- Not a new model.
+- Not a decoder replacement.
+- Not prompt engineering.
+- Not a claim of guaranteed truth.
+
+## Start here
+
+- `README.md` (this file): overview and entry points.
+- `wiki/index.md`: concepts, architecture, runs, and supporting evidence.
+- `wiki/meta/Evidence_Map.md`: claim-to-artifact audit trail.
 
 ## API surface
-
-Current endpoints:
 
 - `GET /health`
 - `POST /por/evaluate`
@@ -36,7 +46,7 @@ pip install -e .
 uvicorn api.main:app --reload
 ```
 
-Optional test run:
+Optional check:
 
 ```powershell
 pytest -q
@@ -49,20 +59,18 @@ python demo/por_api_demo.py
 python demo/por_agent_demo.py
 ```
 
-## Evaluation highlights
+## Tracked operating points
 
 Selected tracked operating points:
 
-- **Run #4 — 300 tasks (threshold 0.35):** robust safe behavior at medium scale.
-- **Run #5 — 1000 tasks (threshold 0.35):** scaled conservative safe regime.
-- **Run #5 — 1000 tasks (threshold 0.43):** aggressive boundary setting where leakage risk increases.
-- **Run #6 — 1000 tasks (threshold 0.39):** current safe operating point (recommended).
+- **Run #4 — 300 tasks (threshold 0.35)**
+- **Run #5 — 1000 tasks (threshold 0.35)**
+- **Run #5 — 1000 tasks (threshold 0.43)**
+- **Run #6 — 1000 tasks (threshold 0.39)**
 
-Interpretation: threshold is a control dial; lower values are more conservative, while higher values increase release aggressiveness.
+Threshold is a control dial for release behavior. For run-level interpretation and supporting details, use `wiki/runs/` and `wiki/meta/Evidence_Map.md`.
 
 ## Visual proof
-
-Existing report visuals:
 
 ![PoR threshold control curve](reports/threshold_control_curve.png)
 ![Accepted failures comparison](reports/accepted_failures_comparison.png)
@@ -76,8 +84,6 @@ Additional tracked plots:
 
 ## Reports and tracked artifacts
 
-Tracked JSONL artifacts in `reports/`:
-
 - `reports/eval_35_tasks.jsonl`
 - `reports/eval_100_tasks.jsonl`
 - `reports/eval_run2_100_tasks.jsonl`
@@ -90,4 +96,4 @@ Tracked JSONL artifacts in `reports/`:
 
 ---
 
-Silence-as-Control keeps architecture and model weights unchanged; it enforces runtime release decisions under stability constraints.
+Silence-as-Control leaves model weights and architecture unchanged and enforces runtime release decisions under stability constraints.
