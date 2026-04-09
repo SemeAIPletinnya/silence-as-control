@@ -48,22 +48,34 @@ PoR does not improve the model itself. It controls when the model is allowed to 
 
 ## Quickstart (Windows / PowerShell)
 
+Recommended Python versions: **3.11** or **3.12**.
+
+### Minimal runtime setup
+
 ```powershell
 py -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 pip install -r requirements.txt
-pip install -e .
 uvicorn api.main:app --reload
 ```
 
-Optional check:
+### Optional editable developer install
+
+```powershell
+pip install -e .
+```
+
+Editable install is useful for developer workflows and may require additional native build tooling on very new Python versions.
+If editable install fails there, you can still run the API, tests, and demos with `pip install -r requirements.txt`.
+
+### Optional check
 
 ```powershell
 pytest -q
 ```
 
-## Demo entry points
+### Demo entry points
 
 ```powershell
 python demo/por_api_demo.py
