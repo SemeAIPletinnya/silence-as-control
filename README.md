@@ -66,8 +66,9 @@ uvicorn api.main:app --reload
 pip install -e .
 ```
 
-Editable install is useful for developer workflows and may require additional native build tooling on very new Python versions.
-If editable install fails there, you can still run the API, tests, and demos with `pip install -r requirements.txt`.
+Editable install is optional and mainly intended for developer workflows.
+For the lowest-friction local setup, use `pip install -r requirements.txt` with Python 3.11 or 3.12.
+On very new Python versions, if editable install does not complete, the API, tests, and demos still run without it.
 
 ### Optional check
 
