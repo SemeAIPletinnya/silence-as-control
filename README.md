@@ -67,7 +67,7 @@ pip install -e .
 ```
 
 Editable install is optional and mainly for active developer workflows.
-For the lowest-friction local setup, use `pip install -r requirements.txt` on Python 3.11 or 3.12.
+For the lowest-friction local setup, use `pip install -r requirements.txt` on Python 3.12 or 3.13.
 On very new Python versions, if `pip install -e .` does not complete, you can continue; the API, tests, and demos run without it.
 
 ### Optional check
