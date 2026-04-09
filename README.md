@@ -67,6 +67,7 @@ pip install -e .
 ```
 
 Editable install is useful for developer workflows and may require additional native build tooling on very new Python versions.
+If editable install fails there, you can still run the API, tests, and demos with `pip install -r requirements.txt`.
 
 ### Optional check
 
