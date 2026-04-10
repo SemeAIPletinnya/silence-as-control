@@ -44,6 +44,12 @@ pytest -q
 
 ## Demo entry points
 
+Run this first:
+
+python demo/canonical_demo.py
+
+No API key required. Shows the baseline vs PoR contrast in one local run.
+
 ```powershell
 python demo/por_api_demo.py
 python demo/por_agent_demo.py
