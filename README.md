@@ -79,6 +79,14 @@ pytest -q
 
 ### Demo entry points
 
+Run this first:
+
+```powershell
+python demo/canonical_demo.py
+```
+
+Other demos:
+
 ```powershell
 python demo/por_api_demo.py
 python demo/por_agent_demo.py
