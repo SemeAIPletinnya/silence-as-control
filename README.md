@@ -28,6 +28,13 @@ PoR does not improve the model itself. It controls when the model is allowed to 
 - `wiki/index.md`: concepts, architecture, runs, and supporting evidence.
 - `wiki/meta/Evidence_Map.md`: claim-to-artifact audit trail.
 
+## Fast orientation
+
+1. Run the canonical demo: `python demo/canonical_demo.py`
+2. Read the baseline vs PoR quick guide: `docs/baseline_vs_por_quick_guide.md`
+3. Read the integration path guide: `docs/integration_path.md`
+4. Use `CONTRIBUTING.md` for future work
+
 ## Repository layout
 
 - `api/` -> runtime API surface
