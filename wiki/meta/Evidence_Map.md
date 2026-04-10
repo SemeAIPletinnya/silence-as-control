@@ -1,96 +1,64 @@
-# Evidence Map
+# Evidence Map — Detailed Audit Appendix
 
-_Back to [index](../index.md)_
+Primary reader-facing evidence map:
+- [../Evidence-Map.md](../Evidence-Map.md)
 
-Purpose: provide an audit surface that connects wiki claims to committed repository evidence.
+This appendix preserves deeper repository-scoped audit discipline for stricter technical review.
 
-## Core claims and support status
+## 1) Purpose
 
-| Claim (as stated in wiki/docs) | Supporting files | Support type (taxonomy) | What this does **not** establish |
-|---|---|---|---|
-| PoR is a **release control layer**, not a generation method. | `wiki/concepts/PoR.md`, `wiki/architecture/Release_Control_Layer.md`, `README.md` | **Text-direct** (explicit text statement) | Does not establish model-quality improvement by itself. |
-| Current gate behavior is operationally **proceed/release vs silence**. | `wiki/architecture/PoR_Gate.md`, `wiki/concepts/Silence_as_Control.md`, `api/main.py` (`por_decision`, `evaluate_candidate`) | **Code-direct** (implemented decision path) | Does not establish additional active states (e.g., hold) in current implementation. |
-| Silence is treated as a control outcome (not automatically failure). | `wiki/concepts/Silence_as_Control.md`, `README.md` core idea section, run pages with non-zero `silence` counts | **Mixed-direct** (definition + observed artifact fields) | Does not prove silence is optimal in all contexts. |
-| Baseline-vs-gated comparison is available via artifact outcome fields. | `wiki/comparisons/Baseline_vs_PoR.md`, run pages, JSONL fields `no_control_success` and `with_control_success` | **Artifact-direct** (comparison fields present in JSONL) | Does not prove universal causal superiority outside recorded runs. |
-| Run pages summarize committed evidence for Run 1 / Run 4 / Run 6. | `wiki/runs/Run_1.md`, `wiki/runs/Run_4_300_tasks.md`, `wiki/runs/Run_6_1000_tasks.md`, corresponding JSONL files | **Artifact-direct** (explicit run-file mapping) | Does not cover all runs or provide full per-class evaluation where absent. |
+Use this page as a compact technical appendix:
+- to map runs to committed artifacts,
+- to clarify field-level interpretation,
+- to define support-strength categories,
+- and to state explicit evidence boundaries.
 
-## Run-to-artifact mapping
+## 2) Run-to-artifact mapping
 
-- **Run 1** -> `reports/eval_35_tasks.jsonl`.
-- **Run 4 (300 tasks)** -> `reports/eval_run4_300_threshold_035.jsonl`.
-- **Run 6 (1000 tasks)** -> `reports/eval_run6_1000_threshold_039.jsonl`.
+Core mapped runs:
+- Run 1 -> `reports/eval_35_tasks.jsonl`
+- Run 4 -> `reports/eval_run4_300_threshold_035.jsonl`
+- Run 6 -> `reports/eval_run6_1000_threshold_039.jsonl`
 
-Repository cross-reference:
+Additional 1000-task threshold mapping artifacts:
+- `reports/eval_run5_1000_threshold_035.jsonl`
+- `reports/eval_run5_1000_threshold_042.jsonl`
+- `reports/eval_run5_1000_threshold_043.jsonl`
 
-- `README.md` lists these artifacts in “Reports and tracked artifacts”.
-- `README.md` names Run #4 (threshold 0.35) and Run #6 (threshold 0.39) in “Evaluation highlights”.
+## 3) Field-level notes
 
-## Field-level notes (JSONL)
-
-The run pages rely on these committed per-record fields:
-
-- `silence`: whether output was silenced.
-- `raw_success`: task judged successful before release-control filtering.
-- `with_control_success`: success under the control/evaluated path.
-- `no_control_success`: success under the no-control comparison path.
-- `silence_threshold`: threshold value used for silence gating.
+Committed artifacts and run docs commonly rely on these fields:
+- `silence`: release was withheld by the gate.
+- `raw_success`: outcome label before release-control filtering.
+- `with_control_success`: success in the gated path.
+- `no_control_success`: success in the ungated comparison path.
+- `silence_threshold`: threshold used for silence gating.
 - `raw_success_threshold`: threshold used in raw-success labeling.
 
-Interpretation discipline used in wiki run pages:
+Interpretation rule:
+- aggregate from committed row-level fields first, then state summary metrics.
 
-- Rates/counts are aggregates of committed row-level fields.
-- “Accepted failures under control” is computed as rows with `silence=false` and `raw_success=false`.
+## 4) Evidence strength / support discipline
 
-## Supporting artifacts index
+- **text-direct**: claim is explicitly stated in docs/wiki text.
+- **code-direct**: claim is directly represented in committed implementation.
+- **artifact-direct**: claim is directly observable in committed artifacts/fields.
+- **mixed-direct**: claim depends on a direct combination of docs + artifacts/code.
+- **partial**: directionally supported but missing needed decomposition for stronger inference.
 
-Primary documentation:
+## 5) Known evidence boundaries
 
-- `README.md`
-- `wiki/index.md`
-- `wiki/SCHEMA.md`
-- `wiki/concepts/PoR.md`
-- `wiki/concepts/Silence_as_Control.md`
-- `wiki/architecture/PoR_Gate.md`
-- `wiki/architecture/Release_Control_Layer.md`
-- `wiki/comparisons/Baseline_vs_PoR.md`
-- `wiki/runs/Run_1.md`
-- `wiki/runs/Run_4_300_tasks.md`
-- `wiki/runs/Run_6_1000_tasks.md`
+- No universal generalization beyond documented runs/artifacts.
+- No claim of globally optimal threshold across all domains.
+- No claim of complete deployment proof or production hardening.
+- No claim that PoR guarantees truth.
+- Release-policy improvement does not imply universal capability improvement.
 
-Primary run artifacts:
+## 6) Maintenance rule
 
-- `reports/eval_35_tasks.jsonl`
-- `reports/eval_run4_300_threshold_035.jsonl`
-- `reports/eval_run6_1000_threshold_039.jsonl`
-
-Implementation references (only for decision-path grounding):
-
-- `api/main.py` (`por_decision`, `evaluate_candidate`)
-
-## Evidence strength
-
-- **Text-direct**: claim is explicitly stated in committed docs/wiki text.
-- **Code-direct**: claim is explicitly represented in committed implementation logic.
-- **Artifact-direct**: claim is directly observable in committed artifact fields/files.
-- **Mixed-direct**: claim depends on both explicit documentation and artifact observation.
-- **Partial**: claim is directionally supported but missing decomposition needed for stronger inference.
-
-For the current wiki set, core claims listed above are supported directly at repository scope; extrapolations remain out of scope.
-
-## Known evidence boundaries
-
-- No claim of universal generalization beyond documented runs.
-- No claim of global threshold optimality across all distributions.
-- No claim that one metric family is universally sufficient for deployment safety.
-- No claim of complete per-class/per-domain analysis where such summaries are not committed.
-- No claim that PoR guarantees truth; it changes release policy.
-
-## Maintenance rule
-
-When updating this map:
-
+When updating this appendix:
 1. Add only claims already present in repository docs/wiki.
-2. Link each claim to concrete files.
-3. Mark support as direct vs partial.
-4. State what each claim does not establish.
-5. If evidence is missing, record that explicitly instead of filling gaps.
+2. Map each claim to concrete files/artifacts.
+3. State what each claim does **not** establish.
+4. Mark support as established vs partial.
+5. Do not fill evidence gaps with inference.
