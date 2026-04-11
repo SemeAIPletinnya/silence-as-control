@@ -67,7 +67,7 @@ def call_short_retry(client: OpenAI, *, model: str, original_prompt: str) -> tup
 
 
 def load_rows(path: Path) -> list[dict[str, str]]:
-    with path.open("r", encoding="utf-8", newline="") as f:
+    with path.open("r", encoding="utf-8-sig", newline="") as f:
         reader = csv.DictReader(f)
         return list(reader)
 
