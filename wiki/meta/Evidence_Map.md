@@ -62,3 +62,37 @@ When updating this appendix:
 3. State what each claim does **not** establish.
 4. Mark support as established vs partial.
 5. Do not fill evidence gaps with inference.
+
+## 7) Recent workstream evidence additions (PRs #93-#98)
+
+Use these mappings for current status claims and milestone traceability.
+
+### A) Workstream definition evidence
+- Artifact: `docs/silence_rate_roadmap.md`
+- Supports: silence-rate optimization is a defined, separate workstream with scoped goals.
+- Support class: **text-direct**
+- Does **not** establish: solved silence behavior or production validation.
+
+### B) Structured exploratory evidence (borderline pocket)
+- Artifact: `docs/borderline_pocket_findings.md`
+- Supports: borderline pocket has been analyzed and summarized for practical lane selection.
+- Support class: **text-direct** (with artifact references inside the doc)
+- Does **not** establish: full silence-band recoverability.
+
+### C) Extension-layer direction evidence
+- Artifact: `docs/first_extension_experiment.md`
+- Supports: first extension experiment is specified as a conservative next step.
+- Support class: **text-direct**
+- Does **not** establish: end-to-end runtime gain in external deployment conditions.
+
+### D) Sandbox-level execution signal
+- Artifact: `scripts/short_regen_sandbox.py`
+- Supports: a committed runner exists for short-regeneration sandbox execution.
+- Support class: **code-direct**
+- Does **not** establish: broad runtime integration validity by itself.
+
+### E) Sandbox findings evidence
+- Artifact: `docs/short_regen_sandbox_findings.md`
+- Supports: first sandbox run findings are documented and bounded.
+- Support class: **mixed-direct** (documented interpretation of committed sandbox artifacts)
+- Does **not** establish: complete production readiness or universal threshold conclusions.
