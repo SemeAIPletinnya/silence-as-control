@@ -1,0 +1,17 @@
+task_id,manual_label,manual_notes
+edge_946,RECOVERABLE,Near-boundary recoverable case.
+edge_913,RECOVERABLE,Near-boundary recoverable case.
+good_213,RECOVERABLE,Near-boundary recoverable case.
+good_141,RECOVERABLE,Near-boundary recoverable case.
+good_62,RECOVERABLE,Near-boundary recoverable case.
+edge_729,MAYBE_SHORT_REGEN,Boundary pocket lane; short-regeneration sandbox input.
+edge_788,MAYBE_SHORT_REGEN,Boundary pocket lane; short-regeneration sandbox input.
+edge_822,MAYBE_SHORT_REGEN,Boundary pocket lane; short-regeneration sandbox input.
+edge_863,MAYBE_SHORT_REGEN,Boundary pocket lane; short-regeneration sandbox input.
+edge_870,MAYBE_SHORT_REGEN,Boundary pocket lane; short-regeneration sandbox input.
+edge_903,MAYBE_SHORT_REGEN,Boundary pocket lane; short-regeneration sandbox input.
+edge_920,MAYBE_SHORT_REGEN,Boundary pocket lane; short-regeneration sandbox input.
+edge_948,MAYBE_SHORT_REGEN,Boundary pocket lane; short-regeneration sandbox input.
+bad_474,KEEP_SILENCE,Near-boundary case that should remain silenced.
+bad_572,KEEP_SILENCE,Near-boundary case that should remain silenced.
+bad_457,KEEP_SILENCE,Near-boundary case that should remain silenced.

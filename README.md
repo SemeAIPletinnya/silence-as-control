@@ -116,17 +116,25 @@ Selected tracked operating points:
 
 Threshold is a control dial for release behavior. For run-level interpretation and supporting details, use `wiki/runs/` and `wiki/meta/Evidence_Map.md`.
 
-## Visual proof
+## Selected evidence snapshots
 
-![PoR threshold control curve](reports/threshold_control_curve.png)
+![Threshold control curve](reports/threshold_control_curve.png)
+*Threshold operating-mode behavior across tracked runs.*
+
 ![Accepted failures comparison](reports/accepted_failures_comparison.png)
+*Failure leakage appears at boundary/aggressive thresholds and returns to zero at the conservative-safe setting.*
+
 ![Drift separation comparison](reports/drift_separation_comparison.png)
-![Run metrics](reports/metrics.png)
+*Success/failure drift separation remains visible across operating points.*
 
-Additional tracked plots:
+For additional visuals and run artifacts, see `reports/README.md`.
 
-- `reports/drift.png`
-- `reports/drift_clean.png`
+## Silence-rate workstream (recent docs)
+
+- `docs/silence_rate_roadmap.md`
+- `docs/borderline_pocket_findings.md`
+- `docs/first_extension_experiment.md`
+- `docs/short_regen_sandbox_findings.md`
 
 ## Reports and tracked artifacts
 
