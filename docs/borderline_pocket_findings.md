@@ -28,6 +28,11 @@ Manual labeling of the 16-case pocket produced:
 - MAYBE_SHORT_REGEN = 8
 - KEEP_SILENCE = 3
 
+Tracked artifacts for this split:
+
+- Full pocket labels: `reports/borderline_pocket_labels.csv` (16 rows).
+- MAYBE_SHORT_REGEN sandbox subset: `reports/borderline_maybe_short_regen.csv` (8 rows).
+
 ## Interpretation
 
 The silence band is not homogeneous. Most silenced cases still appear to be hard silence, but there is a small near-boundary pocket with real rescue potential. The pocket also appears internally structured rather than random.
