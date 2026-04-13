@@ -2,6 +2,8 @@
 
 Purpose: claim-to-evidence index for what is established, partially established, and pending.
 
+Cross-layer signal semantics are defined in `docs/signal_and_threshold_contract.md`. Use that page before comparing thresholds across eval, runtime/API, and deterministic library control layers.
+
 ## Core Thesis Evidence
 
 ### Claim
@@ -24,6 +26,8 @@ PoR / Silence-as-Control is a runtime **release-control layer**, not a generatio
 ### Claim
 
 Threshold behaves as an operational dial with identifiable regimes.
+
+Scope note: this claim is about evidence/eval artifacts and must not be read as a universal threshold contract across runtime/API or deterministic library control modules.
 
 - **Established evidence**
   - `reports/eval_run5_1000_threshold_035.jsonl`
@@ -76,6 +80,24 @@ Baseline and PoR differ materially at the release-policy layer.
   - Additional out-of-distribution and integration-level comparisons.
 - **Does not establish**
   - That PoR dominates baseline on every objective; the evidence is policy- and dataset-scoped.
+
+## Extension-Layer MAYBE_SHORT_REGEN Evidence
+
+### Claim
+
+A lane-scoped extension sandbox exists for MAYBE_SHORT_REGEN and can be measured locally without changing primitive semantics.
+
+- **Established evidence**
+  - `scripts/short_regen_sandbox.py`
+  - `reports/borderline_maybe_short_regen.csv`
+  - `reports/short_regen_manual_scoring_template.csv`
+  - `docs/maybe_short_regen_formalization.md`
+- **Partial evidence**
+  - Retry-side scoring and manual scoring are extension-layer support and do not yet constitute generalized policy proof.
+- **Future evidence needed**
+  - Repeated lane-scoped runs with completed manual scoring under stable acceptance criteria.
+- **Does not establish**
+  - A general recovery policy for silenced outputs.
 
 ## Applied API / Runtime Evidence
 

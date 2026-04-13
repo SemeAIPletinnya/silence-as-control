@@ -8,14 +8,17 @@ from api.xai_wrapper import DEFAULT_MODEL, generate_candidate
 
 app = FastAPI(title="silence-as-control")
 
-THRESHOLD = 0.39
+# Runtime/API demo gate default.
+# This 0.39 value is local to the API heuristic layer and is NOT the
+# deterministic control contract used in src/silence_as_control/control.py.
+RUNTIME_GATE_THRESHOLD = 0.39
 SILENCE_TOKEN = "[SILENCE: UNSTABLE OUTPUT BLOCKED]"
 
 
 class EvaluateRequest(BaseModel):
     prompt: str
     candidate: str
-    threshold: float = THRESHOLD
+    threshold: float = RUNTIME_GATE_THRESHOLD
 
 
 class EvaluateResponse(BaseModel):
@@ -30,7 +33,7 @@ class EvaluateResponse(BaseModel):
 
 class CompleteRequest(BaseModel):
     prompt: str
-    threshold: float = THRESHOLD
+    threshold: float = RUNTIME_GATE_THRESHOLD
     model: str = DEFAULT_MODEL
     system_prompt: str = "You are a precise technical assistant."
     temperature: float = 0.0
@@ -52,7 +55,7 @@ class LegacyGenerateRequest(BaseModel):
     output: str
     coherence: float
     drift: float
-    threshold: float = THRESHOLD
+    threshold: float = RUNTIME_GATE_THRESHOLD
 
 
 class LegacyGenerateResponse(BaseModel):
@@ -62,6 +65,7 @@ class LegacyGenerateResponse(BaseModel):
 
 
 def estimate_drift(prompt: str, candidate: str):
+    """Runtime-only heuristic drift estimate for demo/API gating."""
     prompt_lower = prompt.lower()
     candidate_lower = candidate.lower()
 
@@ -118,6 +122,7 @@ def estimate_drift(prompt: str, candidate: str):
 
 
 def estimate_coherence(prompt: str, candidate: str):
+    """Runtime-only heuristic coherence estimate for demo/API gating."""
     prompt_words = set(
         w.strip(".,:;!?()[]{}\"'").lower()
         for w in prompt.split()
@@ -185,6 +190,7 @@ def check_json_validity(prompt: str, candidate: str):
 
 
 def por_decision(drift: float, coherence: float, threshold: float) -> str:
+    # Runtime/API demo gate: silence when either runtime heuristic leaves bounds.
     if drift > threshold or coherence < threshold:
         return "SILENCE"
     return "PROCEED"
@@ -243,11 +249,10 @@ def legacy_generate(req: LegacyGenerateRequest):
 def complete(req: CompleteRequest):
     candidate = generate_candidate(
         prompt=req.prompt,
-        system_prompt=req.system_prompt,
         model=req.model,
+        system_prompt=req.system_prompt,
         temperature=req.temperature,
     )
-
     result = evaluate_candidate(req.prompt, candidate, req.threshold)
 
     return CompleteResponse(

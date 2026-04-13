@@ -83,6 +83,16 @@ MAYBE_SHORT_REGEN is the best first formal target because:
 - It is cleaner to test than a broad rescue policy.
 - It allows learning in a controlled scope before touching larger policies.
 
+## Formalization support (Batch 3)
+
+To keep this lane narrow but more formalized, the repository now includes:
+
+- Optional retry-side proxy scoring in `scripts/short_regen_sandbox.py` via `--score-retries` (extension-layer only).
+- Manual scoring template: `reports/short_regen_manual_scoring_template.csv`.
+- Conservative formalization criteria: `docs/maybe_short_regen_formalization.md`.
+
+These supports do not change primitive behavior and do not introduce a new primitive state.
+
 ## Short next-step summary
 
 First formal extension experiment target: MAYBE_SHORT_REGEN lane.

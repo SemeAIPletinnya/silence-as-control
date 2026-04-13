@@ -13,6 +13,12 @@ The project had already documented the roadmap, analyzed the borderline pocket, 
 - Integration status: not runtime-integrated.
 - Claim boundary: this is not proof that the full silence band is recoverable.
 
+## Evidence status of this document
+
+- This file is **narrative findings** and interpretation.
+- It can be informed by local sandbox runs, but it is not itself a committed JSONL run artifact from the main eval workstream.
+- Sandbox output files (`short_regen_sandbox_results.jsonl`, `short_regen_sandbox_report.md`) are typically regenerated locally unless explicitly committed with reproducibility metadata.
+
 ## Input lane
 
 - Target lane: `MAYBE_SHORT_REGEN`.
@@ -39,6 +45,13 @@ Representative style examples:
 - "Truth is the quality of a statement... being in accordance with reality..."
 
 These are descriptive examples of output style change, not a claim of broad capability recovery.
+
+## Formalization boundary note
+
+- Optional retry-side proxy scoring (`--score-retries`) is available for sandbox outputs, but it is **extension-layer measurement**, not primitive scoring.
+- Manual scoring support now lives in `reports/short_regen_manual_scoring_template.csv`.
+- No hidden HOLD-like primitive state is introduced by this workstream.
+- Formalization criteria for this lane are defined in `docs/maybe_short_regen_formalization.md`.
 
 ## Interpretation
 

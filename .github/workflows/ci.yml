@@ -23,3 +23,10 @@ jobs:
 
       - name: Run tests
         run: pytest
+
+      - name: Rebuild MAYBE_SHORT_REGEN lane artifacts
+        run: python scripts/build_short_regen_lane.py
+
+      - name: Verify lane artifacts are not drifting
+        run: |
+          git diff --exit-code -- reports/borderline_maybe_short_regen.csv reports/borderline_pocket_labels.csv
