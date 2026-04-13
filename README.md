@@ -35,6 +35,12 @@ PoR does not improve the model itself. It controls when the model is allowed to 
 3. Read the integration path guide: `docs/integration_path.md`
 4. Use `CONTRIBUTING.md` for future work
 
+## Repository Architecture
+
+![Repository architecture](reports/repo_architecture_hero.png)
+
+*Repository architecture across Evidence / Eval, Runtime / API, Deterministic Control, and the MAYBE_SHORT_REGEN extension lane.*
+
 ## Repository layout
 
 - `api/` -> runtime API surface
