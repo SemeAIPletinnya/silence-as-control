@@ -1,0 +1,9 @@
+task_id,original_prompt,original_output_len,retry_output_len,usefulness_score,compactness_score,factuality_clarity_score,policy_ok,notes
+edge_729,What is truth?,1214,,,,,,
+edge_788,What is truth?,1241,,,,,,
+edge_822,What is truth?,1561,,,,,,
+edge_863,What is truth?,1188,,,,,,
+edge_870,What is truth?,1037,,,,,,
+edge_903,What is truth?,1400,,,,,,
+edge_920,What is truth?,1027,,,,,,
+edge_948,What is truth?,1126,,,,,,

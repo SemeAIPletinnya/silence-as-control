@@ -105,6 +105,14 @@ python demo/por_api_demo.py
 python demo/por_agent_demo.py
 ```
 
+## Signal and threshold contract (read this before comparing layers)
+
+- **Canonical for reported evidence**: eval pipeline and run artifacts (`scripts/live_eval_openai.py`, `reports/*`, `wiki/runs/*`).
+- **Runtime/demo threshold**: local API gate semantics in `api/main.py` (default `0.39` for runtime heuristics).
+- **Deterministic library control contract**: tested library gate in `src/silence_as_control/control.py` (`coherence >= 0.7`, `drift <= 0.3`).
+
+These are intentionally different contracts. See `docs/signal_and_threshold_contract.md` for the canonical cross-layer definition.
+
 ## Tracked operating points
 
 Selected tracked operating points:
@@ -135,6 +143,7 @@ For additional visuals and run artifacts, see `reports/README.md`.
 - `docs/borderline_pocket_findings.md`
 - `docs/first_extension_experiment.md`
 - `docs/short_regen_sandbox_findings.md`
+- `docs/maybe_short_regen_formalization.md`
 
 ## Reports and tracked artifacts
 

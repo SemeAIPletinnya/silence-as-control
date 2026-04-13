@@ -1,6 +1,16 @@
 import json
 import os
+import sys
 from pathlib import Path
+
+from dotenv import load_dotenv
+from openai import OpenAI
+
+# Support both `python scripts/...` and module import paths.
+sys.path.append(str(Path(__file__).resolve().parent))
+from scoring_utils import compute_proxy_metrics
+
+
 def load_tasks_from_jsonl(path):
     tasks = []
     with open(path, "r", encoding="utf-8") as f:
@@ -8,8 +18,6 @@ def load_tasks_from_jsonl(path):
             tasks.append(json.loads(line))
     return tasks
 
-from dotenv import load_dotenv
-from openai import OpenAI
 
 load_dotenv()
 
@@ -22,120 +30,32 @@ MODEL = os.getenv("OPENAI_MODEL", "gpt-5.4")
 
 TASKS = load_tasks_from_jsonl("tasks_run5_1000.jsonl")
 
-HEDGING_TERMS = [
-    "maybe",
-    "probably",
-    "not sure",
-    "could",
-    "might",
-    "depending",
-    "seems",
-    "around",
-]
-
-CONTRADICTION_TERMS = [
-    "but",
-    "although",
-    "however",
-    "or",
-    "not sure",
-    "might",
-    "could",
-]
-
-def normalize(text: str) -> str:
-    return " ".join(text.lower().strip().split())
-
-def tokenize(text: str) -> list[str]:
-    cleaned = (
-        normalize(text)
-        .replace(".", " ")
-        .replace(",", " ")
-        .replace(":", " ")
-        .replace(";", " ")
-        .replace("(", " ")
-        .replace(")", " ")
-        .replace("?", " ")
-        .replace("!", " ")
-        .replace("-", " ")
-        .replace("_", " ")
-        .replace("/", " ")
-    )
-    return [t for t in cleaned.split() if t]
-
-def keyword_integrity(expected_keywords: list[str], output: str) -> float:
-    out = normalize(output)
-    hits = 0
-    for kw in expected_keywords:
-        if kw.lower() in out:
-            hits += 1
-    return round(hits / len(expected_keywords), 3) if expected_keywords else 1.0
-
-def hedging_score(output: str) -> float:
-    out = normalize(output)
-    hits = sum(1 for term in HEDGING_TERMS if term in out)
-    return round(min(hits / 3, 1.0), 3)
-
-def contradiction_score(output: str) -> float:
-    out = normalize(output)
-    hits = sum(1 for term in CONTRADICTION_TERMS if term in out)
-    nums = [tok for tok in tokenize(out) if tok.isdigit()]
-    if len(set(nums)) >= 2:
-        hits += 1
-    return round(min(hits / 4, 1.0), 3)
-
-def token_overlap(prompt: str, output: str) -> float:
-    p = set(tokenize(prompt))
-    o = set(tokenize(output))
-    if not p or not o:
-        return 0.0
-    return round(len(p & o) / len(p | o), 3)
-
-def length_ratio_drift(prompt: str, output: str) -> float:
-    p = max(len(prompt), 1)
-    o = len(output)
-    ratio = abs(o - p) / p
-    return round(min(ratio, 1.0), 3)
+# Evidence/eval contract constants for this script's artifact output.
+# These values define live eval evidence semantics and are intentionally
+# separate from runtime/API demo heuristics and deterministic library control.
+SEMANTIC_PROXY_DRIFT_SILENCE_THRESHOLD = 0.39
+RAW_SUCCESS_QUALITY_THRESHOLD = 0.55
 
 def semantic_proxy_drift(prompt: str, output: str, expected_keywords: list[str]):
-    integrity = keyword_integrity(expected_keywords, output)
-    hedge = hedging_score(output)
-    contradiction = contradiction_score(output)
-    overlap = token_overlap(prompt, output)
-    length_drift = length_ratio_drift(prompt, output)
-
-    integrity_penalty = 1.0 - integrity
-    overlap_penalty = 1.0 - overlap
-
-    drift = (
-        0.35 * integrity_penalty
-        + 0.20 * hedge
-        + 0.20 * contradiction
-        + 0.15 * overlap_penalty
-        + 0.10 * length_drift
+    metrics = compute_proxy_metrics(prompt, output, expected_keywords)
+    return (
+        metrics["task_integrity"],
+        metrics["hedging_score"],
+        metrics["contradiction_score"],
+        metrics["token_overlap"],
+        metrics["length_ratio_drift"],
+        metrics["semantic_proxy_drift"],
+        metrics["raw_quality_score"],
     )
-    drift = round(min(max(drift, 0.0), 1.0), 3)
 
-    quality = (
-        0.45 * integrity
-        + 0.15 * (1.0 - hedge)
-        + 0.15 * (1.0 - contradiction)
-        + 0.15 * overlap
-        + 0.10 * (1.0 - length_drift)
-    )
-    quality = round(min(max(quality, 0.0), 1.0), 3)
-
-    return integrity, hedge, contradiction, overlap, length_drift, drift, quality
 
 def get_output_text(response) -> str:
     if hasattr(response, "output_text") and response.output_text:
         return response.output_text.strip()
     return ""
 
-def main():
-    raw_success_threshold = 0.55
-    silence_threshold = 0.39
 
+def main():
     results = []
 
     for task in TASKS:
@@ -155,8 +75,8 @@ def main():
             task["expected_keywords"],
         )
 
-        raw_success = quality >= raw_success_threshold
-        silence = drift >= silence_threshold
+        raw_success = quality >= RAW_SUCCESS_QUALITY_THRESHOLD
+        silence = drift >= SEMANTIC_PROXY_DRIFT_SILENCE_THRESHOLD
 
         result = {
             "task_id": task["task_id"],
@@ -178,8 +98,8 @@ def main():
             "silence": silence,
             "no_control_success": raw_success,
             "with_control_success": raw_success if not silence else False,
-            "raw_success_threshold": raw_success_threshold,
-            "silence_threshold": silence_threshold,
+            "raw_success_threshold": RAW_SUCCESS_QUALITY_THRESHOLD,
+            "silence_threshold": SEMANTIC_PROXY_DRIFT_SILENCE_THRESHOLD,
         }
 
         results.append(result)
@@ -190,6 +110,7 @@ def main():
 
     print(f"Done. Live eval logs saved to {LOG_FILE}")
     print(f"Tasks evaluated: {len(results)}")
+
 
 if __name__ == "__main__":
     main()

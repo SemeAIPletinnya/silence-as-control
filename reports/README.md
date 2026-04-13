@@ -2,6 +2,8 @@
 
 This directory is the repository's **evidence surface** for run artifacts, summary visuals, and small reproducibility inputs.
 
+Signal and threshold semantics across layers are defined in `docs/signal_and_threshold_contract.md`. This reports directory corresponds to the evidence/eval contract.
+
 ## What belongs here
 
 - **Tracked run artifacts**: canonical JSONL outputs from evaluation runs.
@@ -27,6 +29,25 @@ This directory is the repository's **evidence surface** for run artifacts, summa
   Curated MAYBE_SHORT_REGEN lane input (8 task IDs) used by the short-regen sandbox workstream.
 - `borderline_pocket_labels.csv`  
   Full 16-case manual label table for the near-boundary borderline pocket (RECOVERABLE / MAYBE_SHORT_REGEN / KEEP_SILENCE).
+- `short_regen_manual_scoring_template.csv`
+  Manual scoring template for the 8 MAYBE_SHORT_REGEN cases (template only; not claimed scored results).
+
+## Sandbox artifact policy (short_regen_sandbox)
+
+- Default sandbox outputs are:
+  - `reports/short_regen_sandbox_results.jsonl`
+  - `reports/short_regen_sandbox_report.md`
+- These files are **normally regenerated locally** and are not required committed evidence by default.
+- Before treating sandbox outputs as evidence, runs should include reproducibility metadata at minimum:
+  - model
+  - run timestamp (UTC)
+  - input CSV path
+  - output/report paths
+  - retry guidance version
+  - run id (and git SHA when available)
+- Sandbox outputs establish local lane behavior only; they do **not** by themselves establish primitive changes, threshold retuning, or production readiness.
+- Optional retry-side scoring from sandbox runs is extension-layer evidence support, not primitive scoring or historical run replacement.
+- See `docs/maybe_short_regen_formalization.md` for conservative formalization criteria and non-claims.
 
 ## Plot files (tracked visual summaries)
 

@@ -45,6 +45,14 @@ Current stage is:
 - Evaluation artifacts and plots: `reports/`
 - Existing concept and architecture material: `wiki/concepts/`, `wiki/architecture/`
 
+## Signal/threshold contract note
+
+Before comparing thresholds across files, use `docs/signal_and_threshold_contract.md`.
+
+- Evidence canon for reported runs: eval pipeline + `reports/*` + `wiki/runs/*`.
+- Runtime/demo gate: API-local semantics in `api/main.py`.
+- Deterministic library control: tested contract in `src/silence_as_control/control.py`.
+
 ## Notes on evidence surface
 
 The repository now includes tracked JSONL run artifacts, run summaries, and visual evidence snapshots in `reports/`.

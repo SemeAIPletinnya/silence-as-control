@@ -5,3 +5,4 @@ httpx
 pytest==8.3.5
 openai
 
+python-dotenv
