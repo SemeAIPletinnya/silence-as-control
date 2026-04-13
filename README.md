@@ -37,7 +37,7 @@ PoR does not improve the model itself. It controls when the model is allowed to 
 
 ## Repository Architecture
 
-![Repository architecture](reports/repo_architecture_hero.png)
+![Repository architecture](repo_architecture_hero.png)
 
 *Repository architecture across Evidence / Eval, Runtime / API, Deterministic Control, and the MAYBE_SHORT_REGEN extension lane.*
 
