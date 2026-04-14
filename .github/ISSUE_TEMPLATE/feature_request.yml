@@ -1,0 +1,45 @@
+name: Feature request
+description: Suggest an improvement to the project.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem_motivation
+    attributes:
+      label: Problem / motivation
+      description: What problem are you trying to solve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_idea
+    attributes:
+      label: Proposed idea
+      description: Describe your proposed solution or approach.
+    validations:
+      required: true
+
+  - type: textarea
+    id: why_it_matters
+    attributes:
+      label: Why it matters
+      description: Explain the user or project impact.
+    validations:
+      required: true
+
+  - type: textarea
+    id: risks_tradeoffs
+    attributes:
+      label: Possible risks / tradeoffs
+      description: Note complexity, downsides, or alternatives considered.
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: Share links, examples, or related discussion.
+    validations:
+      required: false
