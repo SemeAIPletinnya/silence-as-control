@@ -41,6 +41,54 @@ PoR does not improve the model itself. It controls when the model is allowed to 
 
 *Repository architecture across Evidence / Eval, Runtime / API, Deterministic Control, and the MAYBE_SHORT_REGEN extension lane.*
 
+## Ecosystem
+
+This repository is the canonical control-primitive entry point for the broader PoR ecosystem.
+
+- `silence-as-control` — main primitive repo for Silence-as-Control / Proof-of-Resonance release control.
+- `PoR-Kernel-v-0.2.0` — earlier kernel-oriented PoR structure work.
+- `DEMO-ECONOMY-PoR-` — demo/value-surface repository for PoR presentation and adoption framing.
+- `copilot-por-sdk` — SDK-level integration path for Copilot-style usage.
+- `por-copilot-bridge` — bridge/integration experiments for Copilot-facing workflows.
+- `PoR-Kernel-module-to-silence-as-control` — module transition work toward Silence-as-Control structure.
+- `SemeAi_ProofOfResonance` — broader PoR framing and system-level direction.
+- `PoR-use-silence-as-control-from-model_a_response` — experiment around response-to-control application flow.
+- `SemeAIPletinnya/semeai-codex` — Codex-related working environment / support repo.
+
+## Roadmap to v1.0.1
+
+This is the current release direction toward **v1.0.1** (target window: **July 4–8, 2026**).
+
+### Done
+
+- audit hardening
+- README architecture surface
+- signal and threshold contract clarification
+- wiki / documentation surface refinement
+
+### In progress
+
+- wiki origin pages
+- demo strengthening
+- API formalization
+- release-surface cleanup
+
+### Next
+
+- OpenAPI finalization
+- killer demo packaging
+- reproducibility hardening
+- release freeze for v1.0.1
+
+## Release criteria for v1.0.1
+
+- [ ] primitive is fixed and clearly defined
+- [ ] 2–3 killer demos exist
+- [ ] OpenAPI contract is documented
+- [ ] reproducibility is stable
+- [ ] semantic boundaries are clean
+- [ ] public repo surface is readable
+
 ## Repository layout
 
 - `api/` -> runtime API surface
