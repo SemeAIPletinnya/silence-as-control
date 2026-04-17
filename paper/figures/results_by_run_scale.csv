@@ -1,0 +1,5 @@
+run_label,source_file,task_count,silence_threshold,coverage,silence_rate,accepted_precision,risk_capture,accepted_count,silenced_count,raw_fail_count,silenced_raw_fail_count,silenced_raw_success_count,accepted_raw_success_count,accepted_raw_fail_count,avg_drift_accepted,avg_drift_silenced,drift_separation
+35_tasks_t0.30,reports/eval_35_tasks.jsonl,35,0.3,0.8571,0.1429,1.0,1.0,30,5,2,2,3,30,0,0.2067,0.4264,2.0629
+100_tasks_t0.30,reports/eval_100_tasks.jsonl,100,0.3,0.77,0.23,1.0,1.0,77,23,6,6,17,77,0,0.2071,0.4187,2.0211
+300_tasks_t0.35,reports/eval_run4_300_threshold_035.jsonl,300,0.35,0.64,0.36,1.0,1.0,192,108,104,104,4,192,0,0.2501,0.7068,2.8264
+1000_tasks_t0.39,reports/eval_run6_1000_threshold_039.jsonl,1000,0.39,0.544,0.456,1.0,1.0,544,456,441,441,15,544,0,0.2429,0.6656,2.7405

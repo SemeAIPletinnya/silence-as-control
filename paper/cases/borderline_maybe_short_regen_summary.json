@@ -1,0 +1,14 @@
+{
+  "source_csv": "reports/borderline_maybe_short_regen.csv",
+  "case_count": 8,
+  "drift_min": 0.396,
+  "drift_max": 0.412,
+  "raw_quality_min": 0.629,
+  "raw_quality_max": 0.641,
+  "raw_success_true": 8,
+  "silence_true": 8,
+  "manual_labels": [
+    "MAYBE_SHORT_REGEN"
+  ],
+  "all_raw_success_and_silenced": true
+}
