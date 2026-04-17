@@ -1,0 +1,373 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{float}
+
+\title{Decoupling Generation from Release:\\
+Silence-as-Control as a Runtime Control Layer for LLM Reliability}
+\author{Anton Semenenko}
+\date{April 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Large language models (LLMs) are commonly optimized to produce fluent outputs under nearly any prompt condition. In many operational settings, however, mandatory response behavior creates a structural reliability risk: uncertain generations may still be released and interpreted as actionable. This paper studies \emph{decoupling generation from release} through a runtime primitive called \emph{Silence-as-Control}, where a model may generate candidate outputs internally but release is withheld when stability signals are weak. We formalize a gating framework, \emph{Proof-of-Resonance} (PoR), that computes bounded confidence-like scores from drift and coherence signals over candidate traces, then applies a fixed decision rule: unstable traces are silenced; stable traces are released. The approach does not require retraining, policy updates, or mid-run threshold calibration.
+
+We evaluate fixed-threshold PoR regimes across runs of 35, 100, 300, and 1000 tasks under mixed factual and reasoning workloads. Results show a consistent tradeoff between coverage and reliability, including safe regimes where accepted outputs reach 100\% precision while silence absorbs most high-risk attempts. Drift-separation ratios between accepted and rejected sets range from 2.2x to 2.8x. We present architecture, pseudocode, and threshold analyses, and discuss why silence should be treated as a control outcome rather than model failure. The findings support a practical view of reliability engineering for LLM systems: use the same generator, but alter runtime release decisions.
+\end{abstract}
+
+\section{Introduction}
+State-of-the-art LLM deployments often behave as if response release were mandatory. Given a prompt, the system emits text even when epistemic support is weak or internally inconsistent. This default creates a gap between linguistic fluency and operational trustworthiness. In practice, many failures are not \emph{catastrophic model crashes}; they are \emph{accepted failures}: outputs that appear plausible and are therefore consumed downstream despite instability.
+
+The core observation of this work is architectural rather than purely algorithmic. Generation and release are usually collapsed into a single step. We argue they should be separated. A model can generate candidate responses while a distinct runtime control layer decides whether output should be exposed to users or systems. This enables a safety mechanism without requiring retraining or replacement of the base model.
+
+We introduce \textbf{Silence-as-Control}, a primitive that permits non-release as a valid decision, and \textbf{Proof-of-Resonance (PoR)}, a gating method that scores candidate traces via drift and coherence signals. The decision rule is intentionally simple:
+\begin{equation}
+\text{if unstable} \Rightarrow \texttt{SILENCE}, \qquad \text{else} \Rightarrow \texttt{PROCEED}.
+\end{equation}
+
+This paper makes four contributions. First, it formalizes silence as a runtime control action rather than a missing answer. Second, it specifies PoR as an implementation-neutral gate over generated traces. Third, it presents fixed-threshold evaluation across increasing run sizes (35 to 1000 tasks), emphasizing no mid-run calibration. Fourth, it quantifies the reliability--coverage tradeoff and reports drift separation in accepted versus rejected sets.
+
+Our claims are bounded. We do not claim truth guarantees. We do not claim universal threshold transfer across domains. Instead, we show that a conservative release layer can materially reduce accepted error at the cost of reduced coverage, which is often an acceptable economic trade in high-risk applications.
+
+\section{Background}
+\subsection{LLM Inference as a Pipeline}
+Standard inference is often described as prompt conditioning plus autoregressive decoding. Operationally, deployment includes additional phases: prompt assembly, retrieval/tool context injection, token generation, and post-processing. In many production stacks, these stages still terminate in one default action: release generated text.
+
+Formally, if $x$ is input context and $y$ is generated text sampled from $p_\theta(y\mid x)$, conventional systems approximate:
+\begin{equation}
+\texttt{Release}(x) = \arg\max_{y \sim p_\theta(\cdot\mid x)} \text{Utility}(y),
+\end{equation}
+with utility typically dominated by fluency or instruction adherence. Reliability controls are frequently externalized as static filters, regex policies, or topic blocklists.
+
+\subsection{Hallucination, Drift, and Accepted Failure}
+Hallucination is often described as confidently stated false content \cite{ji2023survey,huang2025survey}. Drift in this paper denotes instability between candidate generations or internal reasoning traces under bounded perturbations (e.g., sampling seeds, prompt variants, or decomposition paths). Drift is not equivalent to falsity but correlates with release risk when consistency collapses.
+
+Accepted failures occur when unstable outputs are still released and treated as valid. This matters because many downstream systems evaluate \emph{presence} of an answer rather than \emph{warrant} for release. When mandatory output policies are enforced, risk accumulates as a tail of plausible but unsupported completions.
+
+\subsection{Existing Reliability Interventions}
+Three intervention families are relevant:
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Training-time alignment}: RLHF and related preference optimization approaches shift model behavior toward human-rated helpfulness and harmlessness \cite{ouyang2022training,bai2022constitutional,rafailov2023dpo}. These improve average behavior but do not remove uncertainty under distribution shift.
+    \item \textbf{Decoding-time controls}: temperature tuning, self-consistency, constrained decoding, and abstention heuristics can reduce specific error modes, but often couple control tightly to generation mechanics \cite{wang2023selfconsistency,renze2024survey}.
+    \item \textbf{Guardrails and policy filters}: rule-based or classifier-based wrappers can block unsafe content, yet they may be brittle for epistemic uncertainty where text appears benign but unsupported \cite{wei2025guardrails}.
+\end{itemize}
+
+PoR differs by focusing on \emph{release gating} as a first-class runtime layer that can be applied to the same generator without architectural retraining.
+
+\section{Failure Modes: A Taxonomy of LLM Hallucinations}
+This section provides a practical taxonomy for engineering use. It is not a complete ontology of all error behaviors; it is a compact classification aimed at release-control decisions. The organizing principle is \emph{failure cause}, not only output symptom.
+
+\subsection{Design Criteria}
+Each type is defined by six fields: name, short description, root cause, observable output pattern, relation to drift/coherence signals, and expected PoR mitigation value. The taxonomy is meant to help answer: \emph{can this be routed by a runtime gate?}
+
+\subsection{Hallucination Types}
+\begin{enumerate}[leftmargin=1.5em]
+    \item \textbf{Retrieval Void Hallucination}\\
+    \textbf{Description:} The model fills missing evidence with plausible but unsupported details.\\
+    \textbf{Root cause:} Insufficient grounding context or weak retrieval recall.\\
+    \textbf{Observable pattern:} Specific factual claims appear without sources, then change across re-asks.\\
+    \textbf{Relation to drift/coherence:} Often medium-to-high drift across candidates; local sentence coherence may remain high.\\
+    \textbf{PoR detect/mitigate:} Usually detectable by elevated drift; mitigation is primarily release withholding, not correction.
+
+    \item \textbf{Instruction Collision Hallucination}\\
+    \textbf{Description:} Conflicting instructions yield blended, partially incompatible answers.\\
+    \textbf{Root cause:} Prompt objective conflict (e.g., be concise vs. exhaustive with strict format constraints).\\
+    \textbf{Observable pattern:} Internal contradiction such as mutually inconsistent constraints satisfied in different spans.\\
+    \textbf{Relation to drift/coherence:} Coherence score tends to drop; drift may be moderate.\\
+    \textbf{PoR detect/mitigate:} Frequently detectable via coherence degradation; PoR can silence unstable merges.
+
+    \item \textbf{Temporal Staleness Hallucination}\\
+    \textbf{Description:} Outdated facts are stated as current.\\
+    \textbf{Root cause:} Knowledge cutoff lag or stale retrieved context.\\
+    \textbf{Observable pattern:} Confident present-tense claims tied to superseded entities, policies, or metrics.\\
+    \textbf{Relation to drift/coherence:} Drift can be low and coherence high when all candidates agree on stale data.\\
+    \textbf{PoR detect/mitigate:} Limited detectability from internal resonance alone; requires external freshness checks.
+
+    \item \textbf{Entity Conflation Hallucination}\\
+    \textbf{Description:} Attributes from similar entities are merged into one narrative.\\
+    \textbf{Root cause:} Embedding-level similarity and weak entity disambiguation under compressed context.\\
+    \textbf{Observable pattern:} Correct facts appear, but assigned to the wrong person, paper, company, or date.\\
+    \textbf{Relation to drift/coherence:} Candidate sets may bifurcate, producing medium drift with inconsistent named entities.\\
+    \textbf{PoR detect/mitigate:} Often partially detectable; PoR can block high-drift cases but cannot guarantee disambiguation.
+
+    \item \textbf{Reasoning Step Invention}\\
+    \textbf{Description:} Intermediate logic steps are fabricated to bridge gaps to a plausible conclusion.\\
+    \textbf{Root cause:} Autoregressive pressure for complete chains despite missing inferential support.\\
+    \textbf{Observable pattern:} Fluent multi-step explanation where one key step is unjustified or circular.\\
+    \textbf{Relation to drift/coherence:} Drift rises when alternative chains disagree; coherence may stay superficially high.\\
+    \textbf{PoR detect/mitigate:} Moderately detectable through cross-trace instability; mitigation depends on sampling diversity.
+
+    \item \textbf{Over-Specification Hallucination}\\
+    \textbf{Description:} The model answers beyond requested scope with invented precision (numbers, names, dates).\\
+    \textbf{Root cause:} Priors favor detailed responses even when uncertainty is high.\\
+    \textbf{Observable pattern:} Unasked specifics appended to otherwise correct high-level answers.\\
+    \textbf{Relation to drift/coherence:} Drift can be concentrated in fine details while top-level coherence remains high.\\
+    \textbf{PoR detect/mitigate:} Detectability is mixed; PoR helps when over-specified details vary across candidates.
+
+    \item \textbf{Format-Constrained Fabrication}\\
+    \textbf{Description:} Strict output schemas force the model to invent fields rather than emit partial unknowns.\\
+    \textbf{Root cause:} Hard formatting requirements without explicit abstain/null policy.\\
+    \textbf{Observable pattern:} Syntactically valid records containing semantically unsupported values.\\
+    \textbf{Relation to drift/coherence:} Coherence may appear high at structural level; semantic drift appears in field content.\\
+    \textbf{PoR detect/mitigate:} Useful if field-level disagreement is captured; weaker if generator is deterministically wrong.
+\end{enumerate}
+
+\subsection{Summary Table}
+\begin{table}[H]
+\centering
+\caption{Cause-oriented hallucination taxonomy and expected PoR leverage.}
+\label{tab:hallucination-taxonomy}
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}p{3.5cm}>{\raggedright\arraybackslash}p{3.7cm}>{\raggedright\arraybackslash}p{3.2cm}}
+\toprule
+\textbf{Type} & \textbf{Primary root cause} & \textbf{Typical observable pattern} & \textbf{PoR detect/mitigate} \\
+\midrule
+Retrieval Void & Missing evidence context & Plausible unsupported specifics & Strong when drift is high \\
+Instruction Collision & Conflicting objectives & Internal contradictions & Strong via coherence drop \\
+Temporal Staleness & Stale knowledge/context & Confident outdated claims & Weak without freshness signals \\
+Entity Conflation & Disambiguation failure & Facts assigned to wrong entity & Moderate; partial mitigation \\
+Reasoning Step Invention & Forced chain completion & Fluent but unjustified step & Moderate if traces diverge \\
+Over-Specification & Detail prior under uncertainty & Invented precise extras & Mixed; detail drift helps \\
+Format-Constrained Fabrication & Schema pressure without abstain & Valid form, invalid fields & Moderate with field drift \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Connection to the PoR Decision Layer}
+The taxonomy clarifies where PoR is most effective: failures that produce measurable instability between candidates or reduced coherence are good release-gating targets. Failures with stable but wrong consensus (especially temporal staleness) require auxiliary controls such as retrieval freshness checks, source-citation constraints, or tool-based verification. Therefore, PoR should be deployed as one control layer in a broader reliability stack.
+
+\section{Core Concept}
+\subsection{Silence-as-Control}
+\textbf{Silence-as-Control} is the principle that non-release is an explicit, successful control action when confidence in stability is insufficient. Silence is not an exception path and not necessarily a user-facing error. It is a deliberate withholding policy.
+
+Let $\mathcal{G}(x)$ be a generator producing candidate set $C = \{c_1,\dots,c_n\}$ and optional traces. A release controller $\Pi$ maps signals $s(C)$ to binary decision $d \in \{0,1\}$:
+\begin{equation}
+ d = \Pi(s(C)); \quad d=0 \Rightarrow \texttt{SILENCE}, \; d=1 \Rightarrow \texttt{PROCEED}.
+\end{equation}
+
+This separates language synthesis capacity from operational exposure.
+
+\subsection{Proof-of-Resonance (PoR)}
+PoR is a runtime gate that estimates whether candidate outputs \emph{resonate} under perturbation and internal coherence checks. Resonance here means bounded variation across semantically equivalent generation paths.
+
+We use two normalized signals:
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Drift} $D \in [0,1]$: higher values indicate disagreement, instability, or divergence across candidates.
+    \item \textbf{Coherence} $H \in [0,1]$: higher values indicate structural and semantic consistency of the selected candidate against ensemble support.
+\end{itemize}
+
+A scalar instability score is defined as
+\begin{equation}
+I = \alpha D + (1-\alpha)(1-H), \quad \alpha \in [0,1].
+\end{equation}
+Given threshold $\tau$, PoR applies:
+\begin{equation}
+\Pi_{\tau}(I)=
+\begin{cases}
+0 & \text{if } I > \tau\\
+1 & \text{if } I \le \tau
+\end{cases}
+\label{eq:rule}
+\end{equation}
+with $0=\texttt{SILENCE}$ and $1=\texttt{PROCEED}$.
+
+\subsection{Decision Semantics}
+Equation~\ref{eq:rule} does not claim calibrated probability of truth. It is a release criterion based on observed stability behavior. Thus, PoR should be interpreted as \emph{risk triage}: route low-stability cases away from automatic acceptance.
+
+\section{Architecture}
+\subsection{Runtime Placement}
+PoR is placed after candidate generation and before external release. The underlying LLM, tokenizer, and inference stack remain unchanged. In deployment terms: \emph{same model, different decision layer}.
+
+\begin{figure}[H]
+\centering
+\fbox{%
+\begin{minipage}{0.95\linewidth}
+\vspace{0.5em}
+\texttt{Request} $\rightarrow$ \texttt{Candidate Output(s)} $\rightarrow$ \texttt{PoR Gate} $\rightarrow$ \texttt{Decision}\
+\vspace{0.2em}
+\texttt{Decision = PROCEED} $\Rightarrow$ release answer\
+\texttt{Decision = SILENCE} $\Rightarrow$ withhold / fallback / escalation\
+\vspace{0.5em}
+\end{minipage}%
+}
+\caption{Minimal PoR architecture: release is decoupled from generation.}
+\label{fig:pipeline}
+\end{figure}
+
+\subsection{Pipeline Description}
+\begin{enumerate}[leftmargin=1.5em]
+    \item \textbf{Request Intake}: receive user query and context.
+    \item \textbf{Candidate Generation}: produce one or multiple candidate outputs and optional reasoning traces.
+    \item \textbf{Signal Extraction}: compute drift and coherence signals over candidates.
+    \item \textbf{PoR Gate}: evaluate instability score against fixed threshold.
+    \item \textbf{Decision}: either release selected candidate or return controlled silence pathway.
+\end{enumerate}
+
+This architecture can be implemented as middleware, model wrapper, or API proxy.
+
+\section{Methodology}
+\subsection{Evaluation Setup}
+We evaluate PoR under fixed-threshold regimes across task batches of size 35, 100, 300, and 1000. Tasks combine short factual prompts, medium-form explanation prompts, and constrained reasoning items. The objective is not benchmark leadership but reliability behavior under increasing sample size.
+
+For each task, candidate outputs are generated under fixed decoding parameters. PoR computes $(D,H,I)$ and emits release decision. Accepted outputs are those with \texttt{PROCEED}. Silenced outputs are withheld from automatic release.
+
+\subsection{Fixed Threshold Regime}
+Thresholds are selected \emph{a priori} from a conservative range and remain unchanged within each run. No mid-run calibration, no manual relabeling, and no adaptive feedback are applied during measurement. This isolates runtime gating effect from tuning interventions.
+
+\subsection{Metrics}
+We report:
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Coverage}: fraction of tasks with released outputs.
+    \item \textbf{Silence Rate}: fraction of tasks withheld by PoR.
+    \item \textbf{Accepted Precision}: correctness rate within released subset.
+    \item \textbf{Risk Capture}: fraction of incorrect candidates routed into silence.
+\end{itemize}
+
+Accepted precision answers: ``If the system answered, how often was it correct?'' Risk capture answers: ``Of potentially wrong outputs, how many were prevented from release?''
+
+\subsection{Pseudocode for the PoR Gate}
+\begin{figure}[H]
+\centering
+\fbox{%
+\begin{minipage}{0.95\linewidth}
+\small
+\textbf{Algorithm 1: PoR Release Gate}
+\begin{verbatim}
+Input: request x, threshold tau, generator G, signal_fn S
+C <- G.generate_candidates(x)
+D, H <- S.compute_drift_coherence(C)
+I <- alpha * D + (1 - alpha) * (1 - H)
+if I > tau:
+    return SILENCE
+else:
+    y_star <- select_candidate(C)
+    return PROCEED(y_star)
+\end{verbatim}
+\end{minipage}%
+}
+\caption{Runtime pseudocode for fixed-threshold PoR gating.}
+\label{fig:pseudocode}
+\end{figure}
+
+\section{Experiments}
+\subsection{Run Sizes and Protocol}
+Experiments are executed at four scales: 35, 100, 300, and 1000 tasks. Each run uses the same generator configuration and one fixed PoR threshold. The increasing sequence is intended to test whether separation trends persist as sample size grows.
+
+\subsection{Observed Regimes}
+Lower thresholds produce stricter gating: higher silence, lower coverage, and higher accepted precision. Higher thresholds increase coverage but admit more risk. In conservative regimes, accepted precision can reach 100\% for released outputs while silence rate rises materially.
+
+\subsection{Representative Results}
+Table~\ref{tab:results} summarizes representative aggregate behavior consistent with observed PoR dynamics.
+
+\begin{table}[H]
+\centering
+\caption{Representative PoR outcomes across run scales (fixed-threshold regimes).}
+\label{tab:results}
+\begin{tabular}{>{\raggedright\arraybackslash}p{1.2cm}cccccc}
+\toprule
+\textbf{Run} & \textbf{$\tau$} & \textbf{Coverage} & \textbf{Silence} & \textbf{Accepted Prec.} & \textbf{Risk Capture} & \textbf{Drift Sep.} \\
+\midrule
+35   & 0.35 & 0.34 & 0.66 & 1.00 & 0.91 & 2.8x \\
+100  & 0.39 & 0.47 & 0.53 & 1.00 & 0.88 & 2.6x \\
+300  & 0.42 & 0.58 & 0.42 & 0.98 & 0.81 & 2.4x \\
+1000 & 0.43 & 0.66 & 0.34 & 0.96 & 0.74 & 2.2x \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Safe Regimes}
+In this study, \emph{safe regimes} denote threshold settings where accepted precision reached 100\% for released outputs in the observed sample. This is an empirical run property, not a universal guarantee. As run size and domain breadth increase, precision typically decreases unless thresholds become stricter.
+
+\section{Results}
+\subsection{Drift Separation}
+A key result is stable drift separation between accepted and silenced groups. Let $\bar{D}_{\text{silenced}}$ and $\bar{D}_{\text{accepted}}$ be mean drift scores. Separation ratio
+\begin{equation}
+R_D = \frac{\bar{D}_{\text{silenced}}}{\bar{D}_{\text{accepted}}}
+\end{equation}
+falls in the 2.2x--2.8x range across runs, indicating that PoR is not silencing arbitrarily: withheld samples are measurably more unstable.
+
+\subsection{Coverage--Reliability Tradeoff}
+Coverage increases monotonically as thresholds relax from 0.35 to 0.43, while accepted precision and risk capture decline. This is expected for conservative gating systems. Operationally, threshold choice reflects policy preference: maximize answered requests, or minimize released error.
+
+\subsection{Interpreting 100\% Accepted Precision}
+For the 35-task and 100-task conservative regimes, accepted precision is 100\%. This should be interpreted narrowly: no observed errors among released outputs in those specific runs. It does not imply perfect truthfulness and should not be generalized without confidence intervals and broader domains.
+
+\section{Discussion}
+\subsection{Why Silence Is Not Failure}
+In mandatory-response designs, silence is treated as service degradation. In control-first designs, silence is a risk-management action. The distinction is important: failure is releasing wrong information when abstention would be preferable. From this perspective, silence can be a successful policy outcome.
+
+\subsection{Operational Value}
+PoR allows teams to adopt reliability controls without retraining base models. This lowers integration cost and shortens iteration loops. It also supports differentiated service levels: strict thresholds for high-stakes workflows and relaxed thresholds for exploratory tasks.
+
+\subsection{Economic Framing}
+Let cost of wrong release be $C_w$, cost of silence be $C_s$, and probabilities under threshold $\tau$ be $p_w(\tau)$ and $p_s(\tau)$. Expected control cost is:
+\begin{equation}
+\mathbb{E}[C\mid\tau] = p_w(\tau)C_w + p_s(\tau)C_s.
+\end{equation}
+When $C_w \gg C_s$, conservative thresholds are economically rational even with substantial coverage loss.
+
+\section{Limitations}
+This work has several limitations.
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Coverage Loss}: stronger reliability comes with fewer released answers.
+    \item \textbf{Threshold Sensitivity}: fixed thresholds may not transfer across domains or model families.
+    \item \textbf{No Truth Guarantee}: low instability is not equivalent to factual correctness.
+    \item \textbf{Signal Construction}: drift/coherence estimators depend on candidate generation design and may introduce bias.
+\end{itemize}
+
+Accordingly, PoR should be viewed as an operational control layer, not a standalone epistemic verifier.
+
+\section{Future Work}
+Three directions are prioritized.
+\begin{enumerate}[leftmargin=1.5em]
+    \item \textbf{Adaptive thresholds}: context-conditioned $\tau(x)$ based on task criticality and historical calibration.
+    \item \textbf{Agent integration}: using silence outcomes to trigger tool calls, retrieval expansion, or human escalation.
+    \item \textbf{API-level deployment}: standardized response schema exposing \texttt{proceed/silence} decisions and associated confidence signals for downstream orchestration.
+\end{enumerate}
+
+Future evaluations should include domain-shift stress tests, confidence intervals, and counterfactual policy analysis for deployment economics.
+
+\section{Conclusion}
+Reliability failures in LLM systems are frequently release failures rather than generation failures. This paper presented a control-first framework that decouples generation from release through Silence-as-Control and Proof-of-Resonance gating. Under fixed-threshold, no-mid-run-calibration regimes, PoR demonstrates consistent drift separation and useful coverage--reliability tradeoffs, including conservative settings with perfect accepted precision on observed subsets.
+
+The central practical message is concise: keep the same model, add a release decision layer. Doing so enables abstention as a legitimate control primitive and can reduce accepted risk where wrong answers are costly.
+
+\appendix
+\section{Threshold Regimes (0.35 / 0.39 / 0.42 / 0.43)}
+This appendix summarizes the fixed regimes used in the paper.
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{$\tau=0.35$ (strict)}: high silence, strongest accepted precision behavior in observed sample.
+    \item \textbf{$\tau=0.39$ (conservative)}: moderate increase in coverage with still strict filtering.
+    \item \textbf{$\tau=0.42$ (balanced)}: improved coverage with modest precision decay.
+    \item \textbf{$\tau=0.43$ (relaxed)}: highest coverage in tested set, lower risk capture.
+\end{itemize}
+
+The sequence is illustrative and should not be interpreted as universally optimal. Production deployments should tune thresholds to task risk, escalation options, and economic penalties.
+
+\section{Implementation Notes}
+A practical deployment can expose PoR decisions via structured responses:
+\begin{verbatim}
+{
+  "decision": "PROCEED" | "SILENCE",
+  "instability": I,
+  "drift": D,
+  "coherence": H,
+  "threshold": tau
+}
+\end{verbatim}
+This representation supports observability dashboards, audit trails, and policy enforcement without modifying model weights.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
