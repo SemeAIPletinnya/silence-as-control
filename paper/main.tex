@@ -23,7 +23,7 @@ Silence-as-Control as a Runtime Control Layer for LLM Reliability}
 \begin{abstract}
 Large language models (LLMs) are commonly optimized to produce fluent outputs under nearly any prompt condition. In many operational settings, however, mandatory response behavior creates a structural reliability risk: uncertain generations may still be released and interpreted as actionable. This paper studies \emph{decoupling generation from release} through a runtime primitive called \emph{Silence-as-Control}, where a model may generate candidate outputs internally but release is withheld when stability signals are weak. We formalize a gating framework, \emph{Proof-of-Resonance} (PoR), that computes bounded confidence-like scores from drift and coherence signals over candidate traces, then applies a fixed decision rule: unstable traces are silenced; stable traces are released. The approach does not require retraining, policy updates, or mid-run threshold calibration.
 
-We evaluate fixed-threshold PoR regimes across runs of 35, 100, 300, and 1000 tasks under mixed factual and reasoning workloads. Results show a consistent tradeoff between coverage and reliability, including safe regimes where accepted outputs reach 100\% precision while silence absorbs most high-risk attempts. Drift-separation ratios between accepted and rejected sets range from 2.2x to 2.8x. We present architecture, pseudocode, and threshold analyses, and discuss why silence should be treated as a control outcome rather than model failure. The findings support a practical view of reliability engineering for LLM systems: use the same generator, but alter runtime release decisions.
+We evaluate fixed-threshold PoR regimes on tracked repository artifacts covering runs of 35, 100, 300, and 1000 tasks, plus a 1000-task threshold sweep at 0.35/0.39/0.42/0.43. Results show the expected coverage--reliability tradeoff and stable drift separation between accepted and silenced cohorts (about 2.0x--2.8x across reported runs). In conservative regimes, accepted precision reached 100\% in the observed samples, but this is explicitly run-bounded and not a truth guarantee. A key empirical finding is a boundary pocket near threshold 0.39: some cases are raw successes yet still silenced. Curated MAYBE\_SHORT\_REGEN cases from this pocket cluster around semantic drift 0.396--0.412 with raw quality 0.629--0.641, suggesting that binary silence may be overly coarse in a narrow threshold-adjacent band. We present architecture, pseudocode, reproducibility scripts, and an evidence manifest to make claim provenance explicit. The practical message remains unchanged: same model, different release decision.
 \end{abstract}
 
 \section{Introduction}
@@ -36,9 +36,9 @@ We introduce \textbf{Silence-as-Control}, a primitive that permits non-release a
 \text{if unstable} \Rightarrow \texttt{SILENCE}, \qquad \text{else} \Rightarrow \texttt{PROCEED}.
 \end{equation}
 
-This paper makes four contributions. First, it formalizes silence as a runtime control action rather than a missing answer. Second, it specifies PoR as an implementation-neutral gate over generated traces. Third, it presents fixed-threshold evaluation across increasing run sizes (35 to 1000 tasks), emphasizing no mid-run calibration. Fourth, it quantifies the reliability--coverage tradeoff and reports drift separation in accepted versus rejected sets.
+This paper makes four contributions. First, it formalizes silence as a runtime control action rather than a missing answer. Second, it specifies PoR as an implementation-neutral gate over generated traces. Third, it presents fixed-threshold evaluation across tracked run artifacts while preserving a strict no-mid-run-calibration discipline. Fourth, it quantifies the reliability--coverage tradeoff, including a boundary-pocket analysis near threshold 0.39 where raw-success outputs can still be silenced.
 
-Our claims are bounded. We do not claim truth guarantees. We do not claim universal threshold transfer across domains. Instead, we show that a conservative release layer can materially reduce accepted error at the cost of reduced coverage, which is often an acceptable economic trade in high-risk applications.
+Our claims are bounded. We do not claim truth guarantees. We do not claim universal threshold transfer across domains. Instead, we show that a conservative release layer can materially reduce accepted error at the cost of reduced coverage, which is often an acceptable economic trade in high-risk applications. This deployment framing is relevant for coding-agent settings where a run may appear ``green'' while still being architecturally wrong; in such contexts, release controls remain useful even when generation quality appears locally high.
 
 \section{Background}
 \subsection{LLM Inference as a Pipeline}
@@ -154,6 +154,16 @@ We report:
 
 Accepted precision answers: ``If the system answered, how often was it correct?'' Risk capture answers: ``Of potentially wrong outputs, how many were prevented from release?''
 
+\subsection{Evidence and Provenance Surface}
+To keep claims auditable, this paper package includes:
+\begin{itemize}[leftmargin=1.5em]
+    \item \texttt{paper/evidence\_manifest.md}: mapping from paper claims to run artifacts.
+    \item \texttt{paper/appendix\_protocol.md}: fixed-threshold evaluation discipline.
+    \item \texttt{scripts/aggregate\_paper\_results.py}: metric aggregation from tracked JSONL runs.
+    \item \texttt{scripts/export\_boundary\_cases.py}: boundary-pocket export from curated report CSV.
+    \item \texttt{scripts/make\_paper\_figures.py}: generation of LaTeX table fragments used in this manuscript.
+\end{itemize}
+
 \subsection{Pseudocode for the PoR Gate}
 \begin{figure}[H]
 \centering
@@ -180,32 +190,33 @@ else:
 
 \section{Experiments}
 \subsection{Run Sizes and Protocol}
-Experiments are executed at four scales: 35, 100, 300, and 1000 tasks. Each run uses the same generator configuration and one fixed PoR threshold. The increasing sequence is intended to test whether separation trends persist as sample size grows.
+The paper uses tracked JSONL artifacts under \texttt{reports/} and computes metrics through reproducibility scripts in \texttt{scripts/}. We report (i) run-scale snapshots at 35, 100, 300, and 1000 tasks and (ii) a controlled 1000-task threshold sweep (0.35/0.39/0.42/0.43). All metrics in Tables~\ref{tab:run-scale} and~\ref{tab:threshold-sweep} are generated from repository artifacts, not manually entered values.
 
 \subsection{Observed Regimes}
-Lower thresholds produce stricter gating: higher silence, lower coverage, and higher accepted precision. Higher thresholds increase coverage but admit more risk. In conservative regimes, accepted precision can reach 100\% for released outputs while silence rate rises materially.
+Lower thresholds tend to be more conservative (higher silence, lower coverage). At 1000-task scale, accepted precision is 100\% for thresholds 0.35 and 0.39 in observed runs; at 0.42 and 0.43, coverage rises but accepted precision and risk capture decrease slightly. This pattern reflects a reliability--coverage frontier rather than a universal optimum.
 
-\subsection{Representative Results}
-Table~\ref{tab:results} summarizes representative aggregate behavior consistent with observed PoR dynamics.
+\subsection{Run-Scale Snapshot Results}
+Table~\ref{tab:run-scale} summarizes one tracked run per scale. The first two rows use threshold 0.30 (legacy small-scale artifacts), while larger runs use 0.35 and 0.39. Therefore, this table should be interpreted as a provenance snapshot, not a pure threshold sweep.
 
 \begin{table}[H]
 \centering
-\caption{Representative PoR outcomes across run scales (fixed-threshold regimes).}
-\label{tab:results}
-\begin{tabular}{>{\raggedright\arraybackslash}p{1.2cm}cccccc}
-\toprule
-\textbf{Run} & \textbf{$\tau$} & \textbf{Coverage} & \textbf{Silence} & \textbf{Accepted Prec.} & \textbf{Risk Capture} & \textbf{Drift Sep.} \\
-\midrule
-35   & 0.35 & 0.34 & 0.66 & 1.00 & 0.91 & 2.8x \\
-100  & 0.39 & 0.47 & 0.53 & 1.00 & 0.88 & 2.6x \\
-300  & 0.42 & 0.58 & 0.42 & 0.98 & 0.81 & 2.4x \\
-1000 & 0.43 & 0.66 & 0.34 & 0.96 & 0.74 & 2.2x \\
-\bottomrule
-\end{tabular}
+\caption{Run-scale snapshot generated from \texttt{paper/figures/results\_by\_run\_scale.csv}.}
+\label{tab:run-scale}
+\input{figures/table_run_scale.tex}
 \end{table}
 
-\subsection{Safe Regimes}
-In this study, \emph{safe regimes} denote threshold settings where accepted precision reached 100\% for released outputs in the observed sample. This is an empirical run property, not a universal guarantee. As run size and domain breadth increase, precision typically decreases unless thresholds become stricter.
+\subsection{Controlled 1000-task Threshold Sweep}
+Table~\ref{tab:threshold-sweep} isolates threshold behavior at fixed task count (\(N=1000\)). In this controlled setting, 0.39 appears as a conservative operating regime: accepted precision remained 100\% in the observed run with fewer silenced raw-success cases than 0.35 (15 vs 29), while maintaining strong drift separation.
+
+\begin{table}[H]
+\centering
+\caption{1000-task threshold sweep generated from \texttt{paper/figures/results\_1000\_threshold\_sweep.csv}.}
+\label{tab:threshold-sweep}
+\input{figures/table_threshold_sweep.tex}
+\end{table}
+
+\subsection{Safe Regime Language}
+In this paper, \emph{safe regime} means that accepted precision reached 100\% \emph{in the observed run artifact}. It does not imply universal optimality, and it is not a truth guarantee.
 
 \section{Results}
 \subsection{Drift Separation}
@@ -213,13 +224,21 @@ A key result is stable drift separation between accepted and silenced groups. Le
 \begin{equation}
 R_D = \frac{\bar{D}_{\text{silenced}}}{\bar{D}_{\text{accepted}}}
 \end{equation}
-falls in the 2.2x--2.8x range across runs, indicating that PoR is not silencing arbitrarily: withheld samples are measurably more unstable.
+falls between approximately 2.0x and 2.83x across reported artifacts, indicating that PoR is not silencing arbitrarily: withheld samples are measurably more unstable.
 
 \subsection{Coverage--Reliability Tradeoff}
-Coverage increases monotonically as thresholds relax from 0.35 to 0.43, while accepted precision and risk capture decline. This is expected for conservative gating systems. Operationally, threshold choice reflects policy preference: maximize answered requests, or minimize released error.
+In the 1000-task sweep, coverage increases from 53.5\% (0.35) to 56.3\% (0.42), then returns to 55.0\% (0.43), while accepted precision and risk capture decrease from 100\% to 98.36\% and 98.01\%, respectively. This is the practical control tradeoff: more answers can mean more accepted risk.
 
 \subsection{Interpreting 100\% Accepted Precision}
-For the 35-task and 100-task conservative regimes, accepted precision is 100\%. This should be interpreted narrowly: no observed errors among released outputs in those specific runs. It does not imply perfect truthfulness and should not be generalized without confidence intervals and broader domains.
+For multiple conservative artifacts (including 1000-task runs at 0.35 and 0.39), accepted precision is 100\%. This should be interpreted narrowly: no observed accepted errors in those specific runs. It does not imply perfect truthfulness and should not be generalized without broader-domain validation.
+
+\subsection{Threshold 0.39 as a Conservative Frontier}
+At threshold 0.39, the run artifact contains cases where \texttt{raw\_success=true} and \texttt{silence=true}, therefore \texttt{with\_control\_success=false}. This is not hidden as noise; it is direct evidence that the release gate is conservative enough to suppress some borderline-valid generations. In the 1000-task 0.39 run, 15 raw-success outputs were silenced.
+
+\subsection{Boundary Pocket and MAYBE\_SHORT\_REGEN}
+The boundary evidence package (\texttt{reports/borderline\_maybe\_short\_regen.csv}) contains recurrent cases with semantic drift in the 0.396--0.412 band, raw-quality scores around 0.629--0.641, and labels \texttt{MAYBE\_SHORT\_REGEN}. All 8 rows in that file are simultaneously raw-success and silenced. Manual inspection suggests these are borderline-stable outputs near the threshold frontier rather than clear failures.
+
+This observation does not change the primitive gate and does not imply tri-action behavior is already deployed. It suggests a future extension layer: after a \texttt{SILENCE} decision, a narrow subset of threshold-adjacent cases could be routed to short regeneration, constrained retry, clarification, or selective fallback.
 
 \section{Failure Modes: A Taxonomy of LLM Hallucinations}
 This section introduces a practical taxonomy organized by likely \emph{failure cause}, not surface wording alone. It is intentionally non-exhaustive and meant for runtime engineering decisions. Categories are informed by prior work on hallucination, factuality, and confidence diagnostics \cite{ji2023survey,maynez2020faithfulness,manakul2023selfcheckgpt,min2023factscore}.
@@ -325,6 +344,7 @@ This work has several limitations.
     \item \textbf{Threshold Sensitivity}: fixed thresholds may not transfer across domains or model families.
     \item \textbf{No Truth Guarantee}: low instability is not equivalent to factual correctness.
     \item \textbf{Signal Construction}: drift/coherence estimators depend on candidate generation design and may introduce bias.
+    \item \textbf{Boundary Coarseness}: binary silence may be overly coarse in a narrow threshold-adjacent band (e.g., MAYBE\_SHORT\_REGEN pocket near 0.39).
 \end{itemize}
 
 Accordingly, PoR should be viewed as an operational control layer, not a standalone epistemic verifier.
@@ -333,6 +353,7 @@ Accordingly, PoR should be viewed as an operational control layer, not a standal
 Three directions are prioritized.
 \begin{enumerate}[leftmargin=1.5em]
     \item \textbf{Adaptive thresholds}: context-conditioned $\tau(x)$ based on task criticality and historical calibration.
+    \item \textbf{Selective post-silence routing}: keep the primitive binary gate unchanged, but add extension-layer routing for narrow boundary pockets (short regeneration, constrained retry, clarification).
     \item \textbf{Agent integration}: using silence outcomes to trigger tool calls, retrieval expansion, or human escalation.
     \item \textbf{API-level deployment}: standardized response schema exposing \texttt{proceed/silence} decisions and associated confidence signals for downstream orchestration.
 \end{enumerate}
@@ -348,10 +369,10 @@ The central practical message is concise: keep the same model, add a release dec
 \section{Threshold Regimes (0.35 / 0.39 / 0.42 / 0.43)}
 This appendix summarizes the fixed regimes used in the paper.
 \begin{itemize}[leftmargin=1.5em]
-    \item \textbf{$\tau=0.35$ (strict)}: high silence, strongest accepted precision behavior in observed sample.
-    \item \textbf{$\tau=0.39$ (conservative)}: moderate increase in coverage with still strict filtering.
-    \item \textbf{$\tau=0.42$ (balanced)}: improved coverage with modest precision decay.
-    \item \textbf{$\tau=0.43$ (relaxed)}: highest coverage in tested set, lower risk capture.
+    \item \textbf{$\tau=0.35$ (strict)}: highest silence among 1000-task sweep runs; accepted precision observed at 100\%.
+    \item \textbf{$\tau=0.39$ (conservative frontier)}: accepted precision observed at 100\%, with a recurrent near-threshold boundary pocket (including raw-success yet silenced cases).
+    \item \textbf{$\tau=0.42$ (less conservative)}: higher coverage with modest precision and risk-capture decay.
+    \item \textbf{$\tau=0.43$ (less conservative)}: similar pattern to 0.42 with slightly lower accepted precision in observed run.
 \end{itemize}
 
 The sequence is illustrative and should not be interpreted as universally optimal. Production deployments should tune thresholds to task risk, escalation options, and economic penalties.

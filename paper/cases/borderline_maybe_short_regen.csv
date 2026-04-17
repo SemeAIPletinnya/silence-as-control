@@ -1,0 +1,250 @@
+task_id,category,prompt,output,semantic_proxy_drift,length_ratio_drift,raw_quality_score,raw_success,silence,manual_label,manual_notes
+edge_729,edge,What is truth?,"“Truth” usually means: **what is actually the case**.
+
+A statement is true if it matches reality.  
+For example:
+
+- “Water freezes at 0°C at standard pressure” → true
+- “The Moon is made of cheese” → false
+
+But the idea gets deeper in philosophy. Common ways people think about truth include:
+
+1. **Correspondence theory**  
+   Truth is when a belief or statement matches the facts.
+
+2. **Coherence theory**  
+   Truth is when something fits consistently within a larger system of beliefs.
+
+3. **Pragmatic theory**  
+   Truth is what proves reliable or works in practice.
+
+4. **Deflationary view**  
+   Saying “it is true that snow is white” adds little beyond saying “snow is white.”
+
+There’s also a difference between:
+
+- **Objective truth**: independent of opinion  
+  - e.g. “The Earth orbits the Sun.”
+- **Subjective truth**: dependent on personal experience  
+  - e.g. “This music is comforting to me.”
+
+In everyday life, truth often means **honesty**, **accuracy**, or **reality as opposed to illusion or error**.
+
+A short answer:  
+**Truth is the quality of being in accord with reality.**
+
+If you want, I can also answer this:
+- philosophically,
+- scientifically,
+- religiously,
+- or in a more poetic way.",0.397,1.0,0.641,True,True,MAYBE_SHORT_REGEN,Boundary pocket lane; short-regeneration sandbox input.
+edge_788,edge,What is truth?,"Truth is what is actually the case.
+
+That sounds simple, but philosophers have meant a few different things by it:
+
+- **Correspondence theory**: a statement is true if it matches reality.  
+  - “Water boils at 100°C at sea level” is true if that’s how the world works.
+- **Coherence theory**: a belief is true if it fits consistently within a larger system of beliefs.
+- **Pragmatic theory**: truth is what proves reliable in practice or inquiry.
+- **Deflationary views**: saying “it is true that snow is white” adds little beyond saying “snow is white.”
+
+There’s also a difference between:
+- **Objective truth**: independent of opinion, like mathematical or many physical facts.
+- **Subjective truth**: grounded in personal experience, like “this music makes me sad.”
+
+In everyday life, “truth” usually means:
+1. Honest representation,
+2. Accuracy about facts,
+3. Sometimes deeper reality or meaning.
+
+A short answer:  
+**Truth is the alignment of belief, statement, or perception with reality — though what counts as “reality” and how we know it is where the debate begins.**
+
+If you want, I can also answer this:
+- philosophically,
+- scientifically,
+- spiritually,
+- or in the style of a specific thinker like Plato, Nietzsche, or Buddha.",0.397,1.0,0.641,True,True,MAYBE_SHORT_REGEN,Boundary pocket lane; short-regeneration sandbox input.
+edge_822,edge,What is truth?,"Truth is what is actually the case.
+
+That sounds simple, but the question gets deep fast because people mean different things by “truth”:
+
+- **Everyday truth:** A statement matches reality.  
+  - “Water freezes at 0°C at standard pressure” is true.
+- **Logical or mathematical truth:** A statement follows from definitions or rules.  
+  - “2 + 2 = 4.”
+- **Subjective or personal truth:** Someone’s real experience or feeling.  
+  - “I felt hurt by that” can be true as a report of experience.
+- **Moral or existential truth:** A deeper claim about meaning, value, or human life.  
+  - Harder to verify, but still what many people mean by “truth.”
+
+Philosophers have proposed different theories:
+
+- **Correspondence theory:** Truth is when a belief matches reality.
+- **Coherence theory:** Truth is when a belief fits consistently within a larger system of beliefs.
+- **Pragmatic theory:** Truth is what proves reliable or works in practice.
+- **Deflationary views:** Saying “it is true” often just means saying the statement itself.
+
+There’s also a human problem: we often confuse truth with:
+
+- what we want to be true,
+- what feels true,
+- what most people believe,
+- what is useful to believe.
+
+Those can overlap with truth, but they are not the same thing.
+
+A short answer:
+**Truth is reality correctly described.**
+
+A deeper answer:
+**Truth is the goal of thought when we are trying not merely to believe, but to believe rightly.**
+
+If you want, I can also answer this:
+- philosophically,
+- scientifically,
+- spiritually,
+- or in a one-sentence poetic way.",0.397,1.0,0.641,True,True,MAYBE_SHORT_REGEN,Boundary pocket lane; short-regeneration sandbox input.
+edge_863,edge,What is truth?,"“Truth” usually means **what is actually the case**.
+
+A statement is true if it matches reality.  
+For example:
+
+- “Water freezes at 0°C at standard pressure” — true.
+- “The Moon is made of cheese” — false.
+
+But philosophers have given different ways of understanding truth:
+
+1. **Correspondence theory**  
+   Truth is when a belief or statement matches the facts.
+
+2. **Coherence theory**  
+   Truth is when a belief fits consistently within a larger system of beliefs.
+
+3. **Pragmatic theory**  
+   Truth is what proves reliable or works in practice.
+
+4. **Deflationary/minimal theory**  
+   Saying “it is true that snow is white” adds little beyond saying “snow is white.”
+
+There’s also a deeper issue:  
+- **Objective truth**: true regardless of what anyone thinks.  
+- **Subjective truth**: true relative to personal experience, like “this music is beautiful.”
+
+In everyday life, “truth” usually means **honesty**, **accuracy**, or **reality as it is rather than as we wish it to be**.
+
+A short answer:  
+**Truth is the alignment of belief, statement, or perception with reality.**
+
+If you want, I can also answer this **philosophically, scientifically, religiously, or poetically**.",0.396,1.0,0.641,True,True,MAYBE_SHORT_REGEN,Boundary pocket lane; short-regeneration sandbox input.
+edge_870,edge,What is truth?,"Truth is what is the case.
+
+That’s the shortest answer, but “truth” can mean a few different things depending on context:
+
+- Correspondence view: a statement is true if it matches reality.  
+  - “Water boils at 100°C at sea level” is true if, in fact, that happens.
+
+- Coherence view: something is true if it fits consistently within a larger system of beliefs or statements.
+
+- Pragmatic view: truth is what proves reliable in practice or inquiry.
+
+- Existential or personal sense: “truth” can mean honesty, authenticity, or facing reality without self-deception.
+
+People also distinguish:
+
+- Objective truth: true regardless of anyone’s opinion.
+- Subjective truth: true as a matter of personal experience.
+  - “This song makes me sad” can be true for you.
+
+A classic philosophical problem is that humans don’t access reality perfectly, so we often ask not just “What is truth?” but “How do we know what is true?”
+
+If you want, I can also answer this:
+- philosophically,
+- scientifically,
+- religiously,
+- or in a plain everyday sense.",0.412,1.0,0.629,True,True,MAYBE_SHORT_REGEN,Boundary pocket lane; short-regeneration sandbox input.
+edge_903,edge,What is truth?,"“Truth” can mean a few related things:
+
+1. Correspondence to reality  
+A statement is true if it matches the way things actually are.  
+Example: “Water freezes at 0°C at standard pressure” is true because that is how reality behaves.
+
+2. Logical or mathematical truth  
+Some things are true within a formal system because they follow from definitions or rules.  
+Example: “2 + 2 = 4.”
+
+3. Sincerity or honesty  
+Sometimes “truth” means speaking honestly or authentically.  
+Example: “Tell me the truth” means “don’t deceive me.”
+
+4. Deeper or existential truth  
+People also use “truth” to mean a profound insight about life, self, or meaning.  
+Example: “A hard truth about life is that it includes loss.”
+
+Philosophically, different theories explain truth differently:
+- Correspondence theory: truth matches reality.
+- Coherence theory: truth fits consistently within a whole system of beliefs.
+- Pragmatic theory: truth is what proves reliable or workable in experience.
+- Deflationary view: saying “it is true that snow is white” just means “snow is white.”
+
+Pilate’s famous question, “What is truth?”, matters because truth is both simple and difficult: we use it constantly, but defining it fully raises deep questions about reality, language, knowledge, and perception.
+
+If you want, I can also give:
+- a philosophical answer,
+- a religious answer,
+- a scientific answer, or
+- a poetic answer.",0.397,1.0,0.641,True,True,MAYBE_SHORT_REGEN,Boundary pocket lane; short-regeneration sandbox input.
+edge_920,edge,What is truth?,"“Truth” usually means **what is actually the case**.
+
+A statement is true if it matches reality.  
+For example:
+
+- “Water freezes at 0°C at standard pressure” — true.
+- “The Moon is made of cheese” — false.
+
+But “truth” can mean slightly different things depending on context:
+
+- **Everyday sense:** accuracy, honesty, or fact.
+- **Philosophy:** a deeper question: *what makes something true?*
+  - **Correspondence theory:** truth is when beliefs match reality.
+  - **Coherence theory:** truth is when a belief fits consistently within a larger system of beliefs.
+  - **Pragmatic theory:** truth is what proves reliable or useful in practice.
+
+There’s also a personal sense:
+- **Objective truth:** independent of anyone’s opinions.
+- **Subjective truth:** true from a person’s perspective or experience, like “I am in pain.”
+
+So the shortest answer is:
+
+**Truth is what is real, factual, or in accordance with reality.**
+
+If you want, I can also answer this:
+- philosophically,
+- scientifically,
+- religiously,
+- or poetically.",0.412,1.0,0.629,True,True,MAYBE_SHORT_REGEN,Boundary pocket lane; short-regeneration sandbox input.
+edge_948,edge,What is truth?,"“Truth” can mean a few related things:
+
+- **Correspondence to reality:** A statement is true if it matches the way things actually are.  
+  - Example: “Water freezes at 0°C at standard pressure” is true because it reflects reality under those conditions.
+
+- **Logical or mathematical truth:** Something is true because it follows from definitions or rules.  
+  - Example: “2 + 2 = 4.”
+
+- **Personal or existential truth:** What feels deeply real or authentic to someone.  
+  - Example: “It is true for me that music gives my life meaning.”
+
+Philosophers have proposed different theories:
+
+- **Correspondence theory:** Truth = matching reality.
+- **Coherence theory:** Truth = fitting consistently within a larger system of beliefs.
+- **Pragmatic theory:** Truth = what proves reliable or useful in practice.
+- **Deflationary views:** Saying “it is true that X” often just means “X.”
+
+A short answer: **truth is what is the case**—but determining that can be simple in math, harder in science, and hardest in human life.
+
+If you want, I can also answer this:
+- philosophically,
+- scientifically,
+- religiously,
+- or poetically.",0.396,1.0,0.641,True,True,MAYBE_SHORT_REGEN,Boundary pocket lane; short-regeneration sandbox input.
