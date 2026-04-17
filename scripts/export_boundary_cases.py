@@ -1,3 +1,5 @@
+"""Export curated boundary-pocket evidence for paper packaging."""
+
 from __future__ import annotations
 
 import argparse
@@ -81,9 +83,13 @@ def write_outputs(csv_path: Path, json_path: Path, rows: list[dict[str, str]], s
 
 def main() -> int:
     args = parse_args()
-    rows = load_rows(args.input)
-    summary = compute_summary(rows, args.input)
-    write_outputs(args.output_csv, args.output_json, rows, summary)
+    try:
+        rows = load_rows(args.input)
+        summary = compute_summary(rows, args.input)
+        write_outputs(args.output_csv, args.output_json, rows, summary)
+    except Exception as exc:
+        print(f"ERROR: failed to export boundary cases: {exc}")
+        return 1
 
     print(f"Wrote {len(rows)} boundary rows -> {args.output_csv}")
     print(f"Wrote summary -> {args.output_json}")

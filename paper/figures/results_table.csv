@@ -1,5 +1,0 @@
-run_label,source_file,task_count,silence_threshold,coverage,silence_rate,accepted_precision,risk_capture,drift_separation
-1000_tasks_t0.35,reports/eval_run5_1000_threshold_035.jsonl,1000,0.35,0.535,0.465,1.0,1.0,2.7039
-1000_tasks_t0.39,reports/eval_run6_1000_threshold_039.jsonl,1000,0.39,0.544,0.456,1.0,1.0,2.7405
-1000_tasks_t0.42,reports/eval_run5_1000_threshold_042.jsonl,1000,0.42,0.563,0.437,0.9876,0.9841,2.6927
-1000_tasks_t0.43,reports/eval_run5_1000_threshold_043.jsonl,1000,0.43,0.55,0.45,0.9836,0.9801,2.7028

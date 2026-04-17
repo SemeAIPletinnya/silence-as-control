@@ -1,3 +1,5 @@
+"""Aggregate paper-ready metrics from tracked JSONL evaluation artifacts."""
+
 from __future__ import annotations
 
 import argparse
@@ -142,12 +144,15 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    try:
+        scale_rows = [summarize_run(spec) for spec in DEFAULT_SCALE_RUNS]
+        threshold_rows = [summarize_run(spec) for spec in DEFAULT_THRESHOLD_SWEEP]
 
-    scale_rows = [summarize_run(spec) for spec in DEFAULT_SCALE_RUNS]
-    threshold_rows = [summarize_run(spec) for spec in DEFAULT_THRESHOLD_SWEEP]
-
-    write_csv(args.scale_out, scale_rows)
-    write_csv(args.threshold_out, threshold_rows)
+        write_csv(args.scale_out, scale_rows)
+        write_csv(args.threshold_out, threshold_rows)
+    except Exception as exc:
+        print(f"ERROR: failed to aggregate paper results: {exc}")
+        return 1
 
     print(f"Wrote {len(scale_rows)} rows -> {args.scale_out}")
     print(f"Wrote {len(threshold_rows)} rows -> {args.threshold_out}")

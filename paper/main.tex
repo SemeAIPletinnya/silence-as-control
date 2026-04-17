@@ -206,7 +206,7 @@ Table~\ref{tab:run-scale} summarizes one tracked run per scale. The first two ro
 \end{table}
 
 \subsection{Controlled 1000-task Threshold Sweep}
-Table~\ref{tab:threshold-sweep} isolates threshold behavior at fixed task count (\(N=1000\)). In this controlled setting, 0.39 appears as a conservative operating regime: accepted precision remained 100\% in the observed run with fewer silenced raw-success cases than 0.35 (15 vs 29), while maintaining strong drift separation.
+Table~\ref{tab:threshold-sweep} isolates threshold behavior at fixed task count (\(N=1000\)). In this controlled setting, 0.39 appears as a conservative operating regime and practical safe anchor: accepted precision remained 100\% in the observed run with fewer silenced raw-success cases than 0.35 (15 vs 29), while maintaining strong drift separation.
 
 \begin{table}[H]
 \centering
@@ -227,7 +227,7 @@ R_D = \frac{\bar{D}_{\text{silenced}}}{\bar{D}_{\text{accepted}}}
 falls between approximately 2.0x and 2.83x across reported artifacts, indicating that PoR is not silencing arbitrarily: withheld samples are measurably more unstable.
 
 \subsection{Coverage--Reliability Tradeoff}
-In the 1000-task sweep, coverage increases from 53.5\% (0.35) to 56.3\% (0.42), then returns to 55.0\% (0.43), while accepted precision and risk capture decrease from 100\% to 98.36\% and 98.01\%, respectively. This is the practical control tradeoff: more answers can mean more accepted risk.
+In the 1000-task sweep, coverage rises from 53.5\% (0.35) to 56.3\% (0.42), then returns to 55.0\% (0.43), so behavior is not strictly monotonic across all thresholds. Within this sweep, accepted precision and risk capture decrease from 100\% to 98.36\% and 98.01\%, respectively. This is the practical control tradeoff in our runs: more answers can mean more accepted risk.
 
 \subsection{Interpreting 100\% Accepted Precision}
 For multiple conservative artifacts (including 1000-task runs at 0.35 and 0.39), accepted precision is 100\%. This should be interpreted narrowly: no observed accepted errors in those specific runs. It does not imply perfect truthfulness and should not be generalized without broader-domain validation.
@@ -236,7 +236,7 @@ For multiple conservative artifacts (including 1000-task runs at 0.35 and 0.39),
 At threshold 0.39, the run artifact contains cases where \texttt{raw\_success=true} and \texttt{silence=true}, therefore \texttt{with\_control\_success=false}. This is not hidden as noise; it is direct evidence that the release gate is conservative enough to suppress some borderline-valid generations. In the 1000-task 0.39 run, 15 raw-success outputs were silenced.
 
 \subsection{Boundary Pocket and MAYBE\_SHORT\_REGEN}
-The boundary evidence package (\texttt{reports/borderline\_maybe\_short\_regen.csv}) contains recurrent cases with semantic drift in the 0.396--0.412 band, raw-quality scores around 0.629--0.641, and labels \texttt{MAYBE\_SHORT\_REGEN}. All 8 rows in that file are simultaneously raw-success and silenced. Manual inspection suggests these are borderline-stable outputs near the threshold frontier rather than clear failures.
+The boundary evidence package (\texttt{reports/borderline\_maybe\_short\_regen.csv}) contains a recurrent borderline pocket with semantic drift in the 0.396--0.412 band, raw-quality scores around 0.629--0.641, and labels \texttt{MAYBE\_SHORT\_REGEN}. All 8 rows in that file are simultaneously raw-success and silenced. Manual inspection suggests these are borderline-stable outputs near the threshold frontier rather than clear failures.
 
 This observation does not change the primitive gate and does not imply tri-action behavior is already deployed. It suggests a future extension layer: after a \texttt{SILENCE} decision, a narrow subset of threshold-adjacent cases could be routed to short regeneration, constrained retry, clarification, or selective fallback.
 
@@ -350,7 +350,7 @@ This work has several limitations.
 Accordingly, PoR should be viewed as an operational control layer, not a standalone epistemic verifier.
 
 \section{Future Work}
-Three directions are prioritized.
+Four directions are prioritized.
 \begin{enumerate}[leftmargin=1.5em]
     \item \textbf{Adaptive thresholds}: context-conditioned $\tau(x)$ based on task criticality and historical calibration.
     \item \textbf{Selective post-silence routing}: keep the primitive binary gate unchanged, but add extension-layer routing for narrow boundary pockets (short regeneration, constrained retry, clarification).

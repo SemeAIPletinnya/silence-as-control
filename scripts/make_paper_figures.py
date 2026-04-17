@@ -1,3 +1,5 @@
+"""Generate LaTeX table fragments from aggregated paper CSV outputs."""
+
 from __future__ import annotations
 
 import argparse
@@ -76,10 +78,15 @@ def write_sweep_table(path: Path, rows: list[dict[str, str]]) -> None:
 
 def main() -> int:
     args = parse_args()
-    scale_rows = load_rows(args.scale_csv)
-    sweep_rows = load_rows(args.sweep_csv)
-    write_scale_table(args.scale_tex, scale_rows)
-    write_sweep_table(args.sweep_tex, sweep_rows)
+    try:
+        scale_rows = load_rows(args.scale_csv)
+        sweep_rows = load_rows(args.sweep_csv)
+        write_scale_table(args.scale_tex, scale_rows)
+        write_sweep_table(args.sweep_tex, sweep_rows)
+    except Exception as exc:
+        print(f"ERROR: failed to generate LaTeX figure tables: {exc}")
+        return 1
+
     print(f"Wrote LaTeX table fragment: {args.scale_tex}")
     print(f"Wrote LaTeX table fragment: {args.sweep_tex}")
     return 0
