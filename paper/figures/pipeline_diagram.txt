@@ -1,0 +1,11 @@
+Request
+  |
+  v
+Candidate Output(s)  ---->  Drift / Coherence Signal Extraction
+  |                                   |
+  +-----------------------------------+
+                  |
+                  v
+               PoR Gate
+        if unstable -> SILENCE
+        else        -> PROCEED
