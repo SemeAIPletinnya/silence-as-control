@@ -59,6 +59,8 @@ python benchmarks/simpleqa/run_simpleqa_por.py \
   --max-examples 200 \
   --thresholds 0.35 0.39 0.42 0.43 \
   --por-samples 3 \
+  --baseline-temperature 0.0 \
+  --por-temperature 0.4 \
   --output-dir results/simpleqa
 ```
 
@@ -66,6 +68,11 @@ Environment variables for OpenAI-compatible adapter:
 
 - `OPENAI_API_KEY` (required)
 - `OPENAI_BASE_URL` (optional)
+
+Temperature controls:
+
+- `--baseline-temperature` defaults to `0.0` (deterministic baseline behavior).
+- `--por-temperature` defaults to `0.4`, allowing PoR candidate samples to vary and expose instability/drift.
 
 ## Output artifacts
 
