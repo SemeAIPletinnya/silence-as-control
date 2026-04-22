@@ -24,6 +24,17 @@ from benchmarks.simpleqa.plot_results import build_threshold_tradeoff_plot
 from benchmarks.simpleqa.por_adapter import evaluate_por_gate
 
 
+def threshold_to_key(threshold: float) -> str:
+    """Non-lossy threshold key for grouping/output labels."""
+    return format(threshold, ".17g")
+
+
+def validate_por_samples(value: int) -> int:
+    if value < 2:
+        raise ValueError("--por-samples must be >= 2 to compute multi-sample drift.")
+    return value
+
+
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run SimpleQA PoR benchmark harness.")
     parser.add_argument("--dataset-path", required=True, help="Path to local SimpleQA file (.json/.jsonl/.csv).")
@@ -37,11 +48,17 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--answer-field", default="answer")
     parser.add_argument("--answers-field", default="answers")
     parser.add_argument("--id-field", default="id")
+    parser.add_argument(
+        "--por-samples",
+        type=int,
+        default=3,
+        help="Number of PoR candidate samples per prompt (minimum: 2).",
+    )
 
     parser.add_argument(
         "--separate-por-call",
         action="store_true",
-        help="If set, generate PoR candidate with a second model call. Default reuses baseline answer.",
+        help="If set, PoR samples are all newly generated; otherwise baseline answer is reused as sample[0].",
     )
     return parser.parse_args()
 
@@ -56,6 +73,10 @@ def _to_csv_value(v: Any) -> str:
 
 def run() -> None:
     args = _parse_args()
+    try:
+        por_samples = validate_por_samples(args.por_samples)
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
     out_dir = Path(args.output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -82,8 +103,12 @@ def run() -> None:
         "reference_answers",
         "baseline_answer",
         "por_candidate",
+        "por_candidates_json",
+        "por_primary_candidate",
+        "por_sample_count",
         "threshold",
         "threshold_label",
+        "threshold_value",
         "drift",
         "coherence",
         "instability_score",
@@ -114,8 +139,12 @@ def run() -> None:
                     "reference_answers": ex.reference_answers,
                     "baseline_answer": baseline_answer,
                     "por_candidate": "",
+                    "por_candidates_json": [],
+                    "por_primary_candidate": "",
+                    "por_sample_count": 0,
                     "threshold": "",
                     "threshold_label": "baseline",
+                    "threshold_value": "",
                     "drift": "",
                     "coherence": "",
                     "instability_score": "",
@@ -139,8 +168,12 @@ def run() -> None:
                 "reference_answers": ex.reference_answers,
                 "baseline_answer": baseline_answer,
                 "por_candidate": baseline_answer,
+                "por_candidates_json": [baseline_answer],
+                "por_primary_candidate": baseline_answer,
+                "por_sample_count": 1,
                 "threshold": "",
                 "threshold_label": "baseline",
+                "threshold_value": "",
                 "drift": "",
                 "coherence": "",
                 "instability_score": "",
@@ -155,42 +188,79 @@ def run() -> None:
             rows.append(baseline_row)
             writer.writerow({k: _to_csv_value(v) for k, v in baseline_row.items()})
 
-            por_candidate = baseline_answer
-            if args.separate_por_call:
-                try:
-                    por_candidate = adapter.answer(ex.question)
-                except ModelAdapterError as exc:
-                    por_candidate = ""
-                    err_row = {
-                        "example_id": ex.example_id,
-                        "question": ex.question,
-                        "reference_answers": ex.reference_answers,
-                        "baseline_answer": baseline_answer,
-                        "por_candidate": por_candidate,
-                        "threshold": "",
-                        "threshold_label": "por_candidate_error",
-                        "drift": "",
-                        "coherence": "",
-                        "instability_score": "",
-                        "por_decision": "ERROR",
-                        "final_output": "",
-                        "correctness_label": "wrong",
-                        "silence_flag": True,
-                        "false_silence_flag": False,
-                        "accepted_error_flag": False,
-                        "error": str(exc),
-                    }
-                    rows.append(err_row)
-                    writer.writerow({k: _to_csv_value(v) for k, v in err_row.items()})
-                    csv_file.flush()
-                    continue
+            por_candidates: list[str] = []
+            if not args.separate_por_call:
+                por_candidates.append(baseline_answer)
+            try:
+                while len(por_candidates) < por_samples:
+                    por_candidates.append(adapter.answer(ex.question))
+            except ModelAdapterError as exc:
+                err_row = {
+                    "example_id": ex.example_id,
+                    "question": ex.question,
+                    "reference_answers": ex.reference_answers,
+                    "baseline_answer": baseline_answer,
+                    "por_candidate": "",
+                    "por_candidates_json": por_candidates,
+                    "por_primary_candidate": "",
+                    "por_sample_count": len(por_candidates),
+                    "threshold": "",
+                    "threshold_label": "por_candidate_error",
+                    "threshold_value": "",
+                    "drift": "",
+                    "coherence": "",
+                    "instability_score": "",
+                    "por_decision": "ERROR",
+                    "final_output": "",
+                    "correctness_label": "wrong",
+                    "silence_flag": True,
+                    "false_silence_flag": False,
+                    "accepted_error_flag": False,
+                    "error": str(exc),
+                }
+                rows.append(err_row)
+                writer.writerow({k: _to_csv_value(v) for k, v in err_row.items()})
+                csv_file.flush()
+                continue
 
+            if len(por_candidates) < 2:
+                err_row = {
+                    "example_id": ex.example_id,
+                    "question": ex.question,
+                    "reference_answers": ex.reference_answers,
+                    "baseline_answer": baseline_answer,
+                    "por_candidate": "",
+                    "por_candidates_json": por_candidates,
+                    "por_primary_candidate": "",
+                    "por_sample_count": len(por_candidates),
+                    "threshold": "",
+                    "threshold_label": "por_candidate_error",
+                    "threshold_value": "",
+                    "drift": "",
+                    "coherence": "",
+                    "instability_score": "",
+                    "por_decision": "ERROR",
+                    "final_output": "",
+                    "correctness_label": "wrong",
+                    "silence_flag": True,
+                    "false_silence_flag": False,
+                    "accepted_error_flag": False,
+                    "error": "Insufficient PoR candidate samples to compute drift.",
+                }
+                rows.append(err_row)
+                writer.writerow({k: _to_csv_value(v) for k, v in err_row.items()})
+                csv_file.flush()
+                continue
+
+            por_candidate = por_candidates[0]
             candidate_correct = is_correct(por_candidate, ex.reference_answers)
 
             for threshold in args.thresholds:
+                threshold_key = threshold_to_key(threshold)
                 eval_result = evaluate_por_gate(
                     prompt=ex.question,
-                    candidate=por_candidate,
+                    primary_candidate=por_candidate,
+                    candidate_samples=por_candidates,
                     threshold=threshold,
                 )
                 silence_flag = eval_result.por_decision == "SILENCE"
@@ -205,8 +275,12 @@ def run() -> None:
                     "reference_answers": ex.reference_answers,
                     "baseline_answer": baseline_answer,
                     "por_candidate": por_candidate,
-                    "threshold": f"{threshold:.2f}",
-                    "threshold_label": f"{threshold:.2f}",
+                    "por_candidates_json": por_candidates,
+                    "por_primary_candidate": por_candidate,
+                    "por_sample_count": len(por_candidates),
+                    "threshold": threshold_key,
+                    "threshold_label": threshold_key,
+                    "threshold_value": threshold,
                     "drift": eval_result.drift,
                     "coherence": eval_result.coherence,
                     "instability_score": eval_result.instability_score,
@@ -263,6 +337,7 @@ def run() -> None:
             "answers_field": args.answers_field,
             "id_field": args.id_field,
             "separate_por_call": args.separate_por_call,
+            "por_samples": por_samples,
             "experimental_short_regen_enabled": False,
         },
         "baseline": asdict(baseline_metrics),

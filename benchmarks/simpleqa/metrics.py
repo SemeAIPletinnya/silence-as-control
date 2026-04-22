@@ -71,8 +71,7 @@ def compute_baseline_metrics(rows: list[dict[str, Any]]) -> BaselineMetrics:
 
 
 def compute_threshold_metrics(rows: list[dict[str, Any]], threshold: float) -> ThresholdMetrics:
-    key = f"{threshold:.2f}"
-    subset = [r for r in rows if r.get("threshold_label") == key]
+    subset = [r for r in rows if r.get("threshold_value") == threshold]
     total = len(subset)
     answered = sum(1 for r in subset if not r.get("silence_flag", False))
     silence = total - answered

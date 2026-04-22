@@ -5,7 +5,7 @@ This benchmark evaluates **baseline answering** vs **PoR-gated release control**
 It is designed to test the Silence-as-Control hypothesis:
 
 - baseline: always answers,
-- PoR-gated: answers only when instability is below threshold, otherwise silences.
+- PoR-gated: generates multiple candidates, computes drift across that candidate set, then answers only when instability is below threshold (otherwise silences).
 
 ## Why SimpleQA
 
@@ -22,6 +22,8 @@ This harness preserves repository layer boundaries:
 - **core primitive**: `api/core_primitive.py`
 - **runtime scoring extensions**: `api/por_runtime.py`
 - **experimental recovery**: **disabled by default** (not used in this benchmark)
+
+This benchmark evaluates **release-control tradeoffs**, not model-generation improvement.
 
 ## Files
 
@@ -56,6 +58,7 @@ python benchmarks/simpleqa/run_simpleqa_por.py \
   --model gpt-4o-mini \
   --max-examples 200 \
   --thresholds 0.35 0.39 0.42 0.43 \
+  --por-samples 3 \
   --output-dir results/simpleqa
 ```
 
@@ -77,6 +80,12 @@ The run writes:
 4. Plot:
    - `results/simpleqa/simpleqa_threshold_tradeoff.png`
 
+Per-example rows include:
+
+- `por_candidates_json` (all PoR candidates used for drift),
+- `por_primary_candidate` (candidate[0], used for coherence and release output),
+- `por_sample_count`.
+
 ## Metric definitions
 
 ### Baseline
@@ -88,6 +97,7 @@ The run writes:
 
 ### Per-threshold PoR
 
+- PoR drift uses multi-sample candidates per prompt (`--por-samples`, minimum 2, default 3)
 - `total_examples`
 - `answered_count` = non-silenced outputs
 - `silence_count`
@@ -111,6 +121,10 @@ Default correctness is deterministic normalized exact-match:
 - whitespace squashed
 
 No hidden judge heuristics are used by default.
+
+## Threshold precision
+
+Thresholds preserve full precision internally for grouping/aggregation (no 2-decimal bucket collapsing). Display formatting is separate from grouping keys.
 
 ## Interpretation
 
