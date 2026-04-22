@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import math
 import os
+from hashlib import sha256
 from dataclasses import dataclass
 from typing import Callable, Iterable, Sequence
 
@@ -36,6 +37,33 @@ def _clip(value: float, low: float = 0.0, high: float = 1.0) -> float:
     return max(low, min(value, high))
 
 
+def _stable_token_index(token: str, dim: int) -> int:
+    """Map token to embedding slot with deterministic hashing.
+
+    Python's built-in `hash()` is process-randomized, so we use SHA-256 and
+    take the first 8 bytes for a stable integer across runs and machines.
+    """
+    digest = sha256(token.encode("utf-8")).digest()
+    return int.from_bytes(digest[:8], byteorder="big") % dim
+
+
+def map_similarity_to_coherence(similarity: float, *, nonnegative_space: bool) -> float:
+    """Convert cosine similarity to coherence in [0, 1] for runtime gating.
+
+    - For nonnegative bag-of-words fallback embeddings, cosine is already in
+      [0, 1], so we only clamp.
+    - For signed embedding spaces, cosine is in [-1, 1], so we map with
+      `(cos + 1) / 2`.
+    """
+    if nonnegative_space:
+        return _clip(similarity)
+    return _clip((similarity + 1.0) / 2.0)
+
+
+def _is_nonnegative_vector(vec: Sequence[float]) -> bool:
+    return all(v >= 0.0 for v in vec)
+
+
 def get_runtime_threshold(default: float = RUNTIME_EXTENSION_DEFAULT_THRESHOLD) -> float:
     """[RUNTIME] Resolve runtime threshold from env with safe fallback.
 
@@ -59,7 +87,7 @@ def get_embedding(text: str) -> list[float]:
     """
     vec = [0.0] * 64
     for token in text.lower().split():
-        vec[hash(token) % 64] += 1.0
+        vec[_stable_token_index(token, len(vec))] += 1.0
 
     norm = math.sqrt(sum(v * v for v in vec))
     if norm == 0.0:
@@ -92,9 +120,11 @@ def estimate_coherence(
     candidate_vec = embedding_fn(candidate)
     cos = cosine_similarity(prompt_vec, candidate_vec)
 
-    # Map cosine from [-1, 1] into [0, 1] for gate compatibility.
-    coherence = _clip((cos + 1.0) / 2.0)
-    notes.append("embedding_cosine")
+    nonnegative_space = _is_nonnegative_vector(prompt_vec) and _is_nonnegative_vector(
+        candidate_vec
+    )
+    coherence = map_similarity_to_coherence(cos, nonnegative_space=nonnegative_space)
+    notes.append("embedding_cosine_nonnegative" if nonnegative_space else "embedding_cosine")
     return coherence, notes
 
 
@@ -116,7 +146,12 @@ def estimate_drift(
             pairwise.append(cosine_similarity(vectors[i], vectors[j]))
 
     avg_similarity = (sum(pairwise) / len(pairwise)) if pairwise else 1.0
-    drift = _clip(1.0 - ((avg_similarity + 1.0) / 2.0))
+    nonnegative_space = all(_is_nonnegative_vector(vec) for vec in vectors)
+    coherence_between_samples = map_similarity_to_coherence(
+        avg_similarity,
+        nonnegative_space=nonnegative_space,
+    )
+    drift = _clip(1.0 - coherence_between_samples)
     notes.append(f"pairwise_samples:{len(cleaned)}")
     return drift, notes
 

@@ -39,6 +39,8 @@ Code: `api/core_primitive.py`, `src/silence_as_control/control.py`.
 ### 2) Runtime Extensions (optional deployment layer)
 Adaptive thresholds, environment configuration, embedding-based scoring, multi-sample drift.
 
+Runtime fallback embeddings are lightweight and deterministic (for offline/demo reproducibility), not a claim of state-of-the-art semantics. Production systems can inject stronger embedding backends while keeping the same gate logic.
+
 Code: `api/por_runtime.py`.
 
 ### 3) Experimental Features (optional, non-core)
@@ -99,5 +101,5 @@ curl -s http://127.0.0.1:8000/por/complete \
 
 ## Positioning
 - **Paper-core claim**: deterministic fixed-threshold PoR release control.
-- **Runtime extensions**: practical deployment helpers, optional.
+- **Runtime extensions**: practical deployment helpers, optional deployment scaffolding.
 - **Experimental features**: MAYBE_SHORT_REGEN, optional and non-core.
