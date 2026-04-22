@@ -1,0 +1,145 @@
+"""Runtime extensions for PoR API scoring (non-core).
+
+These helpers are deployment-oriented additions around the core primitive:
+- environment-configurable runtime threshold,
+- adaptive threshold computation,
+- embedding-based coherence estimation,
+- multi-sample drift estimation.
+"""
+
+from __future__ import annotations
+
+import math
+import os
+from dataclasses import dataclass
+from typing import Callable, Iterable, Sequence
+
+# Runtime extension default. Kept aligned to the core default by default.
+RUNTIME_EXTENSION_DEFAULT_THRESHOLD = 0.39
+# Backward-compatible alias.
+RUNTIME_GATE_THRESHOLD_DEFAULT = RUNTIME_EXTENSION_DEFAULT_THRESHOLD
+
+THRESHOLD_ENV_VAR = "POR_RUNTIME_GATE_THRESHOLD"
+EmbeddingFn = Callable[[str], list[float]]
+
+
+@dataclass(frozen=True)
+class AdaptiveThresholdConfig:
+    """[RUNTIME] Adaptive-threshold policy parameters."""
+
+    alpha: float = 0.4
+    minimum: float = 0.20
+    maximum: float = 0.80
+
+
+def _clip(value: float, low: float = 0.0, high: float = 1.0) -> float:
+    return max(low, min(value, high))
+
+
+def get_runtime_threshold(default: float = RUNTIME_EXTENSION_DEFAULT_THRESHOLD) -> float:
+    """[RUNTIME] Resolve runtime threshold from env with safe fallback.
+
+    Uses `POR_RUNTIME_GATE_THRESHOLD` if set; otherwise returns `default`.
+    """
+    raw = os.getenv(THRESHOLD_ENV_VAR)
+    if raw is None:
+        return default
+    try:
+        value = float(raw)
+    except ValueError:
+        return default
+    return _clip(value)
+
+
+def get_embedding(text: str) -> list[float]:
+    """[RUNTIME] Deterministic fallback embedding function.
+
+    This lightweight fallback keeps offline usage and tests stable.
+    Production integrations can inject a stronger embedding function.
+    """
+    vec = [0.0] * 64
+    for token in text.lower().split():
+        vec[hash(token) % 64] += 1.0
+
+    norm = math.sqrt(sum(v * v for v in vec))
+    if norm == 0.0:
+        return vec
+    return [v / norm for v in vec]
+
+
+def cosine_similarity(vec_a: Sequence[float], vec_b: Sequence[float]) -> float:
+    """[RUNTIME] Compute cosine similarity with zero-vector safeguards."""
+    dot = sum(a * b for a, b in zip(vec_a, vec_b))
+    norm_a = math.sqrt(sum(a * a for a in vec_a))
+    norm_b = math.sqrt(sum(b * b for b in vec_b))
+    denom = norm_a * norm_b
+    if denom == 0.0:
+        return 0.0
+    return dot / denom
+
+
+def estimate_coherence(
+    prompt: str,
+    candidate: str,
+    embedding_fn: EmbeddingFn = get_embedding,
+) -> tuple[float, list[str]]:
+    """[RUNTIME] Estimate coherence from prompt/candidate embedding similarity."""
+    notes: list[str] = []
+    if not candidate.strip():
+        return 0.0, ["no_candidate_tokens"]
+
+    prompt_vec = embedding_fn(prompt)
+    candidate_vec = embedding_fn(candidate)
+    cos = cosine_similarity(prompt_vec, candidate_vec)
+
+    # Map cosine from [-1, 1] into [0, 1] for gate compatibility.
+    coherence = _clip((cos + 1.0) / 2.0)
+    notes.append("embedding_cosine")
+    return coherence, notes
+
+
+def estimate_drift(
+    candidate_texts: Sequence[str],
+    embedding_fn: EmbeddingFn = get_embedding,
+) -> tuple[float, list[str]]:
+    """[RUNTIME] Estimate drift from multi-sample embedding disagreement."""
+    notes: list[str] = []
+    cleaned = [text.strip() for text in candidate_texts if text.strip()]
+    if len(cleaned) <= 1:
+        notes.append("single_sample_drift")
+        return 0.0, notes
+
+    vectors = [embedding_fn(text) for text in cleaned]
+    pairwise: list[float] = []
+    for i in range(len(vectors)):
+        for j in range(i + 1, len(vectors)):
+            pairwise.append(cosine_similarity(vectors[i], vectors[j]))
+
+    avg_similarity = (sum(pairwise) / len(pairwise)) if pairwise else 1.0
+    drift = _clip(1.0 - ((avg_similarity + 1.0) / 2.0))
+    notes.append(f"pairwise_samples:{len(cleaned)}")
+    return drift, notes
+
+
+def compute_adaptive_threshold(
+    base_threshold: float,
+    recent_drifts: Iterable[float],
+    recent_coherences: Iterable[float],
+    config: AdaptiveThresholdConfig = AdaptiveThresholdConfig(),
+) -> float:
+    """[RUNTIME] Adapt threshold toward recent mean instability.
+
+    This is optional runtime behavior and not part of the thesis-level primitive.
+    """
+    drifts = [float(x) for x in recent_drifts]
+    coherences = [float(x) for x in recent_coherences]
+
+    if not drifts or not coherences:
+        return _clip(base_threshold, config.minimum, config.maximum)
+
+    n = min(len(drifts), len(coherences))
+    instabilities = [_clip((drifts[i] + (1.0 - coherences[i])) / 2.0) for i in range(n)]
+    mean_instability = sum(instabilities) / len(instabilities)
+
+    adapted = base_threshold + config.alpha * (mean_instability - base_threshold)
+    return _clip(adapted, config.minimum, config.maximum)

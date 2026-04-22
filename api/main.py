@@ -1,29 +1,56 @@
+"""API runtime surface for Silence-as-Control.
+
+Layering in this module:
+- CORE decision primitive: imported from `api.core_primitive`.
+- RUNTIME extensions: imported from `api.por_runtime`.
+- EXPERIMENTAL recovery: imported from `api.experimental_recovery`.
+"""
+
 import json
 from typing import List, Optional
 
 from fastapi import FastAPI
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
+from api.core_primitive import (
+    CORE_FIXED_THRESHOLD,
+    compute_instability_score,
+    fixed_threshold_release_decision,
+)
+from api.experimental_recovery import (
+    EXPERIMENTAL_BORDERLINE_MARGIN,
+    maybe_short_regen,
+)
+from api.por_runtime import (
+    compute_adaptive_threshold,
+    estimate_coherence,
+    estimate_drift,
+    get_runtime_threshold,
+)
 from api.xai_wrapper import DEFAULT_MODEL, generate_candidate
 
 app = FastAPI(title="silence-as-control")
 
-# Runtime/API demo gate default.
-# This 0.39 value is local to the API heuristic layer and is NOT the
-# deterministic control contract used in src/silence_as_control/control.py.
-RUNTIME_GATE_THRESHOLD = 0.39
+# Runtime default threshold used by API endpoints.
+# It starts from the core fixed threshold (0.39), but can be overridden by
+# runtime configuration (`POR_RUNTIME_GATE_THRESHOLD`).
+RUNTIME_DEFAULT_THRESHOLD = get_runtime_threshold(CORE_FIXED_THRESHOLD)
 SILENCE_TOKEN = "[SILENCE: UNSTABLE OUTPUT BLOCKED]"
 
 
 class EvaluateRequest(BaseModel):
     prompt: str
     candidate: str
-    threshold: float = RUNTIME_GATE_THRESHOLD
+    threshold: Optional[float] = None
+    use_adaptive_threshold: bool = False
+    recent_drifts: List[float] = Field(default_factory=list)
+    recent_coherences: List[float] = Field(default_factory=list)
 
 
 class EvaluateResponse(BaseModel):
     drift: float
     coherence: float
+    instability_score: float
     threshold: float
     decision: str
     release_output: Optional[str] = None
@@ -33,10 +60,17 @@ class EvaluateResponse(BaseModel):
 
 class CompleteRequest(BaseModel):
     prompt: str
-    threshold: float = RUNTIME_GATE_THRESHOLD
+    threshold: Optional[float] = None
+    use_adaptive_threshold: bool = False
+    recent_drifts: List[float] = Field(default_factory=list)
+    recent_coherences: List[float] = Field(default_factory=list)
     model: str = DEFAULT_MODEL
     system_prompt: str = "You are a precise technical assistant."
     temperature: float = 0.0
+    drift_samples: int = 3
+    enable_experimental_short_regen: bool = True
+    # Backward-compatible alias for older clients.
+    enable_short_regen: Optional[bool] = None
 
 
 class CompleteResponse(BaseModel):
@@ -44,6 +78,7 @@ class CompleteResponse(BaseModel):
     candidate: Optional[str] = None
     drift: float
     coherence: float
+    instability_score: float
     threshold: float
     decision: str
     release_output: Optional[str] = None
@@ -55,7 +90,7 @@ class LegacyGenerateRequest(BaseModel):
     output: str
     coherence: float
     drift: float
-    threshold: float = RUNTIME_GATE_THRESHOLD
+    threshold: float = RUNTIME_DEFAULT_THRESHOLD
 
 
 class LegacyGenerateResponse(BaseModel):
@@ -64,99 +99,8 @@ class LegacyGenerateResponse(BaseModel):
     reason: Optional[str] = None
 
 
-def estimate_drift(prompt: str, candidate: str):
-    """Runtime-only heuristic drift estimate for demo/API gating."""
-    prompt_lower = prompt.lower()
-    candidate_lower = candidate.lower()
-
-    drift = 0.05
-    notes: List[str] = []
-
-    if len(candidate.strip()) == 0:
-        drift += 0.60
-        notes.append("empty_output")
-
-    if len(candidate.strip()) < 8:
-        drift += 0.20
-        notes.append("too_short")
-
-    risky_markers = [
-        "maybe",
-        "probably",
-        "i think",
-        "not sure",
-        "guess",
-        "possibly",
-        "unknown",
-    ]
-    for marker in risky_markers:
-        if marker in candidate_lower:
-            drift += 0.08
-            notes.append(f"uncertainty:{marker}")
-
-    error_markers = [
-        "error",
-        "exception",
-        "undefined",
-        "null pointer",
-        "traceback",
-        "failed",
-    ]
-    for marker in error_markers:
-        if marker in candidate_lower:
-            drift += 0.12
-            notes.append(f"error_signal:{marker}")
-
-    if "json" in prompt_lower:
-        stripped = candidate.strip()
-        if not (stripped.startswith("{") or stripped.startswith("[")):
-            drift += 0.30
-            notes.append("json_expected_but_structure_missing")
-
-    if "division by zero" in prompt_lower and "0" not in candidate_lower:
-        drift += 0.18
-        notes.append("missed_zero_division_signal")
-
-    drift = max(0.0, min(drift, 1.0))
-    return drift, notes
-
-
-def estimate_coherence(prompt: str, candidate: str):
-    """Runtime-only heuristic coherence estimate for demo/API gating."""
-    prompt_words = set(
-        w.strip(".,:;!?()[]{}\"'").lower()
-        for w in prompt.split()
-        if w.strip()
-    )
-    candidate_words = set(
-        w.strip(".,:;!?()[]{}\"'").lower()
-        for w in candidate.split()
-        if w.strip()
-    )
-
-    notes: List[str] = []
-
-    if not candidate_words:
-        return 0.0, ["no_candidate_tokens"]
-
-    overlap = len(prompt_words.intersection(candidate_words))
-    base = overlap / max(len(prompt_words), 1)
-
-    coherence = 0.35 + base
-
-    if len(candidate.strip()) > 20:
-        coherence += 0.10
-        notes.append("sufficient_length")
-
-    if "{" in candidate and "}" in candidate:
-        coherence += 0.06
-        notes.append("has_structured_format")
-
-    coherence = max(0.0, min(coherence, 1.0))
-    return coherence, notes
-
-
-def check_json_validity(prompt: str, candidate: str):
+def check_json_validity(prompt: str, candidate: str) -> dict:
+    """[RUNTIME] Enforce JSON validity when prompt explicitly asks for JSON."""
     prompt_lower = prompt.lower()
     notes: List[str] = []
 
@@ -189,19 +133,44 @@ def check_json_validity(prompt: str, candidate: str):
         }
 
 
-def por_decision(drift: float, coherence: float, threshold: float) -> str:
-    # Runtime/API demo gate: silence when either runtime heuristic leaves bounds.
-    if drift > threshold or coherence < threshold:
-        return "SILENCE"
-    return "PROCEED"
+def resolve_runtime_threshold(
+    request_threshold: Optional[float],
+    use_adaptive_threshold: bool,
+    recent_drifts: List[float],
+    recent_coherences: List[float],
+) -> float:
+    """[RUNTIME] Resolve the threshold used by API runtime decisions.
+
+    - default mode: fixed threshold.
+    - optional mode: adaptive threshold from recent history.
+    """
+    fixed_threshold = (
+        request_threshold if request_threshold is not None else RUNTIME_DEFAULT_THRESHOLD
+    )
+    fixed_threshold = max(0.0, min(fixed_threshold, 1.0))
+    if not use_adaptive_threshold:
+        return fixed_threshold
+    return compute_adaptive_threshold(
+        base_threshold=fixed_threshold,
+        recent_drifts=recent_drifts,
+        recent_coherences=recent_coherences,
+    )
 
 
-def evaluate_candidate(prompt: str, candidate: str, threshold: float):
-    drift, drift_notes = estimate_drift(prompt, candidate)
+def score_candidate_runtime(
+    prompt: str,
+    candidate: str,
+    threshold: float,
+    candidate_samples: Optional[List[str]] = None,
+) -> dict:
+    """[RUNTIME] Score one candidate and apply the core release decision."""
+    samples = candidate_samples or [candidate]
+    drift, drift_notes = estimate_drift(samples)
     coherence, coherence_notes = estimate_coherence(prompt, candidate)
+    instability = compute_instability_score(drift=drift, coherence=coherence)
     json_check = check_json_validity(prompt, candidate)
 
-    decision = por_decision(drift, coherence, threshold)
+    decision = fixed_threshold_release_decision(instability, threshold)
     notes = drift_notes + coherence_notes + json_check["notes"]
 
     if json_check["expects_json"] and json_check["is_valid_json"] is False:
@@ -211,6 +180,7 @@ def evaluate_candidate(prompt: str, candidate: str, threshold: float):
     return {
         "drift": round(drift, 4),
         "coherence": round(coherence, 4),
+        "instability_score": round(instability, 4),
         "threshold": threshold,
         "decision": decision,
         "release_output": candidate if decision == "PROCEED" else None,
@@ -219,20 +189,35 @@ def evaluate_candidate(prompt: str, candidate: str, threshold: float):
     }
 
 
+def resolve_experimental_short_regen_flag(req: CompleteRequest) -> bool:
+    """[EXPERIMENTAL] Resolve regen enable flag with alias compatibility."""
+    if req.enable_short_regen is None:
+        return req.enable_experimental_short_regen
+    return req.enable_short_regen
+
+
 @app.get("/health")
-def health():
+def health() -> dict:
+    """Health endpoint for API runtime checks."""
     return {"status": "healthy"}
 
 
 @app.post("/por/evaluate", response_model=EvaluateResponse, response_model_exclude_none=True)
-def evaluate(req: EvaluateRequest):
-    result = evaluate_candidate(req.prompt, req.candidate, req.threshold)
+def evaluate(req: EvaluateRequest) -> EvaluateResponse:
+    """Evaluate a provided candidate with core gate + runtime estimators."""
+    threshold = resolve_runtime_threshold(
+        request_threshold=req.threshold,
+        use_adaptive_threshold=req.use_adaptive_threshold,
+        recent_drifts=req.recent_drifts,
+        recent_coherences=req.recent_coherences,
+    )
+    result = score_candidate_runtime(req.prompt, req.candidate, threshold)
     return EvaluateResponse(**result)
 
 
 @app.post("/generate", response_model=LegacyGenerateResponse, response_model_exclude_none=True)
-def legacy_generate(req: LegacyGenerateRequest):
-    # Backward-compatible behavior for existing CI tests
+def legacy_generate(req: LegacyGenerateRequest) -> LegacyGenerateResponse:
+    """Backward-compatible legacy endpoint preserved for existing tests/clients."""
     if req.coherence >= 0.8:
         return LegacyGenerateResponse(
             status="ok",
@@ -246,20 +231,87 @@ def legacy_generate(req: LegacyGenerateRequest):
 
 
 @app.post("/por/complete", response_model=CompleteResponse, response_model_exclude_none=True)
-def complete(req: CompleteRequest):
-    candidate = generate_candidate(
-        prompt=req.prompt,
-        model=req.model,
-        system_prompt=req.system_prompt,
-        temperature=req.temperature,
+def complete(req: CompleteRequest) -> CompleteResponse:
+    """Generate candidate(s), score with PoR gate, then optionally run experimental recovery."""
+    threshold = resolve_runtime_threshold(
+        request_threshold=req.threshold,
+        use_adaptive_threshold=req.use_adaptive_threshold,
+        recent_drifts=req.recent_drifts,
+        recent_coherences=req.recent_coherences,
     )
-    result = evaluate_candidate(req.prompt, candidate, req.threshold)
+
+    sample_count = max(1, req.drift_samples)
+    candidates: List[str] = []
+    for _ in range(sample_count):
+        candidates.append(
+            generate_candidate(
+                prompt=req.prompt,
+                model=req.model,
+                system_prompt=req.system_prompt,
+                temperature=req.temperature,
+            )
+        )
+
+    primary_candidate = candidates[0]
+    result = score_candidate_runtime(
+        prompt=req.prompt,
+        candidate=primary_candidate,
+        threshold=threshold,
+        candidate_samples=candidates,
+    )
+
+    # Experimental lane only: MAYBE_SHORT_REGEN is post-silence and non-core.
+    if result["decision"] == "SILENCE":
+
+        def _regen_once() -> dict:
+            regen_candidate = generate_candidate(
+                prompt=(
+                    "Answer briefly and directly in <= 80 tokens. "
+                    "Avoid uncertainty wording.\n\n"
+                    f"Prompt: {req.prompt}"
+                ),
+                model=req.model,
+                system_prompt=req.system_prompt,
+                temperature=min(req.temperature, 0.2),
+            )
+            regen_result = score_candidate_runtime(
+                prompt=req.prompt,
+                candidate=regen_candidate,
+                threshold=threshold,
+                candidate_samples=[regen_candidate],
+            )
+            regen_result["release_output"] = (
+                regen_candidate if regen_result["decision"] == "PROCEED" else None
+            )
+            regen_result["_regen_candidate"] = regen_candidate
+            return regen_result
+
+        attempted, regen_result = maybe_short_regen(
+            enabled=resolve_experimental_short_regen_flag(req),
+            instability_score=result["instability_score"],
+            threshold=threshold,
+            run_regen=_regen_once,
+        )
+
+        if attempted and regen_result is not None:
+            regen_result["notes"] = regen_result["notes"] + [
+                (
+                    "experimental_maybe_short_regen_attempted"
+                    f":margin={EXPERIMENTAL_BORDERLINE_MARGIN:.2f}"
+                )
+            ]
+            if regen_result["decision"] == "PROCEED":
+                result = regen_result
+                candidates[0] = regen_result["_regen_candidate"]
+            else:
+                result["notes"].append("experimental_maybe_short_regen_failed")
 
     return CompleteResponse(
         model=req.model,
-        candidate=candidate if result["decision"] == "PROCEED" else None,
+        candidate=candidates[0] if result["decision"] == "PROCEED" else None,
         drift=result["drift"],
         coherence=result["coherence"],
+        instability_score=result["instability_score"],
         threshold=result["threshold"],
         decision=result["decision"],
         release_output=result["release_output"],
