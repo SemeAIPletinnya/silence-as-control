@@ -21,7 +21,14 @@ from benchmarks.simpleqa.metrics import (
 )
 from benchmarks.simpleqa.model_adapter import ModelAdapterError, build_model_adapter
 from benchmarks.simpleqa.plot_results import build_threshold_tradeoff_plot
+from benchmarks.simpleqa.por_v2 import (
+    agreement_score_to_risk,
+    compute_risk_v2,
+    por_v2_decision,
+    self_check_label_to_risk,
+)
 from benchmarks.simpleqa.por_adapter import evaluate_por_gate
+from benchmarks.simpleqa.semantic_agreement import semantic_agreement_score
 
 
 def threshold_to_key(threshold: float) -> str:
@@ -72,6 +79,12 @@ def _parse_args() -> argparse.Namespace:
         action="store_true",
         help="If set, PoR samples are all newly generated; otherwise baseline answer is reused as sample[0].",
     )
+    parser.add_argument(
+        "--por-mode",
+        choices=["v1", "v2"],
+        default="v1",
+        help="PoR gating mode: v1 (default) or experimental v2.",
+    )
     return parser.parse_args()
 
 
@@ -118,12 +131,20 @@ def run() -> None:
         "por_candidates_json",
         "por_primary_candidate",
         "por_sample_count",
+        "por_mode",
         "threshold",
         "threshold_label",
         "threshold_value",
         "drift",
         "coherence",
         "instability_score",
+        "semantic_agreement_score",
+        "semantic_agreement_risk",
+        "self_check_label",
+        "self_check_risk",
+        "risk_v2",
+        "decision_v2",
+        "effective_decision",
         "por_decision",
         "final_output",
         "correctness_label",
@@ -157,12 +178,20 @@ def run() -> None:
                     "por_candidates_json": [],
                     "por_primary_candidate": "",
                     "por_sample_count": 0,
+                    "por_mode": args.por_mode,
                     "threshold": "",
                     "threshold_label": "baseline",
                     "threshold_value": "",
                     "drift": "",
                     "coherence": "",
                     "instability_score": "",
+                    "semantic_agreement_score": "",
+                    "semantic_agreement_risk": "",
+                    "self_check_label": "",
+                    "self_check_risk": "",
+                    "risk_v2": "",
+                    "decision_v2": "",
+                    "effective_decision": "ERROR",
                     "por_decision": "ERROR",
                     "final_output": "",
                     "correctness_label": "wrong",
@@ -186,12 +215,20 @@ def run() -> None:
                 "por_candidates_json": [baseline_answer],
                 "por_primary_candidate": baseline_answer,
                 "por_sample_count": 1,
+                "por_mode": args.por_mode,
                 "threshold": "",
                 "threshold_label": "baseline",
                 "threshold_value": "",
                 "drift": "",
                 "coherence": "",
                 "instability_score": "",
+                "semantic_agreement_score": "",
+                "semantic_agreement_risk": "",
+                "self_check_label": "",
+                "self_check_risk": "",
+                "risk_v2": "",
+                "decision_v2": "",
+                "effective_decision": "PROCEED",
                 "por_decision": "PROCEED",
                 "final_output": baseline_answer,
                 "correctness_label": "correct" if baseline_correct else "wrong",
@@ -224,12 +261,20 @@ def run() -> None:
                     "por_candidates_json": por_candidates,
                     "por_primary_candidate": "",
                     "por_sample_count": len(por_candidates),
+                    "por_mode": args.por_mode,
                     "threshold": "",
                     "threshold_label": "por_candidate_error",
                     "threshold_value": "",
                     "drift": "",
                     "coherence": "",
                     "instability_score": "",
+                    "semantic_agreement_score": "",
+                    "semantic_agreement_risk": "",
+                    "self_check_label": "",
+                    "self_check_risk": "",
+                    "risk_v2": "",
+                    "decision_v2": "",
+                    "effective_decision": "ERROR",
                     "por_decision": "ERROR",
                     "final_output": "",
                     "correctness_label": "wrong",
@@ -253,12 +298,20 @@ def run() -> None:
                     "por_candidates_json": por_candidates,
                     "por_primary_candidate": "",
                     "por_sample_count": len(por_candidates),
+                    "por_mode": args.por_mode,
                     "threshold": "",
                     "threshold_label": "por_candidate_error",
                     "threshold_value": "",
                     "drift": "",
                     "coherence": "",
                     "instability_score": "",
+                    "semantic_agreement_score": "",
+                    "semantic_agreement_risk": "",
+                    "self_check_label": "",
+                    "self_check_risk": "",
+                    "risk_v2": "",
+                    "decision_v2": "",
+                    "effective_decision": "ERROR",
                     "por_decision": "ERROR",
                     "final_output": "",
                     "correctness_label": "wrong",
@@ -274,6 +327,50 @@ def run() -> None:
 
             por_candidate = por_candidates[0]
             candidate_correct = is_correct(por_candidate, ex.reference_answers)
+            agreement_score = semantic_agreement_score(por_candidates)
+            agreement_risk = agreement_score_to_risk(agreement_score)
+            self_check_label = ""
+            self_check_risk = ""
+            if args.por_mode == "v2":
+                try:
+                    self_check_label = adapter.self_check(ex.question, por_candidate)
+                except ModelAdapterError as exc:
+                    err_row = {
+                        "example_id": ex.example_id,
+                        "question": ex.question,
+                        "reference_answers": ex.reference_answers,
+                        "baseline_answer": baseline_answer,
+                        "por_candidate": por_candidate,
+                        "por_candidates_json": por_candidates,
+                        "por_primary_candidate": por_candidate,
+                        "por_sample_count": len(por_candidates),
+                        "por_mode": args.por_mode,
+                        "threshold": "",
+                        "threshold_label": "self_check_error",
+                        "threshold_value": "",
+                        "drift": "",
+                        "coherence": "",
+                        "instability_score": "",
+                        "semantic_agreement_score": agreement_score,
+                        "semantic_agreement_risk": agreement_risk,
+                        "self_check_label": "",
+                        "self_check_risk": "",
+                        "risk_v2": "",
+                        "decision_v2": "",
+                        "effective_decision": "ERROR",
+                        "por_decision": "ERROR",
+                        "final_output": "",
+                        "correctness_label": "wrong",
+                        "silence_flag": True,
+                        "false_silence_flag": False,
+                        "accepted_error_flag": False,
+                        "error": str(exc),
+                    }
+                    rows.append(err_row)
+                    writer.writerow({k: _to_csv_value(v) for k, v in err_row.items()})
+                    csv_file.flush()
+                    continue
+                self_check_risk = self_check_label_to_risk(self_check_label)
 
             for threshold in args.thresholds:
                 threshold_key = threshold_to_key(threshold)
@@ -283,7 +380,18 @@ def run() -> None:
                     candidate_samples=por_candidates,
                     threshold=threshold,
                 )
-                silence_flag = eval_result.por_decision == "SILENCE"
+                risk_v2 = ""
+                decision_v2 = ""
+                effective_decision = eval_result.por_decision
+                if args.por_mode == "v2":
+                    risk_v2 = compute_risk_v2(
+                        instability_v1=eval_result.instability_score,
+                        agreement_risk=agreement_risk,
+                        self_check_risk=float(self_check_risk),
+                    )
+                    decision_v2 = por_v2_decision(risk_v2=risk_v2, threshold=threshold)
+                    effective_decision = decision_v2
+                silence_flag = effective_decision == "SILENCE"
                 final_output = "" if silence_flag else por_candidate
                 correctness_label = "wrong" if silence_flag else ("correct" if candidate_correct else "wrong")
                 false_silence_flag = silence_flag and candidate_correct
@@ -298,12 +406,20 @@ def run() -> None:
                     "por_candidates_json": por_candidates,
                     "por_primary_candidate": por_candidate,
                     "por_sample_count": len(por_candidates),
+                    "por_mode": args.por_mode,
                     "threshold": threshold_key,
                     "threshold_label": threshold_key,
                     "threshold_value": threshold,
                     "drift": eval_result.drift,
                     "coherence": eval_result.coherence,
                     "instability_score": eval_result.instability_score,
+                    "semantic_agreement_score": agreement_score,
+                    "semantic_agreement_risk": agreement_risk,
+                    "self_check_label": self_check_label,
+                    "self_check_risk": self_check_risk,
+                    "risk_v2": risk_v2,
+                    "decision_v2": decision_v2,
+                    "effective_decision": effective_decision,
                     "por_decision": eval_result.por_decision,
                     "final_output": final_output,
                     "correctness_label": correctness_label,
@@ -360,6 +476,7 @@ def run() -> None:
             "por_samples": por_samples,
             "baseline_temperature": args.baseline_temperature,
             "por_temperature": args.por_temperature,
+            "por_mode": args.por_mode,
             "experimental_short_regen_enabled": False,
         },
         "baseline": asdict(baseline_metrics),

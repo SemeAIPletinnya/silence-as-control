@@ -7,6 +7,11 @@ It is designed to test the Silence-as-Control hypothesis:
 - baseline: always answers,
 - PoR-gated: generates multiple candidates, computes drift across that candidate set, then answers only when instability is below threshold (otherwise silences).
 
+It supports two PoR gate modes:
+
+- **PoR v1 (default)**: drift + coherence -> instability -> threshold decision.
+- **PoR v2 (experimental)**: keeps v1 signals and adds semantic agreement + self-check risk before thresholding.
+
 ## Why SimpleQA
 
 SimpleQA gives short factual QA examples with canonical answers, making it suitable for measuring:
@@ -56,6 +61,7 @@ python benchmarks/simpleqa/run_simpleqa_por.py \
   --dataset-path /path/to/simpleqa.jsonl \
   --provider openai \
   --model gpt-4o-mini \
+  --por-mode v1 \
   --max-examples 200 \
   --thresholds 0.35 0.39 0.42 0.43 \
   --por-samples 3 \
@@ -74,6 +80,14 @@ Temperature controls:
 - `--baseline-temperature` defaults to `0.0` (deterministic baseline behavior).
 - `--por-temperature` defaults to `0.4`, allowing PoR candidate samples to vary and expose instability/drift.
 
+PoR mode:
+
+- `--por-mode v1` (default): existing benchmark behavior.
+- `--por-mode v2`: experimental prototype combining:
+  - v1 instability,
+  - semantic agreement risk from multi-sample candidate overlap,
+  - compact self-check label (`YES` / `NO` / `UNSURE`) mapped to risk.
+
 ## Output artifacts
 
 The run writes:
@@ -91,7 +105,15 @@ Per-example rows include:
 
 - `por_candidates_json` (all PoR candidates used for drift),
 - `por_primary_candidate` (candidate[0], used for coherence and release output),
-- `por_sample_count`.
+- `por_sample_count`,
+- `por_mode`,
+- `semantic_agreement_score`,
+- `semantic_agreement_risk`,
+- `self_check_label`,
+- `self_check_risk`,
+- `risk_v2`,
+- `decision_v2`,
+- `effective_decision` (the decision used for final output; equals v1 in v1 mode, v2 in v2 mode).
 
 ## Metric definitions
 

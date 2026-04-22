@@ -19,6 +19,9 @@ class ModelAdapter:
     ) -> str:
         raise NotImplementedError
 
+    def self_check(self, question: str, proposed_answer: str) -> str:
+        raise NotImplementedError
+
 
 @dataclass
 class OpenAIChatAdapter(ModelAdapter):
@@ -81,6 +84,32 @@ class OpenAIChatAdapter(ModelAdapter):
             return text
         except Exception as exc:  # noqa: BLE001
             raise ModelAdapterError(f"Model call failed: {exc}") from exc
+
+    def self_check(self, question: str, proposed_answer: str) -> str:
+        prompt = (
+            f"Question: {question}\n"
+            f"Proposed answer: {proposed_answer}\n\n"
+            "Is the proposed answer factually correct?\n"
+            "Reply with exactly one token:\n"
+            "YES\nNO\nUNSURE"
+        )
+        try:
+            resp = self._client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": "You are a strict factual verifier."},
+                    {"role": "user", "content": prompt},
+                ],
+                temperature=0.0,
+            )
+            text = (resp.choices[0].message.content or "").strip().upper()
+            if text.startswith("YES"):
+                return "YES"
+            if text.startswith("NO"):
+                return "NO"
+            return "UNSURE"
+        except Exception as exc:  # noqa: BLE001
+            raise ModelAdapterError(f"Model self-check failed: {exc}") from exc
 
 
 def build_model_adapter(provider: str, model: str) -> ModelAdapter:
