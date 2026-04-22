@@ -18,9 +18,19 @@ def is_correct(answer: str, references: list[str]) -> bool:
     norm_answer = normalize_text(answer)
     if not norm_answer:
         return False
+
     for ref in references:
-        if norm_answer == normalize_text(ref):
+        norm_ref = normalize_text(ref)
+        if not norm_ref:
+            continue
+
+        if norm_answer == norm_ref:
             return True
+        if norm_ref in norm_answer:
+            return True
+        if norm_answer in norm_ref:
+            return True
+
     return False
 
 
