@@ -68,3 +68,20 @@ def compute_risk_v2_1(
 
 def por_v2_1_decision(risk_v2_1: float, threshold: float) -> str:
     return "PROCEED" if risk_v2_1 <= threshold else "SILENCE"
+
+
+def compute_risk_v2_2(
+    *,
+    risk_v2_1: float,
+    self_check_label: str,
+    self_check_no_penalty: float,
+) -> tuple[float, bool]:
+    if self_check_no_penalty < 0:
+        raise ValueError("self_check_no_penalty must be >= 0. Negative values invert risk behavior.")
+    no_override_applied = self_check_label.strip().upper() == "NO"
+    risk_v2_2 = risk_v2_1 + self_check_no_penalty if no_override_applied else risk_v2_1
+    return risk_v2_2, no_override_applied
+
+
+def por_v2_2_decision(risk_v2_2: float, threshold: float) -> str:
+    return "PROCEED" if risk_v2_2 <= threshold else "SILENCE"

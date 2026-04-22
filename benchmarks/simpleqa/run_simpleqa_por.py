@@ -26,8 +26,10 @@ from benchmarks.simpleqa.por_v2 import (
     agreement_score_to_risk,
     compute_risk_v2,
     compute_risk_v2_1,
+    compute_risk_v2_2,
     por_v2_decision,
     por_v2_1_decision,
+    por_v2_2_decision,
     self_check_label_to_risk,
 )
 from benchmarks.simpleqa.por_adapter import evaluate_por_gate
@@ -42,6 +44,12 @@ def threshold_to_key(threshold: float) -> str:
 def validate_por_samples(value: int) -> int:
     if value < 2:
         raise ValueError("--por-samples must be >= 2 to compute multi-sample drift.")
+    return value
+
+
+def validate_self_check_no_penalty(value: float) -> float:
+    if value < 0:
+        raise ValueError("self_check_no_penalty must be >= 0. Negative values invert risk behavior.")
     return value
 
 
@@ -84,9 +92,15 @@ def _parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--por-mode",
-        choices=["v1", "v2", "v2_1"],
+        choices=["v1", "v2", "v2_1", "v2_2"],
         default="v1",
-        help="PoR gating mode: v1 (default), experimental v2, or experimental v2_1.",
+        help="PoR gating mode: v1 (default), experimental v2, v2_1, or v2_2.",
+    )
+    parser.add_argument(
+        "--self-check-no-penalty",
+        type=float,
+        default=0.30,
+        help="Additive risk penalty in v2_2 when self_check_label == NO.",
     )
     return parser.parse_args()
 
@@ -103,6 +117,7 @@ def run() -> None:
     args = _parse_args()
     try:
         por_samples = validate_por_samples(args.por_samples)
+        validated_self_check_no_penalty = validate_self_check_no_penalty(args.self_check_no_penalty)
     except ValueError as exc:
         raise SystemExit(str(exc)) from exc
     out_dir = Path(args.output_dir)
@@ -151,6 +166,10 @@ def run() -> None:
         "contradiction_risk",
         "risk_v2_1",
         "decision_v2_1",
+        "self_check_no_penalty",
+        "self_check_no_override_applied",
+        "risk_v2_2",
+        "decision_v2_2",
         "effective_decision",
         "por_decision",
         "final_output",
@@ -202,6 +221,10 @@ def run() -> None:
                     "contradiction_risk": "",
                     "risk_v2_1": "",
                     "decision_v2_1": "",
+                    "self_check_no_penalty": "",
+                    "self_check_no_override_applied": "",
+                    "risk_v2_2": "",
+                    "decision_v2_2": "",
                     "effective_decision": "ERROR",
                     "por_decision": "ERROR",
                     "final_output": "",
@@ -243,6 +266,10 @@ def run() -> None:
                 "contradiction_risk": "",
                 "risk_v2_1": "",
                 "decision_v2_1": "",
+                "self_check_no_penalty": "",
+                "self_check_no_override_applied": "",
+                "risk_v2_2": "",
+                "decision_v2_2": "",
                 "effective_decision": "PROCEED",
                 "por_decision": "PROCEED",
                 "final_output": baseline_answer,
@@ -293,6 +320,10 @@ def run() -> None:
                     "contradiction_risk": "",
                     "risk_v2_1": "",
                     "decision_v2_1": "",
+                    "self_check_no_penalty": "",
+                    "self_check_no_override_applied": "",
+                    "risk_v2_2": "",
+                    "decision_v2_2": "",
                     "effective_decision": "ERROR",
                     "por_decision": "ERROR",
                     "final_output": "",
@@ -334,6 +365,10 @@ def run() -> None:
                     "contradiction_risk": "",
                     "risk_v2_1": "",
                     "decision_v2_1": "",
+                    "self_check_no_penalty": "",
+                    "self_check_no_override_applied": "",
+                    "risk_v2_2": "",
+                    "decision_v2_2": "",
                     "effective_decision": "ERROR",
                     "por_decision": "ERROR",
                     "final_output": "",
@@ -356,7 +391,7 @@ def run() -> None:
             self_check_risk = ""
             contradiction_label = ""
             contradiction_risk = ""
-            if args.por_mode in ("v2", "v2_1"):
+            if args.por_mode in ("v2", "v2_1", "v2_2"):
                 try:
                     self_check_label = adapter.self_check(ex.question, por_candidate)
                 except ModelAdapterError as exc:
@@ -386,6 +421,10 @@ def run() -> None:
                         "contradiction_risk": "",
                         "risk_v2_1": "",
                         "decision_v2_1": "",
+                        "self_check_no_penalty": "",
+                        "self_check_no_override_applied": "",
+                        "risk_v2_2": "",
+                        "decision_v2_2": "",
                         "effective_decision": "ERROR",
                         "por_decision": "ERROR",
                         "final_output": "",
@@ -401,7 +440,7 @@ def run() -> None:
                     continue
                 self_check_risk = self_check_label_to_risk(self_check_label)
 
-            if args.por_mode == "v2_1":
+            if args.por_mode in ("v2_1", "v2_2"):
                 try:
                     contradiction_text = adapter.contradiction_check(ex.question, por_candidate)
                     contradiction_result = parse_contradiction_response(contradiction_text)
@@ -434,6 +473,10 @@ def run() -> None:
                         "contradiction_risk": "",
                         "risk_v2_1": "",
                         "decision_v2_1": "",
+                        "self_check_no_penalty": "",
+                        "self_check_no_override_applied": "",
+                        "risk_v2_2": "",
+                        "decision_v2_2": "",
                         "effective_decision": "ERROR",
                         "por_decision": "ERROR",
                         "final_output": "",
@@ -460,6 +503,10 @@ def run() -> None:
                 decision_v2 = ""
                 risk_v2_1 = ""
                 decision_v2_1 = ""
+                self_check_no_penalty = ""
+                self_check_no_override_applied = ""
+                risk_v2_2 = ""
+                decision_v2_2 = ""
                 effective_decision = eval_result.por_decision
                 if args.por_mode == "v2":
                     risk_v2 = compute_risk_v2(
@@ -469,7 +516,7 @@ def run() -> None:
                     )
                     decision_v2 = por_v2_decision(risk_v2=risk_v2, threshold=threshold)
                     effective_decision = decision_v2
-                if args.por_mode == "v2_1":
+                if args.por_mode in ("v2_1", "v2_2"):
                     risk_v2_1 = compute_risk_v2_1(
                         instability_v1=eval_result.instability_score,
                         agreement_risk=agreement_risk,
@@ -478,6 +525,16 @@ def run() -> None:
                     )
                     decision_v2_1 = por_v2_1_decision(risk_v2_1=risk_v2_1, threshold=threshold)
                     effective_decision = decision_v2_1
+                if args.por_mode == "v2_2":
+                    self_check_no_penalty = validated_self_check_no_penalty
+                    risk_v2_2, no_override_applied = compute_risk_v2_2(
+                        risk_v2_1=float(risk_v2_1),
+                        self_check_label=str(self_check_label),
+                        self_check_no_penalty=self_check_no_penalty,
+                    )
+                    self_check_no_override_applied = no_override_applied
+                    decision_v2_2 = por_v2_2_decision(risk_v2_2=risk_v2_2, threshold=threshold)
+                    effective_decision = decision_v2_2
                 silence_flag = effective_decision == "SILENCE"
                 final_output = "" if silence_flag else por_candidate
                 correctness_label = "wrong" if silence_flag else ("correct" if candidate_correct else "wrong")
@@ -510,6 +567,10 @@ def run() -> None:
                     "contradiction_risk": contradiction_risk,
                     "risk_v2_1": risk_v2_1,
                     "decision_v2_1": decision_v2_1,
+                    "self_check_no_penalty": self_check_no_penalty,
+                    "self_check_no_override_applied": self_check_no_override_applied,
+                    "risk_v2_2": risk_v2_2,
+                    "decision_v2_2": decision_v2_2,
                     "effective_decision": effective_decision,
                     "por_decision": eval_result.por_decision,
                     "final_output": final_output,
@@ -568,6 +629,7 @@ def run() -> None:
             "baseline_temperature": args.baseline_temperature,
             "por_temperature": args.por_temperature,
             "por_mode": args.por_mode,
+            "self_check_no_penalty": validated_self_check_no_penalty,
             "experimental_short_regen_enabled": False,
         },
         "baseline": asdict(baseline_metrics),
