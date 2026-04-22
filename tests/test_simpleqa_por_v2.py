@@ -5,6 +5,8 @@ from benchmarks.simpleqa.por_v2 import (
     PoRV2Weights,
     compute_risk_v2,
     compute_risk_v2_1,
+    compute_risk_v2_2,
+    por_v2_2_decision,
     self_check_label_to_risk,
 )
 from benchmarks.simpleqa.semantic_agreement import semantic_agreement_score
@@ -63,3 +65,28 @@ def test_compute_risk_v2_1_weighted_sum() -> None:
         ),
     )
     assert risk == pytest.approx(0.43)
+
+
+def test_compute_risk_v2_2_applies_no_penalty() -> None:
+    risk, applied = compute_risk_v2_2(
+        risk_v2_1=0.41,
+        self_check_label="NO",
+        self_check_no_penalty=0.30,
+    )
+    assert risk == pytest.approx(0.71)
+    assert applied is True
+
+
+def test_compute_risk_v2_2_no_penalty_when_not_no() -> None:
+    risk, applied = compute_risk_v2_2(
+        risk_v2_1=0.41,
+        self_check_label="YES",
+        self_check_no_penalty=0.30,
+    )
+    assert risk == pytest.approx(0.41)
+    assert applied is False
+
+
+def test_por_v2_2_decision_thresholding() -> None:
+    assert por_v2_2_decision(risk_v2_2=0.40, threshold=0.42) == "PROCEED"
+    assert por_v2_2_decision(risk_v2_2=0.43, threshold=0.42) == "SILENCE"
