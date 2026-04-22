@@ -54,6 +54,18 @@ def _parse_args() -> argparse.Namespace:
         default=3,
         help="Number of PoR candidate samples per prompt (minimum: 2).",
     )
+    parser.add_argument(
+        "--baseline-temperature",
+        type=float,
+        default=0.0,
+        help="Generation temperature for baseline answer (default: 0.0, deterministic).",
+    )
+    parser.add_argument(
+        "--por-temperature",
+        type=float,
+        default=0.4,
+        help="Generation temperature for PoR candidate sampling (default: 0.4).",
+    )
 
     parser.add_argument(
         "--separate-por-call",
@@ -128,7 +140,10 @@ def run() -> None:
         for idx, ex in enumerate(examples, start=1):
             print(f"[{idx}/{len(examples)}] {ex.example_id}")
             try:
-                baseline_answer = adapter.answer(ex.question)
+                baseline_answer = adapter.answer(
+                    ex.question,
+                    temperature=args.baseline_temperature,
+                )
             except ModelAdapterError as exc:
                 err = str(exc)
                 baseline_answer = ""
@@ -193,7 +208,12 @@ def run() -> None:
                 por_candidates.append(baseline_answer)
             try:
                 while len(por_candidates) < por_samples:
-                    por_candidates.append(adapter.answer(ex.question))
+                    por_candidates.append(
+                        adapter.answer(
+                            ex.question,
+                            temperature=args.por_temperature,
+                        )
+                    )
             except ModelAdapterError as exc:
                 err_row = {
                     "example_id": ex.example_id,
@@ -338,6 +358,8 @@ def run() -> None:
             "id_field": args.id_field,
             "separate_por_call": args.separate_por_call,
             "por_samples": por_samples,
+            "baseline_temperature": args.baseline_temperature,
+            "por_temperature": args.por_temperature,
             "experimental_short_regen_enabled": False,
         },
         "baseline": asdict(baseline_metrics),

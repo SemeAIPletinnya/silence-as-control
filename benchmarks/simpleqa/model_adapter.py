@@ -11,7 +11,12 @@ class ModelAdapterError(RuntimeError):
 class ModelAdapter:
     """Interface for model responses used by the benchmark."""
 
-    def answer(self, question: str) -> str:
+    def answer(
+        self,
+        question: str,
+        temperature: float = 0.0,
+        seed: int | None = None,
+    ) -> str:
         raise NotImplementedError
 
 
@@ -48,18 +53,29 @@ class OpenAIChatAdapter(ModelAdapter):
 
         self._client = OpenAI(**kwargs)
 
-    def answer(self, question: str) -> str:
+    def answer(
+        self,
+        question: str,
+        temperature: float = 0.0,
+        seed: int | None = None,
+    ) -> str:
         try:
-            resp = self._client.chat.completions.create(
-                model=self.model,
-                messages=[
+            request_kwargs = {
+                "model": self.model,
+                "messages": [
                     {
                         "role": "system",
                         "content": "Answer briefly and directly. If uncertain, provide your best factual answer.",
                     },
                     {"role": "user", "content": question},
                 ],
-                temperature=0,
+                "temperature": temperature,
+            }
+            if seed is not None:
+                request_kwargs["seed"] = seed
+
+            resp = self._client.chat.completions.create(
+                **request_kwargs,
             )
             text = (resp.choices[0].message.content or "").strip()
             return text
