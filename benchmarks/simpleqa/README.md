@@ -7,10 +7,11 @@ It is designed to test the Silence-as-Control hypothesis:
 - baseline: always answers,
 - PoR-gated: generates multiple candidates, computes drift across that candidate set, then answers only when instability is below threshold (otherwise silences).
 
-It supports two PoR gate modes:
+It supports three PoR gate modes:
 
 - **PoR v1 (default)**: drift + coherence -> instability -> threshold decision.
 - **PoR v2 (experimental)**: keeps v1 signals and adds semantic agreement + self-check risk before thresholding.
+- **PoR v2.1 (experimental)**: keeps v2 signals and adds contradiction challenge risk before thresholding.
 
 ## Why SimpleQA
 
@@ -87,6 +88,12 @@ PoR mode:
   - v1 instability,
   - semantic agreement risk from multi-sample candidate overlap,
   - compact self-check label (`YES` / `NO` / `UNSURE`) mapped to risk.
+- `--por-mode v2_1`: experimental prototype extending v2 with a short contradiction challenge check:
+  - model is asked to challenge the primary candidate,
+  - response is mapped to `NO_CONTRADICTION` / `WEAK_CHALLENGE` / `STRONG_CHALLENGE`,
+  - contradiction risk is combined with v2 signals.
+
+v2.1 is designed to probe confidently wrong but internally consistent answers. It remains experimental and does **not** replace the core PoR primitive.
 
 ## Output artifacts
 
@@ -113,7 +120,13 @@ Per-example rows include:
 - `self_check_risk`,
 - `risk_v2`,
 - `decision_v2`,
-- `effective_decision` (the decision used for final output; equals v1 in v1 mode, v2 in v2 mode).
+- `contradiction_label`,
+- `contradiction_risk`,
+- `risk_v2_1`,
+- `decision_v2_1`,
+- `effective_decision` (the decision used for final output; equals v1 in v1 mode, v2 in v2 mode, and v2.1 in v2_1 mode).
+
+For `v2_1`, `effective_decision` equals `decision_v2_1`.
 
 ## Metric definitions
 

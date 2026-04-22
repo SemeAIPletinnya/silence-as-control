@@ -19,12 +19,15 @@ from benchmarks.simpleqa.metrics import (
     compute_threshold_metrics,
     is_correct,
 )
+from benchmarks.simpleqa.contradiction_check import parse_contradiction_response
 from benchmarks.simpleqa.model_adapter import ModelAdapterError, build_model_adapter
 from benchmarks.simpleqa.plot_results import build_threshold_tradeoff_plot
 from benchmarks.simpleqa.por_v2 import (
     agreement_score_to_risk,
     compute_risk_v2,
+    compute_risk_v2_1,
     por_v2_decision,
+    por_v2_1_decision,
     self_check_label_to_risk,
 )
 from benchmarks.simpleqa.por_adapter import evaluate_por_gate
@@ -81,9 +84,9 @@ def _parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--por-mode",
-        choices=["v1", "v2"],
+        choices=["v1", "v2", "v2_1"],
         default="v1",
-        help="PoR gating mode: v1 (default) or experimental v2.",
+        help="PoR gating mode: v1 (default), experimental v2, or experimental v2_1.",
     )
     return parser.parse_args()
 
@@ -144,6 +147,10 @@ def run() -> None:
         "self_check_risk",
         "risk_v2",
         "decision_v2",
+        "contradiction_label",
+        "contradiction_risk",
+        "risk_v2_1",
+        "decision_v2_1",
         "effective_decision",
         "por_decision",
         "final_output",
@@ -191,6 +198,10 @@ def run() -> None:
                     "self_check_risk": "",
                     "risk_v2": "",
                     "decision_v2": "",
+                    "contradiction_label": "",
+                    "contradiction_risk": "",
+                    "risk_v2_1": "",
+                    "decision_v2_1": "",
                     "effective_decision": "ERROR",
                     "por_decision": "ERROR",
                     "final_output": "",
@@ -228,6 +239,10 @@ def run() -> None:
                 "self_check_risk": "",
                 "risk_v2": "",
                 "decision_v2": "",
+                "contradiction_label": "",
+                "contradiction_risk": "",
+                "risk_v2_1": "",
+                "decision_v2_1": "",
                 "effective_decision": "PROCEED",
                 "por_decision": "PROCEED",
                 "final_output": baseline_answer,
@@ -274,6 +289,10 @@ def run() -> None:
                     "self_check_risk": "",
                     "risk_v2": "",
                     "decision_v2": "",
+                    "contradiction_label": "",
+                    "contradiction_risk": "",
+                    "risk_v2_1": "",
+                    "decision_v2_1": "",
                     "effective_decision": "ERROR",
                     "por_decision": "ERROR",
                     "final_output": "",
@@ -311,6 +330,10 @@ def run() -> None:
                     "self_check_risk": "",
                     "risk_v2": "",
                     "decision_v2": "",
+                    "contradiction_label": "",
+                    "contradiction_risk": "",
+                    "risk_v2_1": "",
+                    "decision_v2_1": "",
                     "effective_decision": "ERROR",
                     "por_decision": "ERROR",
                     "final_output": "",
@@ -331,7 +354,9 @@ def run() -> None:
             agreement_risk = agreement_score_to_risk(agreement_score)
             self_check_label = ""
             self_check_risk = ""
-            if args.por_mode == "v2":
+            contradiction_label = ""
+            contradiction_risk = ""
+            if args.por_mode in ("v2", "v2_1"):
                 try:
                     self_check_label = adapter.self_check(ex.question, por_candidate)
                 except ModelAdapterError as exc:
@@ -357,6 +382,10 @@ def run() -> None:
                         "self_check_risk": "",
                         "risk_v2": "",
                         "decision_v2": "",
+                        "contradiction_label": "",
+                        "contradiction_risk": "",
+                        "risk_v2_1": "",
+                        "decision_v2_1": "",
                         "effective_decision": "ERROR",
                         "por_decision": "ERROR",
                         "final_output": "",
@@ -372,6 +401,53 @@ def run() -> None:
                     continue
                 self_check_risk = self_check_label_to_risk(self_check_label)
 
+            if args.por_mode == "v2_1":
+                try:
+                    contradiction_text = adapter.contradiction_check(ex.question, por_candidate)
+                    contradiction_result = parse_contradiction_response(contradiction_text)
+                    contradiction_label = contradiction_result.label
+                    contradiction_risk = contradiction_result.risk
+                except ModelAdapterError as exc:
+                    err_row = {
+                        "example_id": ex.example_id,
+                        "question": ex.question,
+                        "reference_answers": ex.reference_answers,
+                        "baseline_answer": baseline_answer,
+                        "por_candidate": por_candidate,
+                        "por_candidates_json": por_candidates,
+                        "por_primary_candidate": por_candidate,
+                        "por_sample_count": len(por_candidates),
+                        "por_mode": args.por_mode,
+                        "threshold": "",
+                        "threshold_label": "contradiction_check_error",
+                        "threshold_value": "",
+                        "drift": "",
+                        "coherence": "",
+                        "instability_score": "",
+                        "semantic_agreement_score": agreement_score,
+                        "semantic_agreement_risk": agreement_risk,
+                        "self_check_label": self_check_label,
+                        "self_check_risk": self_check_risk,
+                        "risk_v2": "",
+                        "decision_v2": "",
+                        "contradiction_label": "",
+                        "contradiction_risk": "",
+                        "risk_v2_1": "",
+                        "decision_v2_1": "",
+                        "effective_decision": "ERROR",
+                        "por_decision": "ERROR",
+                        "final_output": "",
+                        "correctness_label": "wrong",
+                        "silence_flag": True,
+                        "false_silence_flag": False,
+                        "accepted_error_flag": False,
+                        "error": str(exc),
+                    }
+                    rows.append(err_row)
+                    writer.writerow({k: _to_csv_value(v) for k, v in err_row.items()})
+                    csv_file.flush()
+                    continue
+
             for threshold in args.thresholds:
                 threshold_key = threshold_to_key(threshold)
                 eval_result = evaluate_por_gate(
@@ -382,6 +458,8 @@ def run() -> None:
                 )
                 risk_v2 = ""
                 decision_v2 = ""
+                risk_v2_1 = ""
+                decision_v2_1 = ""
                 effective_decision = eval_result.por_decision
                 if args.por_mode == "v2":
                     risk_v2 = compute_risk_v2(
@@ -391,6 +469,15 @@ def run() -> None:
                     )
                     decision_v2 = por_v2_decision(risk_v2=risk_v2, threshold=threshold)
                     effective_decision = decision_v2
+                if args.por_mode == "v2_1":
+                    risk_v2_1 = compute_risk_v2_1(
+                        instability_v1=eval_result.instability_score,
+                        agreement_risk=agreement_risk,
+                        self_check_risk=float(self_check_risk),
+                        contradiction_risk=float(contradiction_risk),
+                    )
+                    decision_v2_1 = por_v2_1_decision(risk_v2_1=risk_v2_1, threshold=threshold)
+                    effective_decision = decision_v2_1
                 silence_flag = effective_decision == "SILENCE"
                 final_output = "" if silence_flag else por_candidate
                 correctness_label = "wrong" if silence_flag else ("correct" if candidate_correct else "wrong")
@@ -419,6 +506,10 @@ def run() -> None:
                     "self_check_risk": self_check_risk,
                     "risk_v2": risk_v2,
                     "decision_v2": decision_v2,
+                    "contradiction_label": contradiction_label,
+                    "contradiction_risk": contradiction_risk,
+                    "risk_v2_1": risk_v2_1,
+                    "decision_v2_1": decision_v2_1,
                     "effective_decision": effective_decision,
                     "por_decision": eval_result.por_decision,
                     "final_output": final_output,

@@ -1,3 +1,4 @@
+from benchmarks.simpleqa.run_simpleqa_por import _parse_args
 from benchmarks.simpleqa.metrics import compute_threshold_metrics
 from benchmarks.simpleqa.por_adapter import evaluate_por_gate
 from benchmarks.simpleqa.run_simpleqa_por import validate_por_samples
@@ -47,3 +48,48 @@ def test_por_gate_uses_multi_sample_drift() -> None:
         threshold=0.39,
     )
     assert result.drift > 0.0
+
+
+def test_por_mode_default_and_choices(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "run_simpleqa_por.py",
+            "--dataset-path",
+            "dummy.jsonl",
+            "--model",
+            "gpt-4o-mini",
+        ],
+    )
+    args = _parse_args()
+    assert args.por_mode == "v1"
+
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "run_simpleqa_por.py",
+            "--dataset-path",
+            "dummy.jsonl",
+            "--model",
+            "gpt-4o-mini",
+            "--por-mode",
+            "v2",
+        ],
+    )
+    args_v2 = _parse_args()
+    assert args_v2.por_mode == "v2"
+
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "run_simpleqa_por.py",
+            "--dataset-path",
+            "dummy.jsonl",
+            "--model",
+            "gpt-4o-mini",
+            "--por-mode",
+            "v2_1",
+        ],
+    )
+    args_v2_1 = _parse_args()
+    assert args_v2_1.por_mode == "v2_1"
