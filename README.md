@@ -92,6 +92,13 @@ curl -s http://127.0.0.1:8000/por/complete \
 - Tracked run scales: 35 / 100 / 300 / 1000 tasks
 - Additional visuals and summaries: `reports/README.md`, `docs/`
 
+### SimpleQA-style benchmark note (prototype, PoR v2.2)
+- Local harder subset: 25 examples (`gpt-4o-mini`).
+- Baseline correctness in that run: 96% (24/25).
+- PoR v2.2 accepted-output precision in that run: 100% (24/24 accepted), with `accepted_error_rate=0.0`.
+- Silence tradeoff: 4% (1/25), including one observed wrong answer case blocked by silencing.
+- This is a prototype benchmark observation on a local subset; broader validation on larger/harder sets is still required.
+
 ## Quick public links
 - Repository root: `./`
 - README: `README.md`

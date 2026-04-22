@@ -184,3 +184,36 @@ PoR is beneficial when:
 
 - `accepted_error_rate` decreases materially relative to baseline,
 - while `silence_rate` stays within an interpretable operational range.
+
+## Observed v2.2 prototype result (local harder subset, 25 examples)
+
+On one local SimpleQA-style harder subset run (`n=25`) using:
+
+- model: `gpt-4o-mini`
+- mode: `v2_2`
+- `baseline_temperature=0.0`
+- `por_temperature=0.4`
+- `por_samples=3`
+- `separate_por_call=true`
+- `self_check_no_penalty=0.30`
+- thresholds: `0.35`, `0.39`, `0.42`, `0.43`
+
+all tested thresholds produced the same observed outcome:
+
+- `total_examples=25`
+- `answered_count=24`
+- `silence_count=1` (`silence_rate=0.04`)
+- `accepted_correct_count=24`
+- `accepted_wrong_count=0`
+- `accepted_precision=1.0` on accepted outputs
+- `accepted_error_rate=0.0`
+- `false_silence_count=0` (`false_silence_rate=0.0`)
+
+Behavioral note from this run: a previously observed wrong answer case (`"The capital of Kazakhstan is Nur-Sultan."`) was silenced in `v2_2` with:
+
+- `self_check_label=NO`
+- `self_check_no_override_applied=True`
+- `risk_v2_2=0.85`
+- `decision_v2_2=SILENCE`
+
+This is a prototype benchmark result on a local subset, not a universal proof. It indicates that in this run, `v2_2` blocked the observed confidently wrong answer with a `4%` silence tradeoff.
