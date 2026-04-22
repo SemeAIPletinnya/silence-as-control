@@ -7,11 +7,12 @@ It is designed to test the Silence-as-Control hypothesis:
 - baseline: always answers,
 - PoR-gated: generates multiple candidates, computes drift across that candidate set, then answers only when instability is below threshold (otherwise silences).
 
-It supports three PoR gate modes:
+It supports four PoR gate modes:
 
 - **PoR v1 (default)**: drift + coherence -> instability -> threshold decision.
 - **PoR v2 (experimental)**: keeps v1 signals and adds semantic agreement + self-check risk before thresholding.
 - **PoR v2.1 (experimental)**: keeps v2 signals and adds contradiction challenge risk before thresholding.
+- **PoR v2.2 (experimental)**: keeps v2.1 and adds a strong additive risk penalty when `self_check = NO`.
 
 ## Why SimpleQA
 
@@ -92,8 +93,13 @@ PoR mode:
   - model is asked to challenge the primary candidate,
   - response is mapped to `NO_CONTRADICTION` / `WEAK_CHALLENGE` / `STRONG_CHALLENGE`,
   - contradiction risk is combined with v2 signals.
+- `--por-mode v2_2`: experimental prototype extending v2.1 with stronger handling of `self_check = NO`:
+  - computes `risk_v2_2 = risk_v2_1 + self_check_no_penalty` when `self_check_label == "NO"`,
+  - otherwise `risk_v2_2 = risk_v2_1`,
+  - then thresholds `risk_v2_2` for release-control decision.
+- `--self-check-no-penalty` (default `0.30`): additive penalty used only in `v2_2`.
 
-v2.1 is designed to probe confidently wrong but internally consistent answers. It remains experimental and does **not** replace the core PoR primitive.
+v2.1/v2.2 are designed to probe confidently wrong but internally consistent answers. v2.2 specifically tests whether internal model rejection should act as a stronger release-control signal. Both remain experimental and do **not** replace the core PoR primitive.
 
 ## Output artifacts
 
@@ -124,9 +130,13 @@ Per-example rows include:
 - `contradiction_risk`,
 - `risk_v2_1`,
 - `decision_v2_1`,
-- `effective_decision` (the decision used for final output; equals v1 in v1 mode, v2 in v2 mode, and v2.1 in v2_1 mode).
+- `self_check_no_penalty`,
+- `self_check_no_override_applied`,
+- `risk_v2_2`,
+- `decision_v2_2`,
+- `effective_decision` (the decision used for final output; equals v1 in v1 mode, v2 in v2 mode, v2.1 in v2_1 mode, and v2.2 in v2_2 mode).
 
-For `v2_1`, `effective_decision` equals `decision_v2_1`.
+For `v2_1`, `effective_decision` equals `decision_v2_1`. For `v2_2`, `effective_decision` equals `decision_v2_2`.
 
 ## Metric definitions
 
