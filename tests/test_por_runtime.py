@@ -19,12 +19,25 @@ def test_runtime_adaptive_threshold_moves_toward_recent_instability():
 
 def test_runtime_embedding_estimators_return_bounded_values_and_trivial_ordering():
     coherence, _ = por_runtime.estimate_coherence("alpha beta", "alpha beta")
+    coherence_unrelated, _ = por_runtime.estimate_coherence(
+        "alpha beta", "quantum nebula parquet"
+    )
     drift_same, _ = por_runtime.estimate_drift(["same answer", "same answer"])
     drift_diff, _ = por_runtime.estimate_drift(["same answer", "totally different"])
 
     assert 0.0 <= coherence <= 1.0
+    assert 0.0 <= coherence_unrelated <= 1.0
     assert 0.0 <= drift_same <= 1.0
     assert 0.0 <= drift_diff <= 1.0
     assert coherence > 0.95
+    assert coherence_unrelated < 0.5
     assert drift_same <= 0.05
     assert drift_diff >= drift_same
+
+
+def test_runtime_fallback_token_hashing_is_deterministic():
+    idx = por_runtime._stable_token_index("stable-token", 64)
+    repeated = [por_runtime._stable_token_index("stable-token", 64) for _ in range(10)]
+
+    assert all(slot == idx for slot in repeated)
+    assert 0 <= idx < 64

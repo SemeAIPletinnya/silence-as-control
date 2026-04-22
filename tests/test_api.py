@@ -72,6 +72,23 @@ def test_api_evaluate_stays_fixed_when_adaptive_disabled():
     assert payload["threshold"] == 0.39
 
 
+def test_api_evaluate_can_silence_on_low_coherence_runtime_signal():
+    response = client.post(
+        "/por/evaluate",
+        json={
+            "prompt": "Explain recursion with code examples",
+            "candidate": "bananas orbit silently over parquet",
+            "threshold": 0.39,
+            "use_adaptive_threshold": False,
+        },
+    )
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["drift"] == 0.0
+    assert payload["coherence"] < 0.25
+    assert payload["decision"] == "SILENCE"
+
+
 # ---------------------------------
 # Experimental MAYBE_SHORT_REGEN
 # ---------------------------------

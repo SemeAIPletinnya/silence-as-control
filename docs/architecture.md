@@ -24,6 +24,8 @@ Useful, optional runtime helpers:
 - embedding-based coherence,
 - multi-sample drift estimation.
 
+The bundled embedding fallback is deterministic and lightweight for reproducible runtime behavior; production deployments may provide stronger semantic embeddings.
+
 Reference module: `api/por_runtime.py`.
 
 ## 3) Experimental Borderline Recovery

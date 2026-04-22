@@ -9,6 +9,11 @@ You are here: optional deployment-layer behavior (non-core).
 - Embedding-based coherence scoring.
 - Multi-sample embedding disagreement for drift.
 
+Runtime embedding note:
+- The default fallback embedding is intentionally lightweight and deterministic (stable token hashing) for offline/demo reproducibility.
+- It is a runtime approximation, not the core thesis claim.
+- Deployments can inject stronger semantic embeddings without changing the core fixed-threshold release primitive.
+
 Implementation: `api/por_runtime.py`, wired via `api/main.py`.
 
 ## Why they exist
