@@ -10,6 +10,14 @@ class PoRV2Weights:
     self_check_weight: float = 0.3
 
 
+@dataclass(frozen=True)
+class PoRV2_1Weights:
+    instability_weight: float = 0.3
+    agreement_weight: float = 0.2
+    self_check_weight: float = 0.2
+    contradiction_weight: float = 0.3
+
+
 def self_check_label_to_risk(label: str) -> float:
     normalized = label.strip().upper()
     if normalized == "YES":
@@ -40,3 +48,23 @@ def compute_risk_v2(
 
 def por_v2_decision(risk_v2: float, threshold: float) -> str:
     return "PROCEED" if risk_v2 <= threshold else "SILENCE"
+
+
+def compute_risk_v2_1(
+    *,
+    instability_v1: float,
+    agreement_risk: float,
+    self_check_risk: float,
+    contradiction_risk: float,
+    weights: PoRV2_1Weights = PoRV2_1Weights(),
+) -> float:
+    return (
+        (weights.instability_weight * instability_v1)
+        + (weights.agreement_weight * agreement_risk)
+        + (weights.self_check_weight * self_check_risk)
+        + (weights.contradiction_weight * contradiction_risk)
+    )
+
+
+def por_v2_1_decision(risk_v2_1: float, threshold: float) -> str:
+    return "PROCEED" if risk_v2_1 <= threshold else "SILENCE"

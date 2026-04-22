@@ -22,6 +22,9 @@ class ModelAdapter:
     def self_check(self, question: str, proposed_answer: str) -> str:
         raise NotImplementedError
 
+    def contradiction_check(self, question: str, proposed_answer: str) -> str:
+        raise NotImplementedError
+
 
 @dataclass
 class OpenAIChatAdapter(ModelAdapter):
@@ -110,6 +113,30 @@ class OpenAIChatAdapter(ModelAdapter):
             return "UNSURE"
         except Exception as exc:  # noqa: BLE001
             raise ModelAdapterError(f"Model self-check failed: {exc}") from exc
+
+    def contradiction_check(self, question: str, proposed_answer: str) -> str:
+        prompt = (
+            f"Question: {question}\n"
+            f"Proposed answer: {proposed_answer}\n\n"
+            "Your task:\n"
+            "Try to challenge the proposed answer.\n"
+            "If you think it may be wrong, provide the strongest short alternative factual answer or contradiction.\n"
+            "If you think it is correct, reply ONLY:\n"
+            "NO_CONTRADICTION"
+        )
+        try:
+            resp = self._client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": "You are a strict factual challenger."},
+                    {"role": "user", "content": prompt},
+                ],
+                temperature=0.0,
+                max_tokens=24,
+            )
+            return (resp.choices[0].message.content or "").strip()
+        except Exception as exc:  # noqa: BLE001
+            raise ModelAdapterError(f"Model contradiction-check failed: {exc}") from exc
 
 
 def build_model_adapter(provider: str, model: str) -> ModelAdapter:
