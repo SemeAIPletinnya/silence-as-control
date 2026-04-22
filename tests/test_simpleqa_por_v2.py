@@ -90,3 +90,12 @@ def test_compute_risk_v2_2_no_penalty_when_not_no() -> None:
 def test_por_v2_2_decision_thresholding() -> None:
     assert por_v2_2_decision(risk_v2_2=0.40, threshold=0.42) == "PROCEED"
     assert por_v2_2_decision(risk_v2_2=0.43, threshold=0.42) == "SILENCE"
+
+
+def test_compute_risk_v2_2_rejects_negative_penalty() -> None:
+    with pytest.raises(ValueError, match="must be >= 0"):
+        compute_risk_v2_2(
+            risk_v2_1=0.41,
+            self_check_label="NO",
+            self_check_no_penalty=-0.1,
+        )

@@ -47,6 +47,12 @@ def validate_por_samples(value: int) -> int:
     return value
 
 
+def validate_self_check_no_penalty(value: float) -> float:
+    if value < 0:
+        raise ValueError("self_check_no_penalty must be >= 0. Negative values invert risk behavior.")
+    return value
+
+
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run SimpleQA PoR benchmark harness.")
     parser.add_argument("--dataset-path", required=True, help="Path to local SimpleQA file (.json/.jsonl/.csv).")
@@ -111,6 +117,7 @@ def run() -> None:
     args = _parse_args()
     try:
         por_samples = validate_por_samples(args.por_samples)
+        validated_self_check_no_penalty = validate_self_check_no_penalty(args.self_check_no_penalty)
     except ValueError as exc:
         raise SystemExit(str(exc)) from exc
     out_dir = Path(args.output_dir)
@@ -519,11 +526,11 @@ def run() -> None:
                     decision_v2_1 = por_v2_1_decision(risk_v2_1=risk_v2_1, threshold=threshold)
                     effective_decision = decision_v2_1
                 if args.por_mode == "v2_2":
-                    self_check_no_penalty = args.self_check_no_penalty
+                    self_check_no_penalty = validated_self_check_no_penalty
                     risk_v2_2, no_override_applied = compute_risk_v2_2(
                         risk_v2_1=float(risk_v2_1),
                         self_check_label=str(self_check_label),
-                        self_check_no_penalty=args.self_check_no_penalty,
+                        self_check_no_penalty=self_check_no_penalty,
                     )
                     self_check_no_override_applied = no_override_applied
                     decision_v2_2 = por_v2_2_decision(risk_v2_2=risk_v2_2, threshold=threshold)
@@ -622,7 +629,7 @@ def run() -> None:
             "baseline_temperature": args.baseline_temperature,
             "por_temperature": args.por_temperature,
             "por_mode": args.por_mode,
-            "self_check_no_penalty": args.self_check_no_penalty,
+            "self_check_no_penalty": validated_self_check_no_penalty,
             "experimental_short_regen_enabled": False,
         },
         "baseline": asdict(baseline_metrics),

@@ -76,6 +76,8 @@ def compute_risk_v2_2(
     self_check_label: str,
     self_check_no_penalty: float,
 ) -> tuple[float, bool]:
+    if self_check_no_penalty < 0:
+        raise ValueError("self_check_no_penalty must be >= 0. Negative values invert risk behavior.")
     no_override_applied = self_check_label.strip().upper() == "NO"
     risk_v2_2 = risk_v2_1 + self_check_no_penalty if no_override_applied else risk_v2_1
     return risk_v2_2, no_override_applied

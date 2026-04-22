@@ -1,7 +1,7 @@
 from benchmarks.simpleqa.run_simpleqa_por import _parse_args
 from benchmarks.simpleqa.metrics import compute_threshold_metrics
 from benchmarks.simpleqa.por_adapter import evaluate_por_gate
-from benchmarks.simpleqa.run_simpleqa_por import validate_por_samples
+from benchmarks.simpleqa.run_simpleqa_por import validate_por_samples, validate_self_check_no_penalty
 
 
 def test_validate_por_samples_rejects_lt_2() -> None:
@@ -11,6 +11,15 @@ def test_validate_por_samples_rejects_lt_2() -> None:
         assert ">= 2" in str(exc)
     else:
         raise AssertionError("Expected ValueError for por_samples < 2")
+
+
+def test_validate_self_check_no_penalty_rejects_negative() -> None:
+    try:
+        validate_self_check_no_penalty(-0.1)
+    except ValueError as exc:
+        assert "must be >= 0" in str(exc)
+    else:
+        raise AssertionError("Expected ValueError for negative self_check_no_penalty")
 
 
 def test_threshold_metrics_preserve_precision_buckets() -> None:
