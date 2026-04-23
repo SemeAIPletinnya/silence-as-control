@@ -9,6 +9,24 @@ It does **not** improve model weights. It controls release behavior.
 
 **Same model. Different decision.**
 
+## Use / Integration
+PoR is useful as:
+- a release gate before final LLM output,
+- abstention/silence control when output is unstable,
+- a reliability layer in agent or API pipelines.
+
+Most relevant for:
+- LLM app builders,
+- agent developers,
+- API/inference layer engineers,
+- teams that care more about avoiding accepted wrong outputs than maximizing raw coverage.
+
+**Offer**
+
+I help teams integrate release-control/abstention gating into LLM pipelines, evaluate accepted-wrong-output and threshold behavior, and set up benchmark/audit flows for model release control.
+
+Open a GitHub issue if you want integration help, audit/evaluation support, or benchmark setup.
+
 ## What this repo is
 - A research-engineering implementation of Proof-of-Resonance (PoR) release control.
 - A deterministic core primitive with explicit `PROCEED` / `SILENCE` outcomes.
