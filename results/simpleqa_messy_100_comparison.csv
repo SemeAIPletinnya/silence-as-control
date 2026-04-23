@@ -1,0 +1,5 @@
+"mode","threshold","total_examples","answered_count","silence_count","accepted_correct","accepted_wrong","accepted_precision","accepted_error_rate","false_silence_count","false_silence_rate"
+"v1","0.35","100","89","11","86","3","0.9662921348314607","0.033707865168539325","11","0.11"
+"v2","0.35","100","100","0","97","3","0.97","0.03","0","0.0"
+"v2_1","0.35","100","100","0","97","3","0.97","0.03","0","0.0"
+"v2_2","0.35","100","100","0","100","0","1.0","0.0","0","0.0"
