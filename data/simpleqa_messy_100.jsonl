@@ -1,0 +1,100 @@
+{"id": "q001", "question": "In which city does the government of France sit?", "answer": "Paris"}
+{"id": "q002", "question": "Name the capital city of Japan.", "answer": "Tokyo"}
+{"id": "q003", "question": "What city is the capital of Australia?", "answer": "Canberra"}
+{"id": "q004", "question": "Which city serves as Canada's federal capital?", "answer": "Ottawa"}
+{"id": "q005", "question": "The capital of Brazil is which city?", "answers": ["Brasília", "Brasilia"]}
+{"id": "q006", "question": "What is the capital city of India?", "answer": "New Delhi"}
+{"id": "q007", "question": "Which city is the capital of South Korea?", "answer": "Seoul"}
+{"id": "q008", "question": "What is the political capital of Turkey?", "answer": "Ankara"}
+{"id": "q009", "question": "Name the capital of New Zealand.", "answer": "Wellington"}
+{"id": "q010", "question": "What city is Egypt's capital?", "answer": "Cairo"}
+{"id": "q011", "question": "Give the chemical symbol for sodium.", "answer": "Na"}
+{"id": "q012", "question": "What is the element symbol for potassium?", "answer": "K"}
+{"id": "q013", "question": "Write the chemical symbol for tungsten.", "answer": "W"}
+{"id": "q014", "question": "What is the symbol for silver on the periodic table?", "answer": "Ag"}
+{"id": "q015", "question": "The chemical symbol Fe stands for which element?", "answer": "iron"}
+{"id": "q016", "question": "What is the molecular formula for water?", "answer": "H2O"}
+{"id": "q017", "question": "What is the molecular formula of carbon dioxide?", "answer": "CO2"}
+{"id": "q018", "question": "What is the common chemical formula for table salt?", "answer": "NaCl"}
+{"id": "q019", "question": "What is the molecular formula of methane?", "answer": "CH4"}
+{"id": "q020", "question": "What is the formula for ammonia?", "answer": "NH3"}
+{"id": "q021", "question": "How many degrees are in a right angle?", "answers": ["90", "ninety"]}
+{"id": "q022", "question": "How many days are in a leap year?", "answers": ["366", "three hundred sixty-six"]}
+{"id": "q023", "question": "How many continents are there on Earth?", "answers": ["7", "seven"]}
+{"id": "q024", "question": "How many sides does a hexagon have?", "answers": ["6", "six"]}
+{"id": "q025", "question": "How many bits make one byte?", "answers": ["8", "eight"]}
+{"id": "q026", "question": "How many players are on the field per soccer team during normal play?", "answers": ["11", "eleven"]}
+{"id": "q027", "question": "How many minutes are in three hours?", "answers": ["180", "one hundred eighty"]}
+{"id": "q028", "question": "What is 12 multiplied by 12?", "answers": ["144", "one hundred forty-four"]}
+{"id": "q029", "question": "What is 15 percent of 200?", "answers": ["30", "thirty"]}
+{"id": "q030", "question": "What is the square root of 81?", "answers": ["9", "nine"]}
+{"id": "q031", "question": "Who wrote the novel 'Pride and Prejudice'?", "answer": "Jane Austen"}
+{"id": "q032", "question": "Who is the author of '1984'?", "answer": "George Orwell"}
+{"id": "q033", "question": "Who wrote 'The Catcher in the Rye'?", "answers": ["J. D. Salinger", "JD Salinger", "J.D. Salinger"]}
+{"id": "q034", "question": "Who wrote 'The Odyssey'?", "answer": "Homer"}
+{"id": "q035", "question": "Who wrote the play 'Hamlet'?", "answers": ["William Shakespeare", "Shakespeare"]}
+{"id": "q036", "question": "Who authored 'To Kill a Mockingbird'?", "answer": "Harper Lee"}
+{"id": "q037", "question": "Who wrote 'The Great Gatsby'?", "answers": ["F. Scott Fitzgerald", "F Scott Fitzgerald"]}
+{"id": "q038", "question": "Who wrote the epic poem 'Paradise Lost'?", "answer": "John Milton"}
+{"id": "q039", "question": "Which Russian author wrote 'War and Peace'?", "answers": ["Leo Tolstoy", "Lev Tolstoy"]}
+{"id": "q040", "question": "Who wrote 'Don Quixote'?", "answers": ["Miguel de Cervantes", "Cervantes"]}
+{"id": "q041", "question": "In what year did World War II end?", "answer": "1945"}
+{"id": "q042", "question": "In which year did the Berlin Wall fall?", "answer": "1989"}
+{"id": "q043", "question": "What year did the first human land on the Moon?", "answer": "1969"}
+{"id": "q044", "question": "In what year was the United Nations founded?", "answer": "1945"}
+{"id": "q045", "question": "In what year did the Titanic sink?", "answer": "1912"}
+{"id": "q046", "question": "In which year did India become independent?", "answer": "1947"}
+{"id": "q047", "question": "What year did the American Civil War begin?", "answer": "1861"}
+{"id": "q048", "question": "In what year did the French Revolution begin?", "answer": "1789"}
+{"id": "q049", "question": "What year was the United States Declaration of Independence adopted?", "answer": "1776"}
+{"id": "q050", "question": "In what year did Nelson Mandela become President of South Africa?", "answer": "1994"}
+{"id": "q051", "question": "Which planet is known as the Red Planet?", "answer": "Mars"}
+{"id": "q052", "question": "Which planet is the largest in our solar system?", "answer": "Jupiter"}
+{"id": "q053", "question": "What is the name of Earth's natural satellite?", "answers": ["the Moon", "Moon"]}
+{"id": "q054", "question": "How many planets are in the solar system?", "answers": ["8", "eight"]}
+{"id": "q055", "question": "What is the nearest star to Earth (other than the Sun)?", "answer": "Proxima Centauri"}
+{"id": "q056", "question": "What galaxy contains our solar system?", "answers": ["Milky Way", "the Milky Way"]}
+{"id": "q057", "question": "What is the Sun primarily made of?", "answer": "hydrogen"}
+{"id": "q058", "question": "What do we call the path a planet follows around a star?", "answer": "orbit"}
+{"id": "q059", "question": "What is the name of the force that keeps planets in orbit around the Sun?", "answer": "gravity"}
+{"id": "q060", "question": "Which planet has the most prominent ring system?", "answer": "Saturn"}
+{"id": "q061", "question": "What is the basic unit of heredity in biology?", "answer": "gene"}
+{"id": "q062", "question": "What is the molecule that carries genetic information in most organisms?", "answer": "DNA"}
+{"id": "q063", "question": "What gas do plants absorb from the atmosphere for photosynthesis?", "answers": ["carbon dioxide", "CO2"]}
+{"id": "q064", "question": "What pigment gives most plants their green color?", "answer": "chlorophyll"}
+{"id": "q065", "question": "What is the powerhouse organelle of the cell?", "answers": ["mitochondrion", "mitochondria"]}
+{"id": "q066", "question": "What is the largest organ in the human body by surface area?", "answers": ["skin", "the skin"]}
+{"id": "q067", "question": "Which blood type is known as the universal donor for red cells?", "answers": ["O negative", "O-"]}
+{"id": "q068", "question": "What is the process by which plants make food using sunlight?", "answer": "photosynthesis"}
+{"id": "q069", "question": "What is the largest internal organ in the human body?", "answer": "liver"}
+{"id": "q070", "question": "In taxonomy, what is the two-part naming system for species called?", "answer": "binomial nomenclature"}
+{"id": "q071", "question": "What does HTTP stand for?", "answer": "Hypertext Transfer Protocol"}
+{"id": "q072", "question": "What does HTTPS stand for?", "answer": "Hypertext Transfer Protocol Secure"}
+{"id": "q073", "question": "What does CPU stand for?", "answer": "Central Processing Unit"}
+{"id": "q074", "question": "What does GPU stand for?", "answer": "Graphics Processing Unit"}
+{"id": "q075", "question": "What does RAM stand for?", "answer": "Random Access Memory"}
+{"id": "q076", "question": "What does URL stand for?", "answer": "Uniform Resource Locator"}
+{"id": "q077", "question": "What does DNA stand for?", "answers": ["Deoxyribonucleic acid", "Deoxyribonucleic Acid"]}
+{"id": "q078", "question": "What does NATO stand for?", "answer": "North Atlantic Treaty Organization"}
+{"id": "q079", "question": "What is the official currency of Japan?", "answers": ["yen", "Japanese yen"]}
+{"id": "q080", "question": "What is the SI base unit of thermodynamic temperature?", "answer": "kelvin"}
+{"id": "q081", "question": "Which city hosts the main headquarters of the United Nations?", "answers": ["New York City", "New York"]}
+{"id": "q082", "question": "What is the full name of NASA?", "answer": "National Aeronautics and Space Administration"}
+{"id": "q083", "question": "What is the full name of UNESCO?", "answer": "United Nations Educational, Scientific and Cultural Organization"}
+{"id": "q084", "question": "Which river flows through both Vienna and Budapest?", "answers": ["Danube", "the Danube"]}
+{"id": "q085", "question": "What is the largest ocean on Earth?", "answers": ["Pacific Ocean", "the Pacific Ocean"]}
+{"id": "q086", "question": "Which mountain range contains Mount Everest?", "answers": ["Himalayas", "the Himalayas"]}
+{"id": "q087", "question": "What is the official language of Brazil?", "answer": "Portuguese"}
+{"id": "q088", "question": "What is the smallest prime number?", "answers": ["2", "two"]}
+{"id": "q089", "question": "How many zeros are in one million written in digits?", "answers": ["6", "six"]}
+{"id": "q090", "question": "How many centimeters are in one meter?", "answers": ["100", "one hundred"]}
+{"id": "q091", "question": "Which instrument measures atmospheric pressure?", "answer": "barometer"}
+{"id": "q092", "question": "What is the pH of a neutral aqueous solution at 25°C?", "answers": ["7", "seven"]}
+{"id": "q093", "question": "Which gas is most abundant in Earth's atmosphere?", "answer": "nitrogen"}
+{"id": "q094", "question": "What is the freezing point of water in degrees Celsius?", "answers": ["0", "zero"]}
+{"id": "q095", "question": "What is the boiling point of water at standard atmospheric pressure in °C?", "answers": ["100", "one hundred"]}
+{"id": "q096", "question": "What is the SI unit of electric current?", "answers": ["ampere", "A"]}
+{"id": "q097", "question": "What is the SI unit of force?", "answer": "newton"}
+{"id": "q098", "question": "What is the SI unit of energy?", "answer": "joule"}
+{"id": "q099", "question": "In computing, what does ASCII stand for?", "answer": "American Standard Code for Information Interchange"}
+{"id": "q100", "question": "Who developed the theory of general relativity?", "answers": ["Albert Einstein", "Einstein"]}
