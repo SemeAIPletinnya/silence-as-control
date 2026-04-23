@@ -89,10 +89,10 @@
 {"id": "q089", "question": "How many zeros are in one million written in digits?", "answers": ["6", "six"]}
 {"id": "q090", "question": "How many centimeters are in one meter?", "answers": ["100", "one hundred"]}
 {"id": "q091", "question": "Which instrument measures atmospheric pressure?", "answer": "barometer"}
-{"id": "q092", "question": "What is the pH of a neutral aqueous solution at 25°C?", "answers": ["7", "seven"]}
+{"id": "q092", "question": "What is the pH of a neutral aqueous solution at 25°C?", "answers": ["7", "seven", "7.0"]}
 {"id": "q093", "question": "Which gas is most abundant in Earth's atmosphere?", "answer": "nitrogen"}
-{"id": "q094", "question": "What is the freezing point of water in degrees Celsius?", "answers": ["0", "zero"]}
-{"id": "q095", "question": "What is the boiling point of water at standard atmospheric pressure in °C?", "answers": ["100", "one hundred"]}
+{"id": "q094", "question": "What is the freezing point of water in degrees Celsius?", "answers": ["0", "zero", "0 degrees Celsius"]}
+{"id": "q095", "question": "What is the boiling point of water at standard atmospheric pressure in °C?", "answers": ["100", "one hundred", "100 degrees Celsius"]}
 {"id": "q096", "question": "What is the SI unit of electric current?", "answers": ["ampere", "A"]}
 {"id": "q097", "question": "What is the SI unit of force?", "answer": "newton"}
 {"id": "q098", "question": "What is the SI unit of energy?", "answer": "joule"}
