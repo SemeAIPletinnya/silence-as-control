@@ -95,7 +95,7 @@ def is_correct(answer: str, references: list[str]) -> bool:
         norm_ref = normalize_text(ref)
         if not norm_ref:
             continue
-        if ("celsius" in norm_ref) != ("celsius" in norm_answer):
+        if "celsius" in norm_ref and "celsius" not in norm_answer:
             continue
 
         if norm_answer == norm_ref:
