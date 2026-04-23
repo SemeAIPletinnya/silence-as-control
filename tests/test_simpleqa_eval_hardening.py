@@ -34,6 +34,16 @@ def test_is_correct_single_letter_symbol_does_not_expand_to_word() -> None:
     assert not is_correct("oxygen", ["O"])
 
 
+def test_is_correct_normalizes_number_words_for_short_numeric_references() -> None:
+    assert is_correct("There are seven continents on Earth.", ["7"])
+    assert is_correct("A triangle has three sides.", ["3"])
+    assert is_correct("A hexagon has six sides.", ["6"])
+
+
+def test_is_correct_number_word_normalization_is_not_overly_permissive() -> None:
+    assert not is_correct("There are seven continents on Earth.", ["8"])
+
+
 def test_error_audit_rows_include_expected_fields() -> None:
     rows = [
         {
@@ -186,3 +196,11 @@ def test_clean_dataset_loads_with_expected_schema_and_size() -> None:
     assert examples[0].example_id
     assert examples[0].question
     assert examples[0].reference_answers
+
+
+def test_clean_dataset_q057_supports_canonical_gravity_alternatives() -> None:
+    dataset_path = Path("data/simpleqa_clean_100.jsonl")
+    examples = load_simpleqa_dataset(dataset_path)
+    q057 = next(example for example in examples if example.example_id == "q057")
+    assert "Gravity" in q057.reference_answers
+    assert "gravitational force" in q057.reference_answers

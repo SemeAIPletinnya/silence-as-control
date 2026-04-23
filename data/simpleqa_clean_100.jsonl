@@ -54,7 +54,7 @@
 {"id": "q054", "question": "What is the fifth planet from the Sun?", "answer": "Jupiter"}
 {"id": "q055", "question": "What galaxy contains our Solar System?", "answer": "Milky Way"}
 {"id": "q056", "question": "What star is at the center of the Solar System?", "answer": "Sun"}
-{"id": "q057", "question": "What force keeps planets in orbit around the Sun?", "answer": "Gravity"}
+{"id": "q057", "question": "What force keeps planets in orbit around the Sun?", "answer": "Gravity", "answers": ["Gravity", "gravitational force"]}
 {"id": "q058", "question": "What gas do humans primarily inhale from air for respiration?", "answer": "Oxygen"}
 {"id": "q059", "question": "What gas do humans primarily exhale as a metabolic waste product?", "answer": "Carbon dioxide"}
 {"id": "q060", "question": "What part of the cell contains most genetic material in eukaryotes?", "answer": "Nucleus"}

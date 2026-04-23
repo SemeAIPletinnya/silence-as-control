@@ -41,6 +41,28 @@ _DEGREE_CELSIUS_PATTERN = re.compile(
 _NON_ALNUM_PATTERN = re.compile(r"[^a-z0-9]+")
 _MULTISPACE_PATTERN = re.compile(r"\s+")
 _TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
+_NUMBER_WORD_TO_DIGIT = {
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "four": "4",
+    "five": "5",
+    "six": "6",
+    "seven": "7",
+    "eight": "8",
+    "nine": "9",
+    "ten": "10",
+    "eleven": "11",
+    "twelve": "12",
+    "thirteen": "13",
+    "fourteen": "14",
+    "fifteen": "15",
+    "sixteen": "16",
+    "seventeen": "17",
+    "eighteen": "18",
+    "nineteen": "19",
+    "twenty": "20",
+}
 
 
 def normalize_text(text: str) -> str:
@@ -48,7 +70,11 @@ def normalize_text(text: str) -> str:
     normalized = unicodedata.normalize("NFKC", text).translate(_SUBSUPER_TRANSLATION).lower()
     normalized = _DEGREE_CELSIUS_PATTERN.sub(r"\1 celsius", normalized)
     normalized = _NON_ALNUM_PATTERN.sub(" ", normalized)
-    return _MULTISPACE_PATTERN.sub(" ", normalized).strip()
+    normalized = _MULTISPACE_PATTERN.sub(" ", normalized).strip()
+    if not normalized:
+        return normalized
+    tokens = [_NUMBER_WORD_TO_DIGIT.get(token, token) for token in normalized.split(" ")]
+    return " ".join(tokens)
 
 
 def _token_set(text: str) -> set[str]:
