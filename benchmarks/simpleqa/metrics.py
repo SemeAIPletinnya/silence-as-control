@@ -1,31 +1,83 @@
 from __future__ import annotations
 
 import re
-import string
+import unicodedata
 from dataclasses import dataclass
 from typing import Any
+
+_SUBSUPER_TRANSLATION = str.maketrans(
+    {
+        "₀": "0",
+        "₁": "1",
+        "₂": "2",
+        "₃": "3",
+        "₄": "4",
+        "₅": "5",
+        "₆": "6",
+        "₇": "7",
+        "₈": "8",
+        "₉": "9",
+        "⁰": "0",
+        "¹": "1",
+        "²": "2",
+        "³": "3",
+        "⁴": "4",
+        "⁵": "5",
+        "⁶": "6",
+        "⁷": "7",
+        "⁸": "8",
+        "⁹": "9",
+        "⁺": "+",
+        "⁻": "-",
+        "₊": "+",
+        "₋": "-",
+    }
+)
+
+_DEGREE_CELSIUS_PATTERN = re.compile(
+    r"(-?\d+(?:\.\d+)?)\s*(?:°\s*c|degrees?\s*celsius|degree\s*celsius|celsius)\b",
+    flags=re.IGNORECASE,
+)
+_NON_ALNUM_PATTERN = re.compile(r"[^a-z0-9]+")
+_MULTISPACE_PATTERN = re.compile(r"\s+")
+_TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
 
 
 def normalize_text(text: str) -> str:
     """Deterministic normalization used for default SimpleQA exact matching."""
-    lowered = text.lower().strip()
-    no_punct = lowered.translate(str.maketrans("", "", string.punctuation))
-    squashed = re.sub(r"\s+", " ", no_punct)
-    return squashed
+    normalized = unicodedata.normalize("NFKC", text).translate(_SUBSUPER_TRANSLATION).lower()
+    normalized = _DEGREE_CELSIUS_PATTERN.sub(r"\1 celsius", normalized)
+    normalized = _NON_ALNUM_PATTERN.sub(" ", normalized)
+    return _MULTISPACE_PATTERN.sub(" ", normalized).strip()
+
+
+def _token_set(text: str) -> set[str]:
+    return set(_TOKEN_PATTERN.findall(text))
+
+
+def _is_short_token_reference(norm_ref: str) -> bool:
+    return bool(re.fullmatch(r"[a-z0-9]{1,3}", norm_ref))
 
 
 def is_correct(answer: str, references: list[str]) -> bool:
     norm_answer = normalize_text(answer)
     if not norm_answer:
         return False
+    answer_tokens = _token_set(norm_answer)
 
     for ref in references:
         norm_ref = normalize_text(ref)
         if not norm_ref:
             continue
+        if ("celsius" in norm_ref) != ("celsius" in norm_answer):
+            continue
 
         if norm_answer == norm_ref:
             return True
+        if _is_short_token_reference(norm_ref):
+            if norm_ref in answer_tokens:
+                return True
+            continue
         if norm_ref in norm_answer:
             return True
         if norm_answer in norm_ref:

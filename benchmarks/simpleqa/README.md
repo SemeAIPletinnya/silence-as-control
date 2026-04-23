@@ -32,6 +32,8 @@ This harness preserves repository layer boundaries:
 
 This benchmark evaluates **release-control tradeoffs**, not model-generation improvement.
 
+Correctness matching and normalization in this folder are **benchmark-evaluation logic only**. They are not part of the PoR runtime primitive claim.
+
 ## Files
 
 - `benchmarks/simpleqa/run_simpleqa_por.py` — end-to-end runner
@@ -56,11 +58,17 @@ Defaults:
 - `answers`
 - `id`
 
+Clean benchmark set included for reproducibility:
+
+- `data/simpleqa_clean_100.jsonl` (100 curated, stable factual QA examples)
+
+This clean set is intended to reduce ambiguous/time-sensitive cases so release-control behavior is easier to interpret.
+
 ## Run
 
 ```bash
 python benchmarks/simpleqa/run_simpleqa_por.py \
-  --dataset-path /path/to/simpleqa.jsonl \
+  --dataset-path data/simpleqa_clean_100.jsonl \
   --provider openai \
   --model gpt-4o-mini \
   --por-mode v1 \
@@ -70,6 +78,21 @@ python benchmarks/simpleqa/run_simpleqa_por.py \
   --baseline-temperature 0.0 \
   --por-temperature 0.4 \
   --output-dir results/simpleqa
+```
+
+Exploratory threshold sweep example (analysis-only, not a recommended operating policy):
+
+```bash
+python benchmarks/simpleqa/run_simpleqa_por.py \
+  --dataset-path data/simpleqa_clean_100.jsonl \
+  --provider openai \
+  --model gpt-4o-mini \
+  --por-mode v2_2 \
+  --thresholds 0.10 0.20 0.30 0.40 0.50 0.60 0.70 0.80 \
+  --por-samples 3 \
+  --baseline-temperature 0.0 \
+  --por-temperature 0.4 \
+  --output-dir results/simpleqa_exploratory
 ```
 
 Environment variables for OpenAI-compatible adapter:
@@ -113,6 +136,16 @@ The run writes:
    - `results/simpleqa/simpleqa_threshold_summary.csv`
 4. Plot:
    - `results/simpleqa/simpleqa_threshold_tradeoff.png`
+5. Error-audit CSV (one row per example-threshold):
+   - `results/simpleqa/simpleqa_error_audit.csv`
+6. Deduped problem-case CSV (one representative row per example id for accepted-wrong or false-silence):
+   - `results/simpleqa/simpleqa_problem_cases_deduped.csv`
+
+Quick inspection command (PowerShell):
+
+```powershell
+Import-Csv results/simpleqa/simpleqa_problem_cases_deduped.csv | Format-Table example_id,silence_flag,effective_decision,correctness_label,final_answer_or_effective_answer -AutoSize
+```
 
 Per-example rows include:
 
@@ -173,6 +206,11 @@ Default correctness is deterministic normalized exact-match:
 - whitespace squashed
 
 No hidden judge heuristics are used by default.
+
+Normalization is still conservative/deterministic and now additionally covers common benchmark forms like:
+
+- unicode sub/superscripts (`H₂O` -> `H2O`, `CO₂` -> `CO2`)
+- degree-Celsius formatting variants (`100°C`, `100 °C`, `100 degrees Celsius`)
 
 ## Threshold precision
 

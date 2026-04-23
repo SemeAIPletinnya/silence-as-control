@@ -18,6 +18,7 @@ from benchmarks.simpleqa.metrics import (
     compute_baseline_metrics,
     compute_threshold_metrics,
     is_correct,
+    normalize_text,
 )
 from benchmarks.simpleqa.contradiction_check import parse_contradiction_response
 from benchmarks.simpleqa.model_adapter import ModelAdapterError, build_model_adapter
@@ -113,6 +114,118 @@ def _to_csv_value(v: Any) -> str:
     return str(v)
 
 
+def _normalized_references(references: Any) -> list[str]:
+    if not isinstance(references, list):
+        return []
+    normalized: list[str] = []
+    seen: set[str] = set()
+    for ref in references:
+        norm_ref = normalize_text(str(ref))
+        if norm_ref and norm_ref not in seen:
+            seen.add(norm_ref)
+            normalized.append(norm_ref)
+    return normalized
+
+
+def _effective_answer_for_problem_case(row: dict[str, Any]) -> str:
+    final_output = str(row.get("final_output", "") or "").strip()
+    if final_output:
+        return final_output
+    primary_candidate = str(row.get("por_primary_candidate", "") or "").strip()
+    if primary_candidate:
+        return primary_candidate
+    return str(row.get("baseline_answer", "") or "").strip()
+
+
+def _build_error_audit_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    audit_rows: list[dict[str, Any]] = []
+    for row in rows:
+        if row.get("threshold_label") == "baseline":
+            continue
+        effective_answer = _effective_answer_for_problem_case(row)
+        audit_rows.append(
+            {
+                "example_id": row.get("example_id", ""),
+                "threshold": row.get("threshold", ""),
+                "question": row.get("question", ""),
+                "reference_answers": row.get("reference_answers", []),
+                "baseline_answer": row.get("baseline_answer", ""),
+                "primary_candidate": row.get("por_primary_candidate", ""),
+                "final_answer_or_effective_answer": effective_answer,
+                "normalized_reference_answers": _normalized_references(row.get("reference_answers", [])),
+                "normalized_final_answer": normalize_text(str(effective_answer)),
+                "correctness_label": row.get("correctness_label", ""),
+                "silence_flag": row.get("silence_flag", ""),
+                "false_silence_flag": row.get("false_silence_flag", ""),
+                "self_check_label": row.get("self_check_label", ""),
+                "contradiction_label": row.get("contradiction_label", ""),
+                "semantic_agreement_score": row.get("semantic_agreement_score", ""),
+                "drift": row.get("drift", ""),
+                "coherence": row.get("coherence", ""),
+                "instability_v1": row.get("instability_score", ""),
+                "risk_v2": row.get("risk_v2", ""),
+                "risk_v2_1": row.get("risk_v2_1", ""),
+                "risk_v2_2": row.get("risk_v2_2", ""),
+                "self_check_no_override_applied": row.get("self_check_no_override_applied", ""),
+                "decision_v1": row.get("por_decision", ""),
+                "decision_v2": row.get("decision_v2", ""),
+                "decision_v2_1": row.get("decision_v2_1", ""),
+                "decision_v2_2": row.get("decision_v2_2", ""),
+                "effective_decision": row.get("effective_decision", ""),
+            }
+        )
+    return audit_rows
+
+
+def _build_problem_cases_deduped_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    problem_rows = [
+        row
+        for row in rows
+        if row.get("threshold_label") not in {"baseline", "por_candidate_error", "self_check_error", "contradiction_check_error"}
+        and (
+            row.get("false_silence_flag", False)
+            or (
+                row.get("effective_decision") == "PROCEED"
+                and row.get("correctness_label") == "wrong"
+            )
+        )
+    ]
+    problem_rows.sort(key=lambda r: (str(r.get("example_id", "")), str(r.get("threshold", ""))))
+
+    deduped: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    for row in problem_rows:
+        example_id = str(row.get("example_id", ""))
+        if example_id in seen_ids:
+            continue
+        seen_ids.add(example_id)
+        deduped.append(
+            {
+                "example_id": example_id,
+                "question": row.get("question", ""),
+                "reference_answers": row.get("reference_answers", []),
+                "baseline_answer": row.get("baseline_answer", ""),
+                "primary_candidate": row.get("por_primary_candidate", ""),
+                "final_answer_or_effective_answer": _effective_answer_for_problem_case(row),
+                "correctness_label": row.get("correctness_label", ""),
+                "silence_flag": row.get("silence_flag", ""),
+                "false_silence_flag": row.get("false_silence_flag", ""),
+                "self_check_label": row.get("self_check_label", ""),
+                "risk_v2_2": row.get("risk_v2_2", ""),
+                "effective_decision": row.get("effective_decision", ""),
+            }
+        )
+    return deduped
+
+
+def _write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, Any]]) -> None:
+    with path.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({k: _to_csv_value(v) for k, v in row.items()})
+
+
 def run() -> None:
     args = _parse_args()
     try:
@@ -126,6 +239,8 @@ def run() -> None:
     per_example_csv = out_dir / "simpleqa_por_results.csv"
     metrics_json = out_dir / "simpleqa_por_metrics.json"
     threshold_summary_csv = out_dir / "simpleqa_threshold_summary.csv"
+    error_audit_csv = out_dir / "simpleqa_error_audit.csv"
+    deduped_problem_cases_csv = out_dir / "simpleqa_problem_cases_deduped.csv"
     tradeoff_plot = out_dir / "simpleqa_threshold_tradeoff.png"
 
     examples = load_simpleqa_dataset(
@@ -585,6 +700,60 @@ def run() -> None:
 
             csv_file.flush()
 
+    error_audit_rows = _build_error_audit_rows(rows)
+    _write_csv(
+        error_audit_csv,
+        fieldnames=[
+            "example_id",
+            "threshold",
+            "question",
+            "reference_answers",
+            "baseline_answer",
+            "primary_candidate",
+            "final_answer_or_effective_answer",
+            "normalized_reference_answers",
+            "normalized_final_answer",
+            "correctness_label",
+            "silence_flag",
+            "false_silence_flag",
+            "self_check_label",
+            "contradiction_label",
+            "semantic_agreement_score",
+            "drift",
+            "coherence",
+            "instability_v1",
+            "risk_v2",
+            "risk_v2_1",
+            "risk_v2_2",
+            "self_check_no_override_applied",
+            "decision_v1",
+            "decision_v2",
+            "decision_v2_1",
+            "decision_v2_2",
+            "effective_decision",
+        ],
+        rows=error_audit_rows,
+    )
+    deduped_problem_rows = _build_problem_cases_deduped_rows(rows)
+    _write_csv(
+        deduped_problem_cases_csv,
+        fieldnames=[
+            "example_id",
+            "question",
+            "reference_answers",
+            "baseline_answer",
+            "primary_candidate",
+            "final_answer_or_effective_answer",
+            "correctness_label",
+            "silence_flag",
+            "false_silence_flag",
+            "self_check_label",
+            "risk_v2_2",
+            "effective_decision",
+        ],
+        rows=deduped_problem_rows,
+    )
+
     baseline_metrics = compute_baseline_metrics(rows)
     threshold_metrics = [compute_threshold_metrics(rows, t) for t in args.thresholds]
 
@@ -636,6 +805,8 @@ def run() -> None:
         "thresholds": [asdict(tm) for tm in threshold_metrics],
         "artifacts": {
             "per_example_csv": str(per_example_csv),
+            "error_audit_csv": str(error_audit_csv),
+            "problem_cases_deduped_csv": str(deduped_problem_cases_csv),
             "threshold_summary_csv": str(threshold_summary_csv),
             "tradeoff_plot": str(plot_path),
         },
@@ -645,6 +816,8 @@ def run() -> None:
 
     print("Done.")
     print(f"- {per_example_csv}")
+    print(f"- {error_audit_csv}")
+    print(f"- {deduped_problem_cases_csv}")
     print(f"- {threshold_summary_csv}")
     print(f"- {metrics_json}")
     print(f"- {plot_path}")
