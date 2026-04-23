@@ -17,6 +17,10 @@ def test_is_correct_supports_formula_and_unit_normalization() -> None:
     assert is_correct("The capital of France is Paris.", ["Paris"])
 
 
+def test_is_correct_matches_decimal_reference_inside_sentence() -> None:
+    assert is_correct("The pH of a neutral aqueous solution at 25°C is 7.0.", ["7.0"])
+
+
 def test_is_correct_does_not_overmatch_short_symbol_inside_word() -> None:
     assert not is_correct("August is often hot.", ["Au"])
 
