@@ -20,7 +20,11 @@ def por_control(
     threshold=CONTROL_MIN_COHERENCE,
     tolerance=CONTROL_MAX_DRIFT,
 ):
-    """Return output only when deterministic control bounds are satisfied."""
+    """Return output only when deterministic control bounds are satisfied.
+
+    `CONTROL_MIN_COHERENCE` and `CONTROL_MAX_DRIFT` are simplified defaults
+    intended for environments that do not run multi-sample drift estimation.
+    """
     if drift > tolerance or coherence < threshold:
         return control_abstention()
     return {"status": "ok", "output": output}

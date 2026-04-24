@@ -41,3 +41,39 @@ def test_runtime_fallback_token_hashing_is_deterministic():
 
     assert all(slot == idx for slot in repeated)
     assert 0 <= idx < 64
+
+
+def test_runtime_local_embedding_truncates_by_configured_max_chars(monkeypatch):
+    monkeypatch.setenv("MAX_EMBEDDING_CHARS", "6")
+    vec_a = por_runtime.get_embedding("alpha beta")
+    vec_b = por_runtime.get_embedding("alpha gamma")
+    vec_c = por_runtime.get_embedding("bravo zeta")
+
+    assert vec_a == vec_b
+    assert vec_b != vec_c
+
+
+def test_runtime_estimate_uses_custom_embedding_hook_by_default(monkeypatch):
+    calls = {"count": 0}
+
+    def custom_embedding(text: str) -> list[float]:
+        calls["count"] += 1
+        return [1.0, float(len(text))]
+
+    monkeypatch.setattr(por_runtime, "CUSTOM_EMBEDDING_FN", custom_embedding)
+    coherence, _ = por_runtime.estimate_coherence("p", "candidate")
+    drift, _ = por_runtime.estimate_drift(["a", "b"])
+
+    assert 0.0 <= coherence <= 1.0
+    assert 0.0 <= drift <= 1.0
+    assert calls["count"] == 4
+
+
+def test_runtime_explicit_embedding_fn_overrides_custom_hook(monkeypatch):
+    monkeypatch.setattr(por_runtime, "CUSTOM_EMBEDDING_FN", lambda _: [1.0, 1.0])
+
+    def explicit_embedding(_: str) -> list[float]:
+        return [0.0, 1.0]
+
+    coherence, _ = por_runtime.estimate_coherence("p", "c", embedding_fn=explicit_embedding)
+    assert coherence == 1.0

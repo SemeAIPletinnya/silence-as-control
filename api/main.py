@@ -7,9 +7,10 @@ Layering in this module:
 """
 
 import json
+import logging
 from typing import List, Optional
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
 from api.core_primitive import (
@@ -18,7 +19,7 @@ from api.core_primitive import (
     fixed_threshold_release_decision,
 )
 from api.experimental_recovery import (
-    EXPERIMENTAL_BORDERLINE_MARGIN,
+    get_experimental_margin,
     maybe_short_regen,
 )
 from api.por_runtime import (
@@ -30,6 +31,7 @@ from api.por_runtime import (
 from api.xai_wrapper import DEFAULT_MODEL, generate_candidate
 
 app = FastAPI(title="silence-as-control")
+LOGGER = logging.getLogger(__name__)
 
 # Runtime default threshold used by API endpoints.
 # It starts from the core fixed threshold (0.39), but can be overridden by
@@ -177,6 +179,15 @@ def score_candidate_runtime(
         decision = "SILENCE"
         notes.append("forced_silence_invalid_json")
 
+    LOGGER.info(
+        "por_runtime_scoring drift=%.4f coherence=%.4f instability=%.4f threshold=%.4f decision=%s",
+        drift,
+        coherence,
+        instability,
+        threshold,
+        decision,
+    )
+
     return {
         "drift": round(drift, 4),
         "coherence": round(coherence, 4),
@@ -205,14 +216,18 @@ def health() -> dict:
 @app.post("/por/evaluate", response_model=EvaluateResponse, response_model_exclude_none=True)
 def evaluate(req: EvaluateRequest) -> EvaluateResponse:
     """Evaluate a provided candidate with core gate + runtime estimators."""
-    threshold = resolve_runtime_threshold(
-        request_threshold=req.threshold,
-        use_adaptive_threshold=req.use_adaptive_threshold,
-        recent_drifts=req.recent_drifts,
-        recent_coherences=req.recent_coherences,
-    )
-    result = score_candidate_runtime(req.prompt, req.candidate, threshold)
-    return EvaluateResponse(**result)
+    try:
+        threshold = resolve_runtime_threshold(
+            request_threshold=req.threshold,
+            use_adaptive_threshold=req.use_adaptive_threshold,
+            recent_drifts=req.recent_drifts,
+            recent_coherences=req.recent_coherences,
+        )
+        result = score_candidate_runtime(req.prompt, req.candidate, threshold)
+        return EvaluateResponse(**result)
+    except Exception:
+        LOGGER.exception("por_evaluate_failed")
+        raise HTTPException(status_code=500, detail="por_evaluate_failed")
 
 
 @app.post("/generate", response_model=LegacyGenerateResponse, response_model_exclude_none=True)
@@ -233,88 +248,92 @@ def legacy_generate(req: LegacyGenerateRequest) -> LegacyGenerateResponse:
 @app.post("/por/complete", response_model=CompleteResponse, response_model_exclude_none=True)
 def complete(req: CompleteRequest) -> CompleteResponse:
     """Generate candidate(s), score with PoR gate, then optionally run experimental recovery."""
-    threshold = resolve_runtime_threshold(
-        request_threshold=req.threshold,
-        use_adaptive_threshold=req.use_adaptive_threshold,
-        recent_drifts=req.recent_drifts,
-        recent_coherences=req.recent_coherences,
-    )
-
-    sample_count = max(1, req.drift_samples)
-    candidates: List[str] = []
-    for _ in range(sample_count):
-        candidates.append(
-            generate_candidate(
-                prompt=req.prompt,
-                model=req.model,
-                system_prompt=req.system_prompt,
-                temperature=req.temperature,
-            )
+    try:
+        threshold = resolve_runtime_threshold(
+            request_threshold=req.threshold,
+            use_adaptive_threshold=req.use_adaptive_threshold,
+            recent_drifts=req.recent_drifts,
+            recent_coherences=req.recent_coherences,
         )
 
-    primary_candidate = candidates[0]
-    result = score_candidate_runtime(
-        prompt=req.prompt,
-        candidate=primary_candidate,
-        threshold=threshold,
-        candidate_samples=candidates,
-    )
-
-    # Experimental lane only: MAYBE_SHORT_REGEN is post-silence and non-core.
-    if result["decision"] == "SILENCE":
-
-        def _regen_once() -> dict:
-            regen_candidate = generate_candidate(
-                prompt=(
-                    "Answer briefly and directly in <= 80 tokens. "
-                    "Avoid uncertainty wording.\n\n"
-                    f"Prompt: {req.prompt}"
-                ),
-                model=req.model,
-                system_prompt=req.system_prompt,
-                temperature=min(req.temperature, 0.2),
-            )
-            regen_result = score_candidate_runtime(
-                prompt=req.prompt,
-                candidate=regen_candidate,
-                threshold=threshold,
-                candidate_samples=[regen_candidate],
-            )
-            regen_result["release_output"] = (
-                regen_candidate if regen_result["decision"] == "PROCEED" else None
-            )
-            regen_result["_regen_candidate"] = regen_candidate
-            return regen_result
-
-        attempted, regen_result = maybe_short_regen(
-            enabled=resolve_experimental_short_regen_flag(req),
-            instability_score=result["instability_score"],
-            threshold=threshold,
-            run_regen=_regen_once,
-        )
-
-        if attempted and regen_result is not None:
-            regen_result["notes"] = regen_result["notes"] + [
-                (
-                    "experimental_maybe_short_regen_attempted"
-                    f":margin={EXPERIMENTAL_BORDERLINE_MARGIN:.2f}"
+        sample_count = max(1, req.drift_samples)
+        candidates: List[str] = []
+        for _ in range(sample_count):
+            candidates.append(
+                generate_candidate(
+                    prompt=req.prompt,
+                    model=req.model,
+                    system_prompt=req.system_prompt,
+                    temperature=req.temperature,
                 )
-            ]
-            if regen_result["decision"] == "PROCEED":
-                result = regen_result
-                candidates[0] = regen_result["_regen_candidate"]
-            else:
-                result["notes"].append("experimental_maybe_short_regen_failed")
+            )
 
-    return CompleteResponse(
-        model=req.model,
-        candidate=candidates[0] if result["decision"] == "PROCEED" else None,
-        drift=result["drift"],
-        coherence=result["coherence"],
-        instability_score=result["instability_score"],
-        threshold=result["threshold"],
-        decision=result["decision"],
-        release_output=result["release_output"],
-        silence_token=result["silence_token"],
-        notes=result["notes"],
-    )
+        primary_candidate = candidates[0]
+        result = score_candidate_runtime(
+            prompt=req.prompt,
+            candidate=primary_candidate,
+            threshold=threshold,
+            candidate_samples=candidates,
+        )
+
+        # Experimental lane only: MAYBE_SHORT_REGEN is post-silence and non-core.
+        if result["decision"] == "SILENCE":
+
+            def _regen_once() -> dict:
+                regen_candidate = generate_candidate(
+                    prompt=(
+                        "Answer briefly and directly in <= 80 tokens. "
+                        "Avoid uncertainty wording.\n\n"
+                        f"Prompt: {req.prompt}"
+                    ),
+                    model=req.model,
+                    system_prompt=req.system_prompt,
+                    temperature=min(req.temperature, 0.2),
+                )
+                regen_result = score_candidate_runtime(
+                    prompt=req.prompt,
+                    candidate=regen_candidate,
+                    threshold=threshold,
+                    candidate_samples=[regen_candidate],
+                )
+                regen_result["release_output"] = (
+                    regen_candidate if regen_result["decision"] == "PROCEED" else None
+                )
+                regen_result["_regen_candidate"] = regen_candidate
+                return regen_result
+
+            attempted, regen_result = maybe_short_regen(
+                enabled=resolve_experimental_short_regen_flag(req),
+                instability_score=result["instability_score"],
+                threshold=threshold,
+                run_regen=_regen_once,
+            )
+
+            if attempted and regen_result is not None:
+                regen_result["notes"] = regen_result["notes"] + [
+                    (
+                        "experimental_maybe_short_regen_attempted"
+                        f":margin={get_experimental_margin():.2f}"
+                    )
+                ]
+                if regen_result["decision"] == "PROCEED":
+                    result = regen_result
+                    candidates[0] = regen_result["_regen_candidate"]
+                else:
+                    result["notes"].append("experimental_maybe_short_regen_failed")
+
+        return CompleteResponse(
+            model=req.model,
+            candidate=candidates[0] if result["decision"] == "PROCEED" else None,
+            drift=result["drift"],
+            coherence=result["coherence"],
+            instability_score=result["instability_score"],
+            threshold=result["threshold"],
+            decision=result["decision"],
+            release_output=result["release_output"],
+            silence_token=result["silence_token"],
+            notes=result["notes"],
+        )
+    except Exception:
+        LOGGER.exception("por_complete_failed")
+        raise HTTPException(status_code=500, detail="por_complete_failed")

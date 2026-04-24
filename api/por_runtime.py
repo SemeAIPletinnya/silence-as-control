@@ -21,7 +21,10 @@ RUNTIME_EXTENSION_DEFAULT_THRESHOLD = 0.39
 RUNTIME_GATE_THRESHOLD_DEFAULT = RUNTIME_EXTENSION_DEFAULT_THRESHOLD
 
 THRESHOLD_ENV_VAR = "POR_RUNTIME_GATE_THRESHOLD"
+MAX_EMBEDDING_CHARS_ENV_VAR = "MAX_EMBEDDING_CHARS"
+DEFAULT_MAX_EMBEDDING_CHARS = 4000
 EmbeddingFn = Callable[[str], list[float]]
+CUSTOM_EMBEDDING_FN: EmbeddingFn | None = None
 
 
 @dataclass(frozen=True)
@@ -79,6 +82,31 @@ def get_runtime_threshold(default: float = RUNTIME_EXTENSION_DEFAULT_THRESHOLD) 
     return _clip(value)
 
 
+def get_max_embedding_chars(default: int = DEFAULT_MAX_EMBEDDING_CHARS) -> int:
+    """[RUNTIME] Resolve max chars for local embedding with safe fallback."""
+    raw = os.getenv(MAX_EMBEDDING_CHARS_ENV_VAR)
+    if raw is None:
+        return default
+    try:
+        value = int(raw)
+    except ValueError:
+        return default
+    return max(1, value)
+
+
+def _truncate_for_local_embedding(text: str) -> str:
+    max_chars = get_max_embedding_chars()
+    return text[:max_chars]
+
+
+def _resolve_embedding_fn(embedding_fn: EmbeddingFn | None) -> EmbeddingFn:
+    if embedding_fn is not None:
+        return embedding_fn
+    if CUSTOM_EMBEDDING_FN is not None:
+        return CUSTOM_EMBEDDING_FN
+    return get_embedding
+
+
 def get_embedding(text: str) -> list[float]:
     """[RUNTIME] Deterministic fallback embedding function.
 
@@ -86,7 +114,8 @@ def get_embedding(text: str) -> list[float]:
     Production integrations can inject a stronger embedding function.
     """
     vec = [0.0] * 64
-    for token in text.lower().split():
+    truncated = _truncate_for_local_embedding(text)
+    for token in truncated.lower().split():
         vec[_stable_token_index(token, len(vec))] += 1.0
 
     norm = math.sqrt(sum(v * v for v in vec))
@@ -109,15 +138,16 @@ def cosine_similarity(vec_a: Sequence[float], vec_b: Sequence[float]) -> float:
 def estimate_coherence(
     prompt: str,
     candidate: str,
-    embedding_fn: EmbeddingFn = get_embedding,
+    embedding_fn: EmbeddingFn | None = None,
 ) -> tuple[float, list[str]]:
     """[RUNTIME] Estimate coherence from prompt/candidate embedding similarity."""
     notes: list[str] = []
     if not candidate.strip():
         return 0.0, ["no_candidate_tokens"]
 
-    prompt_vec = embedding_fn(prompt)
-    candidate_vec = embedding_fn(candidate)
+    embed = _resolve_embedding_fn(embedding_fn)
+    prompt_vec = embed(prompt)
+    candidate_vec = embed(candidate)
     cos = cosine_similarity(prompt_vec, candidate_vec)
 
     nonnegative_space = _is_nonnegative_vector(prompt_vec) and _is_nonnegative_vector(
@@ -130,7 +160,7 @@ def estimate_coherence(
 
 def estimate_drift(
     candidate_texts: Sequence[str],
-    embedding_fn: EmbeddingFn = get_embedding,
+    embedding_fn: EmbeddingFn | None = None,
 ) -> tuple[float, list[str]]:
     """[RUNTIME] Estimate drift from multi-sample embedding disagreement."""
     notes: list[str] = []
@@ -139,7 +169,8 @@ def estimate_drift(
         notes.append("single_sample_drift")
         return 0.0, notes
 
-    vectors = [embedding_fn(text) for text in cleaned]
+    embed = _resolve_embedding_fn(embedding_fn)
+    vectors = [embed(text) for text in cleaned]
     pairwise: list[float] = []
     for i in range(len(vectors)):
         for j in range(i + 1, len(vectors)):
