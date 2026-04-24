@@ -259,3 +259,31 @@ def test_api_complete_honors_backward_compatibility_alias_for_short_regen(monkey
     payload = response.json()
     assert payload["decision"] == "SILENCE"
     assert calls["count"] == 1
+
+
+def test_api_evaluate_returns_500_on_internal_failure(monkeypatch):
+    def broken_score(*args, **kwargs):
+        raise RuntimeError("boom")
+
+    monkeypatch.setattr(api_main, "score_candidate_runtime", broken_score)
+
+    response = client.post(
+        "/por/evaluate",
+        json={"prompt": "p", "candidate": "c"},
+    )
+    assert response.status_code == 500
+    assert response.json()["detail"] == "por_evaluate_failed"
+
+
+def test_api_complete_returns_500_on_internal_failure(monkeypatch):
+    def broken_generate(*args, **kwargs):
+        raise RuntimeError("boom")
+
+    monkeypatch.setattr(api_main, "generate_candidate", broken_generate)
+
+    response = client.post(
+        "/por/complete",
+        json={"prompt": "p"},
+    )
+    assert response.status_code == 500
+    assert response.json()["detail"] == "por_complete_failed"
