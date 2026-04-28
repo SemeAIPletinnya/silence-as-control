@@ -1,0 +1,5 @@
+threshold,total_examples,answered_count,silence_count,answer_rate,silence_rate,accepted_correct_count,accepted_wrong_count,accepted_precision,accepted_error_rate,false_silence_count,false_silence_rate
+0.35,100,64,36,0.64,0.36,60,4,0.9375,0.0625,34,0.34
+0.39,100,70,30,0.7,0.3,66,4,0.9428571428571428,0.05714285714285714,28,0.28
+0.42,100,72,28,0.72,0.28,68,4,0.9444444444444444,0.05555555555555555,26,0.26
+0.43,100,73,27,0.73,0.27,69,4,0.9452054794520548,0.0547945205479452,25,0.25

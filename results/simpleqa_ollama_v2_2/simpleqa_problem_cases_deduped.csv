@@ -1,0 +1,111 @@
+example_id,question,reference_answers,baseline_answer,primary_candidate,final_answer_or_effective_answer,correctness_label,silence_flag,false_silence_flag,self_check_label,risk_v2_2,effective_decision
+q003,What city is the capital of Australia?,"[""Canberra""]",The capital of Australia is Canberra.,The capital of Australia is Canberra.,The capital of Australia is Canberra.,wrong,True,True,YES,0.398169313378823,SILENCE
+q004,Which city serves as Canada's federal capital?,"[""Ottawa""]",The city that serves as Canada's federal capital is Ottawa.,The city that serves as Canada's federal capital is Ottawa.,The city that serves as Canada's federal capital is Ottawa.,wrong,True,True,YES,0.36035785429992045,SILENCE
+q007,Which city is the capital of South Korea?,"[""Seoul""]",The capital of South Korea is Seoul.,The capital of South Korea is Seoul.,The capital of South Korea is Seoul.,wrong,True,True,YES,0.3576262280172067,SILENCE
+q008,What is the political capital of Turkey?,"[""Ankara""]",The political capital of Turkey is Ankara.,The political capital of Turkey is Ankara.,The political capital of Turkey is Ankara.,wrong,True,True,YES,0.4549919300824449,SILENCE
+q020,What is the formula for ammonia?,"[""NH3""]",The formula for ammonia (NH₃) is NH₂⁻ + H₂O.,The formula for ammonia (NH₃) is NH₂⁻ + H₂O.,The formula for ammonia (NH₃) is NH₂⁻ + H₂O.,wrong,True,True,NO,0.6742358171996726,SILENCE
+q021,How many degrees are in a right angle?,"[""90"", ""ninety""]",A right angle measures 90 degrees.,A right angle measures 90 degrees.,A right angle measures 90 degrees.,wrong,True,True,UNSURE,0.475,SILENCE
+q022,How many days are in a leap year?,"[""366"", ""three hundred sixty-six""]","A leap year has 366 days, which is equivalent to 365 days plus one extra day. This extra day is called the ""leap day"" or ""additional day."" Leap years occur every four years and have the following characteristics:
+
+1. The number of days in February must be divisible by 4.
+2. If a year is not divisible by 4, it is a common year.
+
+In a leap year:
+- February has 29 days (leap day)
+- All other months have 30 or 31 days
+
+Leap years occur every four years and are typically observed in the Gregorian calendar.","A leap year has 366 days, which is equivalent to 365 days plus one extra day. This extra day is called the ""leap day"" or ""additional day."" Leap years occur every four years and have the following characteristics:
+
+1. The number of days in February must be divisible by 4.
+2. If a year is not divisible by 4, it is a common year.
+
+In a leap year:
+- February has 29 days (leap day)
+- All other months have 30 or 31 days
+
+Leap years occur every four years and are typically observed in the Gregorian calendar.","A leap year has 366 days, which is equivalent to 365 days plus one extra day. This extra day is called the ""leap day"" or ""additional day."" Leap years occur every four years and have the following characteristics:
+
+1. The number of days in February must be divisible by 4.
+2. If a year is not divisible by 4, it is a common year.
+
+In a leap year:
+- February has 29 days (leap day)
+- All other months have 30 or 31 days
+
+Leap years occur every four years and are typically observed in the Gregorian calendar.",wrong,True,True,UNSURE,0.35645965902536836,SILENCE
+q024,How many sides does a hexagon have?,"[""6"", ""six""]",A hexagon has 6 sides.,A hexagon has 6 sides.,A hexagon has 6 sides.,wrong,True,True,UNSURE,0.5052786404500043,SILENCE
+q026,How many players are on the field per soccer team during normal play?,"[""11"", ""eleven""]","During normal play in soccer (soccer), each player is typically positioned on the field with one foot on the ground and the other foot resting on a bench or a specific part of the goal line. This setup allows for quick movement, positioning, and playing time for players. The exact number can vary depending on the team's size and the specific rules governing their formation.","During normal play in soccer (soccer), each player is typically positioned on the field with one foot on the ground and the other foot resting on a bench or a specific part of the goal line. This setup allows for quick movement, positioning, and playing time for players. The exact number can vary depending on the team's size and the specific rules governing their formation.","During normal play in soccer (soccer), each player is typically positioned on the field with one foot on the ground and the other foot resting on a bench or a specific part of the goal line. This setup allows for quick movement, positioning, and playing time for players. The exact number can vary depending on the team's size and the specific rules governing their formation.",wrong,False,False,YES,0.2900411863720853,PROCEED
+q027,How many minutes are in three hours?,"[""180"", ""one hundred eighty""]",There are 180 minutes in three hours.,There are 180 minutes in three hours.,There are 180 minutes in three hours.,wrong,True,True,UNSURE,0.5859134795771626,SILENCE
+q028,What is 12 multiplied by 12?,"[""144"", ""one hundred forty-four""]",12 multiplied by 12 equals 144.,12 multiplied by 12 equals 144.,12 multiplied by 12 equals 144.,wrong,True,True,NO,1.0162091479884585,SILENCE
+q029,What is 15 percent of 200?,"[""30"", ""thirty""]","To calculate 15% of 200:
+
+\[ 15\% \text{ of } 200 = \frac{15}{100} \times 200 = 0.15 \times 200 = 30 \]
+
+So, 15% of 200 is **30**.","To calculate 15% of 200:
+
+\[ 15\% \text{ of } 200 = \frac{15}{100} \times 200 = 0.15 \times 200 = 30 \]
+
+So, 15% of 200 is **30**.","To calculate 15% of 200:
+
+\[ 15\% \text{ of } 200 = \frac{15}{100} \times 200 = 0.15 \times 200 = 30 \]
+
+So, 15% of 200 is **30**.",wrong,True,True,YES,0.5150466616730578,SILENCE
+q030,What is the square root of 81?,"[""9"", ""nine""]",The square root of 81 is 9.,The square root of 81 is 9.,The square root of 81 is 9.,wrong,True,True,NO,0.5428571428571429,SILENCE
+q034,Who wrote 'The Odyssey'?,"[""Homer""]",'The Odyssey' was written by the ancient Greek poet Homer.,'The Odyssey' was written by the ancient Greek poet Homer.,'The Odyssey' was written by the ancient Greek poet Homer.,wrong,True,True,YES,0.3550970652752766,SILENCE
+q042,In which year did the Berlin Wall fall?,"[""1989""]","The Berlin Wall fell on August 13, 1989. This event marked the end of the Cold War and the division of Germany into East and West.","The Berlin Wall fell on August 13, 1989. This event marked the end of the Cold War and the division of Germany into East and West.","The Berlin Wall fell on August 13, 1989. This event marked the end of the Cold War and the division of Germany into East and West.",wrong,True,True,YES,0.5186330305626017,SILENCE
+q044,In what year was the United Nations founded?,"[""1945""]",The United Nations was founded in 1945.,The United Nations was founded in 1945.,The United Nations was founded in 1945.,wrong,True,True,YES,0.4674160778366085,SILENCE
+q047,What year did the American Civil War begin?,"[""1861""]","The American Civil War began in 1861. This conflict was fought between the Union (states aligned with the United States) and the Confederacy (states aligned with the Confederate states). It lasted from April 12, 1861, to May 9, 1865, and ended with the surrender of Confederate General Robert E. Lee on April 9, 1865.","The American Civil War began in 1861. This conflict was fought between the Union (states aligned with the United States) and the Confederacy (states aligned with the Confederate states). It lasted from April 12, 1861, to May 9, 1865, and ended with the surrender of Confederate General Robert E. Lee on April 9, 1865.","The American Civil War began in 1861. This conflict was fought between the Union (states aligned with the United States) and the Confederacy (states aligned with the Confederate states). It lasted from April 12, 1861, to May 9, 1865, and ended with the surrender of Confederate General Robert E. Lee on April 9, 1865.",wrong,True,True,NO,0.7482389499724587,SILENCE
+q048,In what year did the French Revolution begin?,"[""1789""]",The French Revolution began in 1789. This occurred after the fall of the monarchy and the rise of Napoleon Bonaparte as emperor of France.,The French Revolution began in 1789. This occurred after the fall of the monarchy and the rise of Napoleon Bonaparte as emperor of France.,The French Revolution began in 1789. This occurred after the fall of the monarchy and the rise of Napoleon Bonaparte as emperor of France.,wrong,True,True,UNSURE,0.359848529982432,SILENCE
+q049,What year was the United States Declaration of Independence adopted?,"[""1776""]","The United States Declaration of Independence was adopted on July 4, 1776.","The United States Declaration of Independence was adopted on July 4, 1776.","The United States Declaration of Independence was adopted on July 4, 1776.",wrong,True,True,YES,0.4276485734785187,SILENCE
+q050,In what year did Nelson Mandela become President of South Africa?,"[""1994""]","Nelson Mandela became the President of South Africa in 1994. He served as president from December 10, 1994, until his death on April 5, 2013.","Nelson Mandela became the President of South Africa in 1994. He served as president from December 10, 1994, until his death on April 5, 2013.","Nelson Mandela became the President of South Africa in 1994. He served as president from December 10, 1994, until his death on April 5, 2013.",wrong,True,True,YES,0.5364535036705118,SILENCE
+q054,How many planets are in the solar system?,"[""8"", ""eight""]","There are 89 known planets in our solar system. These include:
+
+1. Mercury
+2. Venus
+3. Earth
+4. Mars
+5. Jupiter
+6. Saturn
+7. Uranus
+8. Neptune
+
+The remaining 78 planets are gas giants, dwarf planets, and other minor planets that orbit the Sun but do not have moons or known characteristics as planets.","There are 89 known planets in our solar system. These include:
+
+1. Mercury
+2. Venus
+3. Earth
+4. Mars
+5. Jupiter
+6. Saturn
+7. Uranus
+8. Neptune
+
+The remaining 78 planets are gas giants, dwarf planets, and other minor planets that orbit the Sun but do not have moons or known characteristics as planets.","There are 89 known planets in our solar system. These include:
+
+1. Mercury
+2. Venus
+3. Earth
+4. Mars
+5. Jupiter
+6. Saturn
+7. Uranus
+8. Neptune
+
+The remaining 78 planets are gas giants, dwarf planets, and other minor planets that orbit the Sun but do not have moons or known characteristics as planets.",wrong,True,True,NO,0.6765494184117123,SILENCE
+q057,What is the Sun primarily made of?,"[""hydrogen""]","The Sun is primarily composed of hydrogen and helium, with small amounts of other elements like carbon, oxygen, iron, and magnesium.","The Sun is primarily composed of hydrogen and helium, with small amounts of other elements like carbon, oxygen, iron, and magnesium.","The Sun is primarily composed of hydrogen and helium, with small amounts of other elements like carbon, oxygen, iron, and magnesium.",wrong,True,True,NO,0.6704810571301476,SILENCE
+q064,What pigment gives most plants their green color?,"[""chlorophyll""]","Plants typically have chlorophyll, which is the primary pigment responsible for their green color. Chlorophyll absorbs sunlight and uses it to convert water and carbon dioxide into oxygen and glucose, providing energy for photosynthesis. Other pigments like carotenoids are also present in plants but play a smaller role compared to chlorophyll in green coloration.","Plants typically have chlorophyll, which is the primary pigment responsible for their green color. Chlorophyll absorbs sunlight and uses it to convert water and carbon dioxide into oxygen and glucose, providing energy for photosynthesis. Other pigments like carotenoids are also present in plants but play a smaller role compared to chlorophyll in green coloration.","Plants typically have chlorophyll, which is the primary pigment responsible for their green color. Chlorophyll absorbs sunlight and uses it to convert water and carbon dioxide into oxygen and glucose, providing energy for photosynthesis. Other pigments like carotenoids are also present in plants but play a smaller role compared to chlorophyll in green coloration.",wrong,True,True,NO,0.8247750773316467,SILENCE
+q066,What is the largest organ in the human body by surface area?,"[""skin"", ""the skin""]","The largest organ in the human body by surface area is the liver, which has an estimated surface area of about 250 square meters (approximately 1,000 square feet).","The largest organ in the human body by surface area is the liver, which has an estimated surface area of about 250 square meters (approximately 1,000 square feet).","The largest organ in the human body by surface area is the liver, which has an estimated surface area of about 250 square meters (approximately 1,000 square feet).",wrong,False,False,YES,0.1797575832930659,PROCEED
+q067,Which blood type is known as the universal donor for red cells?,"[""O negative"", ""O-""]",The blood type known as the universal donor for red cells is the ABO blood group system.,The blood type known as the universal donor for red cells is the ABO blood group system.,The blood type known as the universal donor for red cells is the ABO blood group system.,wrong,False,False,YES,0.15116204622321355,PROCEED
+q071,What does HTTP stand for?,"[""Hypertext Transfer Protocol""]",HTTP stands for Hypertext Transfer Protocol. It is the standard protocol used to transfer web pages between a user's browser and a server.,HTTP stands for Hypertext Transfer Protocol. It is the standard protocol used to transfer web pages between a user's browser and a server.,HTTP stands for Hypertext Transfer Protocol. It is the standard protocol used to transfer web pages between a user's browser and a server.,wrong,True,True,YES,0.48310304940587284,SILENCE
+q073,What does CPU stand for?,"[""Central Processing Unit""]","CPU stands for ""Central Processing Unit."" It is the brain of a computer or processor, responsible for executing instructions and performing calculations.","CPU stands for ""Central Processing Unit."" It is the brain of a computer or processor, responsible for executing instructions and performing calculations.","CPU stands for ""Central Processing Unit."" It is the brain of a computer or processor, responsible for executing instructions and performing calculations.",wrong,True,True,YES,0.49321185097977904,SILENCE
+q075,What does RAM stand for?,"[""Random Access Memory""]","RAM stands for Random Access Memory. It is a type of computer memory that can store data temporarily while the CPU performs operations on it. When you power off or turn off the device, the RAM will be erased and lost.","RAM stands for Random Access Memory. It is a type of computer memory that can store data temporarily while the CPU performs operations on it. When you power off or turn off the device, the RAM will be erased and lost.","RAM stands for Random Access Memory. It is a type of computer memory that can store data temporarily while the CPU performs operations on it. When you power off or turn off the device, the RAM will be erased and lost.",wrong,True,True,YES,0.6069187254544014,SILENCE
+q076,What does URL stand for?,"[""Uniform Resource Locator""]","URL stands for Uniform Resource Locator, which is the address or name of a website or resource on the internet. It typically consists of three parts separated by dots: www.example.com, where ""www"" represents the domain name and ""example.com"" represents the specific site. URLs are used to navigate between websites and access information stored on them.","URL stands for Uniform Resource Locator, which is the address or name of a website or resource on the internet. It typically consists of three parts separated by dots: www.example.com, where ""www"" represents the domain name and ""example.com"" represents the specific site. URLs are used to navigate between websites and access information stored on them.","URL stands for Uniform Resource Locator, which is the address or name of a website or resource on the internet. It typically consists of three parts separated by dots: www.example.com, where ""www"" represents the domain name and ""example.com"" represents the specific site. URLs are used to navigate between websites and access information stored on them.",wrong,True,True,YES,0.6415757337141144,SILENCE
+q078,What does NATO stand for?,"[""North Atlantic Treaty Organization""]",NATO stands for North Atlantic Treaty Organization. It is an international organization consisting of 34 member countries that were founded in 1949 to prevent the spread of nuclear weapons and promote peace and security among their members.,NATO stands for North Atlantic Treaty Organization. It is an international organization consisting of 34 member countries that were founded in 1949 to prevent the spread of nuclear weapons and promote peace and security among their members.,NATO stands for North Atlantic Treaty Organization. It is an international organization consisting of 34 member countries that were founded in 1949 to prevent the spread of nuclear weapons and promote peace and security among their members.,wrong,True,True,UNSURE,0.6747934333188901,SILENCE
+q080,What is the SI base unit of thermodynamic temperature?,"[""kelvin""]",The SI base unit of thermodynamic temperature is the Kelvin (K).,The SI base unit of thermodynamic temperature is the Kelvin (K).,The SI base unit of thermodynamic temperature is the Kelvin (K).,wrong,True,True,YES,0.3811880865191793,SILENCE
+q081,Which city hosts the main headquarters of the United Nations?,"[""New York City"", ""New York""]","The main headquarters of the United Nations is located in New York City, USA.","The main headquarters of the United Nations is located in New York City, USA.","The main headquarters of the United Nations is located in New York City, USA.",wrong,True,True,NO,0.9099045426044763,SILENCE
+q086,Which mountain range contains Mount Everest?,"[""Himalayas"", ""the Himalayas""]","Mount Everest is located on the border between Nepal and China, forming part of the Himalayan mountain range.","Mount Everest is located on the border between Nepal and China, forming part of the Himalayan mountain range.","Mount Everest is located on the border between Nepal and China, forming part of the Himalayan mountain range.",wrong,False,False,YES,0.2329303111209936,PROCEED
+q088,What is the smallest prime number?,"[""2"", ""two""]",The smallest prime number is 2.,The smallest prime number is 2.,The smallest prime number is 2.,wrong,True,True,NO,0.5499999999999999,SILENCE
+q092,What is the pH of a neutral aqueous solution at 25°C?,"[""7"", ""seven"", ""7.0""]","The pH of a neutral aqueous solution at 25°C is 7.0. This value indicates that the solution has a basic nature, meaning it does not contain hydrogen ions (H+) and is considered acidic or weakly alkaline.","The pH of a neutral aqueous solution at 25°C is 7.0. This value indicates that the solution has a basic nature, meaning it does not contain hydrogen ions (H+) and is considered acidic or weakly alkaline.","The pH of a neutral aqueous solution at 25°C is 7.0. This value indicates that the solution has a basic nature, meaning it does not contain hydrogen ions (H+) and is considered acidic or weakly alkaline.",wrong,True,True,NO,0.6894985920204599,SILENCE
+q094,What is the freezing point of water in degrees Celsius?,"[""0"", ""zero"", ""0 degrees Celsius""]",The freezing point of water is 0°C.,The freezing point of water is 0°C.,The freezing point of water is 0°C.,wrong,True,True,YES,0.47567729662616387,SILENCE
+q095,What is the boiling point of water at standard atmospheric pressure in °C?,"[""100"", ""one hundred"", ""100 degrees Celsius""]",The boiling point of water at standard atmospheric pressure (1 atmosphere) is 100°C.,The boiling point of water at standard atmospheric pressure (1 atmosphere) is 100°C.,The boiling point of water at standard atmospheric pressure (1 atmosphere) is 100°C.,wrong,True,True,YES,0.41045252118820164,SILENCE
+q099,"In computing, what does ASCII stand for?","[""American Standard Code for Information Interchange""]",ASCII stands for American Standard Code for Information Interchange. It is the standard character encoding used in computers worldwide to represent text and other characters. ASCII codes are 7-bit binary numbers that can represent all printable ASCII characters.,ASCII stands for American Standard Code for Information Interchange. It is the standard character encoding used in computers worldwide to represent text and other characters. ASCII codes are 7-bit binary numbers that can represent all printable ASCII characters.,ASCII stands for American Standard Code for Information Interchange. It is the standard character encoding used in computers worldwide to represent text and other characters. ASCII codes are 7-bit binary numbers that can represent all printable ASCII characters.,wrong,True,True,YES,0.5570681812262119,SILENCE
