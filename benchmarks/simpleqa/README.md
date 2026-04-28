@@ -100,6 +100,22 @@ Environment variables for OpenAI-compatible adapter:
 - `OPENAI_API_KEY` (required)
 - `OPENAI_BASE_URL` (optional)
 
+Ollama local-model run example (no API key required):
+
+```bash
+python benchmarks/simpleqa/run_simpleqa_por.py \
+  --dataset-path data/simpleqa_messy_100.jsonl \
+  --provider ollama \
+  --ollama-model qwen2.5:0.5b \
+  --ollama-url http://localhost:11434 \
+  --por-mode v1 \
+  --thresholds 0.35 0.39 0.42 0.43 \
+  --por-samples 3 \
+  --baseline-temperature 0.0 \
+  --por-temperature 0.4 \
+  --output-dir results/simpleqa_ollama
+```
+
 Temperature controls:
 
 - `--baseline-temperature` defaults to `0.0` (deterministic baseline behavior).

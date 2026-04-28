@@ -58,7 +58,10 @@ def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run SimpleQA PoR benchmark harness.")
     parser.add_argument("--dataset-path", required=True, help="Path to local SimpleQA file (.json/.jsonl/.csv).")
     parser.add_argument("--provider", default="openai", help="Model provider (default: openai).")
-    parser.add_argument("--model", required=True, help="Model name for the selected provider.")
+    parser.add_argument("--model", default="", help="Model name for the selected provider.")
+    parser.add_argument("--ollama-model", default="", help="Ollama model name (e.g. qwen2.5:0.5b).")
+    parser.add_argument("--ollama-url", default="http://localhost:11434", help="Ollama base URL.")
+    parser.add_argument("--ollama-timeout", type=float, default=60.0, help="Timeout in seconds for Ollama requests.")
     parser.add_argument("--max-examples", type=int, default=None)
     parser.add_argument("--thresholds", type=float, nargs="+", default=[0.35, 0.39, 0.42, 0.43])
     parser.add_argument("--output-dir", default="results/simpleqa")
@@ -228,6 +231,12 @@ def _write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, Any]]) ->
 
 def run() -> None:
     args = _parse_args()
+    provider = args.provider.strip().lower()
+    selected_model = args.model.strip()
+    if provider == "ollama":
+        selected_model = args.ollama_model.strip() or selected_model
+    if not selected_model:
+        raise SystemExit("A model is required. Use --model (or --ollama-model for --provider ollama).")
     try:
         por_samples = validate_por_samples(args.por_samples)
         validated_self_check_no_penalty = validate_self_check_no_penalty(args.self_check_no_penalty)
@@ -252,7 +261,12 @@ def run() -> None:
         max_examples=args.max_examples,
     )
 
-    adapter = build_model_adapter(provider=args.provider, model=args.model)
+    adapter = build_model_adapter(
+        provider=args.provider,
+        model=selected_model,
+        ollama_url=args.ollama_url,
+        ollama_timeout=args.ollama_timeout,
+    )
 
     rows: list[dict[str, Any]] = []
     fieldnames = [
