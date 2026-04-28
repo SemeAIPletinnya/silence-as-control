@@ -121,3 +121,24 @@ def test_por_mode_default_and_choices(monkeypatch) -> None:
     args_v2_2 = _parse_args()
     assert args_v2_2.por_mode == "v2_2"
     assert args_v2_2.self_check_no_penalty == 0.35
+
+
+def test_parse_args_accepts_ollama_options(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "run_simpleqa_por.py",
+            "--dataset-path",
+            "dummy.jsonl",
+            "--provider",
+            "ollama",
+            "--ollama-model",
+            "qwen2.5:0.5b",
+            "--ollama-url",
+            "http://localhost:11434",
+        ],
+    )
+    args = _parse_args()
+    assert args.provider == "ollama"
+    assert args.ollama_model == "qwen2.5:0.5b"
+    assert args.ollama_url == "http://localhost:11434"
