@@ -75,3 +75,12 @@ Keep this directory disciplined:
 - Prefer small, auditable artifacts.
 - Do not add generated noise files or scratch outputs.
 - Keep filenames explicit about run context (task count, threshold, or lane purpose).
+
+
+## Navigation note
+
+For conservative claim-to-artifact mapping, see `docs/evidence_map.md` and `docs/threshold_regime_contract.md`.
+Recent local SimpleQA/Ollama artifact directories are:
+
+- `results/simpleqa_ollama_qwen3_4b_100_v2_retry/`
+- `results/simpleqa_ollama_qwen3_8b_100_v2/`
