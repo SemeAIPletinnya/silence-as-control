@@ -104,6 +104,14 @@ curl -s http://127.0.0.1:8000/por/complete \
   -d '{"prompt":"Explain recursion in one sentence","threshold":0.39,"drift_samples":3,"enable_experimental_short_regen":true}'
 ```
 
+
+## Recent local Ollama evidence
+- PR #131 (Qwen3 4B, SimpleQA/Ollama, 100 examples, PoR v2): at 0.43, 84% coverage with 0 accepted wrong (100% accepted precision) in this run.
+- PR #132 (Qwen3 8B, SimpleQA/Ollama, 100 examples, PoR v2): at 0.42/0.43, 93% coverage with 1 accepted wrong (98.92% accepted precision) in this run.
+- In this evidence slice, Qwen3 4B @ 0.43 acts as a practical zero-accepted-failure anchor, while Qwen3 8B @ 0.42/0.43 is a high-coverage boundary.
+- This supports the repository thesis: stronger generation does not automatically mean safer release behavior at a fixed threshold.
+- See `docs/threshold_regime_contract.md` and `docs/evidence_map.md` for scoped interpretation and artifact navigation.
+
 ## Evidence
 - Run artifacts: `reports/`, `wiki/runs/`, `wiki/meta/Evidence_Map.md`
 - Boundary-pocket artifacts: `reports/borderline_pocket_labels.csv`, `reports/borderline_maybe_short_regen.csv`
