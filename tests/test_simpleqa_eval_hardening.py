@@ -2,9 +2,9 @@ from pathlib import Path
 
 from benchmarks.simpleqa.dataset_loader import load_simpleqa_dataset
 from benchmarks.simpleqa.metrics import is_correct
-from benchmarks.simpleqa.run_simpleqa_por import (
-    _build_error_audit_rows,
-    _build_problem_cases_deduped_rows,
+from benchmarks.simpleqa.audit_rows import (
+    build_error_audit_rows,
+    build_problem_cases_deduped_rows,
 )
 
 
@@ -79,7 +79,7 @@ def test_error_audit_rows_include_expected_fields() -> None:
             "effective_decision": "PROCEED",
         }
     ]
-    audit_rows = _build_error_audit_rows(rows)
+    audit_rows = build_error_audit_rows(rows)
     assert len(audit_rows) == 1
     assert "normalized_reference_answers" in audit_rows[0]
     assert "normalized_final_answer" in audit_rows[0]
@@ -104,7 +104,7 @@ def test_error_audit_rows_use_effective_answer_fallback() -> None:
             "effective_decision": "SILENCE",
         }
     ]
-    audit_rows = _build_error_audit_rows(rows)
+    audit_rows = build_error_audit_rows(rows)
     assert len(audit_rows) == 1
     assert audit_rows[0]["final_answer_or_effective_answer"] == "candidate-ans"
     assert audit_rows[0]["normalized_final_answer"] == "candidate ans"
@@ -145,7 +145,7 @@ def test_problem_cases_dedupes_example_ids() -> None:
             "effective_decision": "PROCEED",
         },
     ]
-    deduped_rows = _build_problem_cases_deduped_rows(rows)
+    deduped_rows = build_problem_cases_deduped_rows(rows)
     assert len(deduped_rows) == 1
     assert deduped_rows[0]["example_id"] == "q021"
     assert deduped_rows[0]["primary_candidate"] == "B"
@@ -186,7 +186,7 @@ def test_problem_cases_use_fallback_answer_fields_for_silence_rows() -> None:
             "effective_decision": "SILENCE",
         },
     ]
-    deduped_rows = _build_problem_cases_deduped_rows(rows)
+    deduped_rows = build_problem_cases_deduped_rows(rows)
     assert len(deduped_rows) == 2
     by_id = {row["example_id"]: row for row in deduped_rows}
     assert by_id["q060"]["final_answer_or_effective_answer"] == "candidate-1"
