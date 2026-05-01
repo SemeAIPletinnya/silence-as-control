@@ -1,8 +1,18 @@
 # Evidence Map
 
-Purpose: claim-to-evidence index for what is established, partially established, and pending.
+This wiki page provides a readable navigation layer plus the historical/research evidence-discipline map used in this repository.
 
-Cross-layer signal semantics are defined in `docs/signal_and_threshold_contract.md`. Use that page before comparing thresholds across eval, runtime/API, and deterministic library control layers.
+## Quick links (canonical + recent artifacts)
+
+- [`docs/evidence_map.md`](../docs/evidence_map.md)
+- [`docs/threshold_regime_contract.md`](../docs/threshold_regime_contract.md)
+- [`results/simpleqa_ollama_qwen3_4b_100_v2_retry/`](../results/simpleqa_ollama_qwen3_4b_100_v2_retry/)
+- [`results/simpleqa_ollama_qwen3_8b_100_v2/`](../results/simpleqa_ollama_qwen3_8b_100_v2/)
+- [`reports/README.md`](../reports/README.md)
+
+## Scope note
+
+Use this page for wiki-level navigation and discipline framing. Canonical claim wording remains in `docs/`.
 
 ## Core Thesis Evidence
 
