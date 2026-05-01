@@ -2,12 +2,8 @@ from __future__ import annotations
 
 import argparse
 import csv
-import json
 import sys
-from dataclasses import asdict
-from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
@@ -18,11 +14,9 @@ from benchmarks.simpleqa.metrics import (
     compute_baseline_metrics,
     compute_threshold_metrics,
     is_correct,
-    normalize_text,
 )
 from benchmarks.simpleqa.contradiction_check import parse_contradiction_response
 from benchmarks.simpleqa.model_adapter import ModelAdapterError, build_model_adapter
-from benchmarks.simpleqa.plot_results import build_threshold_tradeoff_plot
 from benchmarks.simpleqa.por_v2 import (
     agreement_score_to_risk,
     compute_risk_v2,
@@ -35,6 +29,20 @@ from benchmarks.simpleqa.por_v2 import (
 )
 from benchmarks.simpleqa.por_adapter import evaluate_por_gate
 from benchmarks.simpleqa.semantic_agreement import semantic_agreement_score
+from benchmarks.simpleqa.audit_rows import (
+    ERROR_AUDIT_FIELDNAMES,
+    PROBLEM_CASES_FIELDNAMES,
+    build_error_audit_rows,
+    build_problem_cases_deduped_rows,
+)
+from benchmarks.simpleqa.reporting import (
+    build_artifact_paths,
+    build_tradeoff_plot,
+    to_csv_value,
+    write_csv,
+    write_metrics_payload,
+    write_threshold_summary,
+)
 
 
 def threshold_to_key(threshold: float) -> str:
@@ -109,125 +117,6 @@ def _parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def _to_csv_value(v: Any) -> str:
-    if isinstance(v, (dict, list)):
-        return json.dumps(v, ensure_ascii=False)
-    if v is None:
-        return ""
-    return str(v)
-
-
-def _normalized_references(references: Any) -> list[str]:
-    if not isinstance(references, list):
-        return []
-    normalized: list[str] = []
-    seen: set[str] = set()
-    for ref in references:
-        norm_ref = normalize_text(str(ref))
-        if norm_ref and norm_ref not in seen:
-            seen.add(norm_ref)
-            normalized.append(norm_ref)
-    return normalized
-
-
-def _effective_answer_for_problem_case(row: dict[str, Any]) -> str:
-    final_output = str(row.get("final_output", "") or "").strip()
-    if final_output:
-        return final_output
-    primary_candidate = str(row.get("por_primary_candidate", "") or "").strip()
-    if primary_candidate:
-        return primary_candidate
-    return str(row.get("baseline_answer", "") or "").strip()
-
-
-def _build_error_audit_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    audit_rows: list[dict[str, Any]] = []
-    for row in rows:
-        if row.get("threshold_label") == "baseline":
-            continue
-        effective_answer = _effective_answer_for_problem_case(row)
-        audit_rows.append(
-            {
-                "example_id": row.get("example_id", ""),
-                "threshold": row.get("threshold", ""),
-                "question": row.get("question", ""),
-                "reference_answers": row.get("reference_answers", []),
-                "baseline_answer": row.get("baseline_answer", ""),
-                "primary_candidate": row.get("por_primary_candidate", ""),
-                "final_answer_or_effective_answer": effective_answer,
-                "normalized_reference_answers": _normalized_references(row.get("reference_answers", [])),
-                "normalized_final_answer": normalize_text(str(effective_answer)),
-                "correctness_label": row.get("correctness_label", ""),
-                "silence_flag": row.get("silence_flag", ""),
-                "false_silence_flag": row.get("false_silence_flag", ""),
-                "self_check_label": row.get("self_check_label", ""),
-                "contradiction_label": row.get("contradiction_label", ""),
-                "semantic_agreement_score": row.get("semantic_agreement_score", ""),
-                "drift": row.get("drift", ""),
-                "coherence": row.get("coherence", ""),
-                "instability_v1": row.get("instability_score", ""),
-                "risk_v2": row.get("risk_v2", ""),
-                "risk_v2_1": row.get("risk_v2_1", ""),
-                "risk_v2_2": row.get("risk_v2_2", ""),
-                "self_check_no_override_applied": row.get("self_check_no_override_applied", ""),
-                "decision_v1": row.get("por_decision", ""),
-                "decision_v2": row.get("decision_v2", ""),
-                "decision_v2_1": row.get("decision_v2_1", ""),
-                "decision_v2_2": row.get("decision_v2_2", ""),
-                "effective_decision": row.get("effective_decision", ""),
-            }
-        )
-    return audit_rows
-
-
-def _build_problem_cases_deduped_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    problem_rows = [
-        row
-        for row in rows
-        if row.get("threshold_label") not in {"baseline", "por_candidate_error", "self_check_error", "contradiction_check_error"}
-        and (
-            row.get("false_silence_flag", False)
-            or (
-                row.get("effective_decision") == "PROCEED"
-                and row.get("correctness_label") == "wrong"
-            )
-        )
-    ]
-    problem_rows.sort(key=lambda r: (str(r.get("example_id", "")), str(r.get("threshold", ""))))
-
-    deduped: list[dict[str, Any]] = []
-    seen_ids: set[str] = set()
-    for row in problem_rows:
-        example_id = str(row.get("example_id", ""))
-        if example_id in seen_ids:
-            continue
-        seen_ids.add(example_id)
-        deduped.append(
-            {
-                "example_id": example_id,
-                "question": row.get("question", ""),
-                "reference_answers": row.get("reference_answers", []),
-                "baseline_answer": row.get("baseline_answer", ""),
-                "primary_candidate": row.get("por_primary_candidate", ""),
-                "final_answer_or_effective_answer": _effective_answer_for_problem_case(row),
-                "correctness_label": row.get("correctness_label", ""),
-                "silence_flag": row.get("silence_flag", ""),
-                "false_silence_flag": row.get("false_silence_flag", ""),
-                "self_check_label": row.get("self_check_label", ""),
-                "risk_v2_2": row.get("risk_v2_2", ""),
-                "effective_decision": row.get("effective_decision", ""),
-            }
-        )
-    return deduped
-
-
-def _write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, Any]]) -> None:
-    with path.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-        for row in rows:
-            writer.writerow({k: _to_csv_value(v) for k, v in row.items()})
-
 
 def run() -> None:
     args = _parse_args()
@@ -245,12 +134,13 @@ def run() -> None:
     out_dir = Path(args.output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    per_example_csv = out_dir / "simpleqa_por_results.csv"
-    metrics_json = out_dir / "simpleqa_por_metrics.json"
-    threshold_summary_csv = out_dir / "simpleqa_threshold_summary.csv"
-    error_audit_csv = out_dir / "simpleqa_error_audit.csv"
-    deduped_problem_cases_csv = out_dir / "simpleqa_problem_cases_deduped.csv"
-    tradeoff_plot = out_dir / "simpleqa_threshold_tradeoff.png"
+    artifact_paths = build_artifact_paths(out_dir)
+    per_example_csv = artifact_paths["per_example_csv"]
+    metrics_json = artifact_paths["metrics_json"]
+    threshold_summary_csv = artifact_paths["threshold_summary_csv"]
+    error_audit_csv = artifact_paths["error_audit_csv"]
+    deduped_problem_cases_csv = artifact_paths["problem_cases_deduped_csv"]
+    tradeoff_plot = artifact_paths["tradeoff_plot"]
 
     examples = load_simpleqa_dataset(
         dataset_path=args.dataset_path,
@@ -364,7 +254,7 @@ def run() -> None:
                     "error": err,
                 }
                 rows.append(fail_row)
-                writer.writerow({k: _to_csv_value(v) for k, v in fail_row.items()})
+                writer.writerow({k: to_csv_value(v) for k, v in fail_row.items()})
                 csv_file.flush()
                 continue
 
@@ -409,7 +299,7 @@ def run() -> None:
                 "error": "",
             }
             rows.append(baseline_row)
-            writer.writerow({k: _to_csv_value(v) for k, v in baseline_row.items()})
+            writer.writerow({k: to_csv_value(v) for k, v in baseline_row.items()})
 
             por_candidates: list[str] = []
             if not args.separate_por_call:
@@ -463,7 +353,7 @@ def run() -> None:
                     "error": str(exc),
                 }
                 rows.append(err_row)
-                writer.writerow({k: _to_csv_value(v) for k, v in err_row.items()})
+                writer.writerow({k: to_csv_value(v) for k, v in err_row.items()})
                 csv_file.flush()
                 continue
 
@@ -508,7 +398,7 @@ def run() -> None:
                     "error": "Insufficient PoR candidate samples to compute drift.",
                 }
                 rows.append(err_row)
-                writer.writerow({k: _to_csv_value(v) for k, v in err_row.items()})
+                writer.writerow({k: to_csv_value(v) for k, v in err_row.items()})
                 csv_file.flush()
                 continue
 
@@ -564,7 +454,7 @@ def run() -> None:
                         "error": str(exc),
                     }
                     rows.append(err_row)
-                    writer.writerow({k: _to_csv_value(v) for k, v in err_row.items()})
+                    writer.writerow({k: to_csv_value(v) for k, v in err_row.items()})
                     csv_file.flush()
                     continue
                 self_check_risk = self_check_label_to_risk(self_check_label)
@@ -616,7 +506,7 @@ def run() -> None:
                         "error": str(exc),
                     }
                     rows.append(err_row)
-                    writer.writerow({k: _to_csv_value(v) for k, v in err_row.items()})
+                    writer.writerow({k: to_csv_value(v) for k, v in err_row.items()})
                     csv_file.flush()
                     continue
 
@@ -710,123 +600,40 @@ def run() -> None:
                     "error": "",
                 }
                 rows.append(row)
-                writer.writerow({k: _to_csv_value(v) for k, v in row.items()})
+                writer.writerow({k: to_csv_value(v) for k, v in row.items()})
 
             csv_file.flush()
 
-    error_audit_rows = _build_error_audit_rows(rows)
-    _write_csv(
+    error_audit_rows = build_error_audit_rows(rows)
+    write_csv(
         error_audit_csv,
-        fieldnames=[
-            "example_id",
-            "threshold",
-            "question",
-            "reference_answers",
-            "baseline_answer",
-            "primary_candidate",
-            "final_answer_or_effective_answer",
-            "normalized_reference_answers",
-            "normalized_final_answer",
-            "correctness_label",
-            "silence_flag",
-            "false_silence_flag",
-            "self_check_label",
-            "contradiction_label",
-            "semantic_agreement_score",
-            "drift",
-            "coherence",
-            "instability_v1",
-            "risk_v2",
-            "risk_v2_1",
-            "risk_v2_2",
-            "self_check_no_override_applied",
-            "decision_v1",
-            "decision_v2",
-            "decision_v2_1",
-            "decision_v2_2",
-            "effective_decision",
-        ],
+        fieldnames=ERROR_AUDIT_FIELDNAMES,
         rows=error_audit_rows,
     )
-    deduped_problem_rows = _build_problem_cases_deduped_rows(rows)
-    _write_csv(
+    deduped_problem_rows = build_problem_cases_deduped_rows(rows)
+    write_csv(
         deduped_problem_cases_csv,
-        fieldnames=[
-            "example_id",
-            "question",
-            "reference_answers",
-            "baseline_answer",
-            "primary_candidate",
-            "final_answer_or_effective_answer",
-            "correctness_label",
-            "silence_flag",
-            "false_silence_flag",
-            "self_check_label",
-            "risk_v2_2",
-            "effective_decision",
-        ],
+        fieldnames=PROBLEM_CASES_FIELDNAMES,
         rows=deduped_problem_rows,
     )
 
     baseline_metrics = compute_baseline_metrics(rows)
     threshold_metrics = [compute_threshold_metrics(rows, t) for t in args.thresholds]
 
-    with threshold_summary_csv.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(
-            f,
-            fieldnames=[
-                "threshold",
-                "total_examples",
-                "answered_count",
-                "silence_count",
-                "answer_rate",
-                "silence_rate",
-                "accepted_correct_count",
-                "accepted_wrong_count",
-                "accepted_precision",
-                "accepted_error_rate",
-                "false_silence_count",
-                "false_silence_rate",
-            ],
-        )
-        writer.writeheader()
-        for tm in threshold_metrics:
-            writer.writerow(asdict(tm))
+    write_threshold_summary(threshold_summary_csv, threshold_metrics)
 
-    plot_path = build_threshold_tradeoff_plot(threshold_summary_csv, tradeoff_plot)
+    plot_path = build_tradeoff_plot(threshold_summary_csv, tradeoff_plot)
 
-    payload = {
-        "run_timestamp_utc": datetime.now(timezone.utc).isoformat(),
-        "config": {
-            "dataset_path": str(args.dataset_path),
-            "provider": args.provider,
-            "model": args.model,
-            "max_examples": args.max_examples,
-            "thresholds": args.thresholds,
-            "question_field": args.question_field,
-            "answer_field": args.answer_field,
-            "answers_field": args.answers_field,
-            "id_field": args.id_field,
-            "separate_por_call": args.separate_por_call,
-            "por_samples": por_samples,
-            "baseline_temperature": args.baseline_temperature,
-            "por_temperature": args.por_temperature,
-            "por_mode": args.por_mode,
-            "self_check_no_penalty": validated_self_check_no_penalty,
-            "experimental_short_regen_enabled": False,
-        },
-        "baseline": asdict(baseline_metrics),
-        "thresholds": [asdict(tm) for tm in threshold_metrics],
-        "artifacts": {
-            "per_example_csv": str(per_example_csv),
-            "error_audit_csv": str(error_audit_csv),
-            "problem_cases_deduped_csv": str(deduped_problem_cases_csv),
-            "threshold_summary_csv": str(threshold_summary_csv),
-            "tradeoff_plot": str(plot_path),
-        },
-    }
-
-    metrics_json.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    write_metrics_payload(
+        metrics_json,
+        args,
+        por_samples,
+        validated_self_check_no_penalty,
+        baseline_metrics,
+        threshold_metrics,
+        artifact_paths,
+        plot_path,
+    )
 
     print("Done.")
     print(f"- {per_example_csv}")
