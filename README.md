@@ -129,6 +129,7 @@ curl -s http://127.0.0.1:8000/por/complete \
 - Repository root: `./`
 - README: `README.md`
 - Docs index: `docs/README.md`
+- External CLI integration: `docs/external_integration.md`
 - Paper/preprint materials: `paper/README.md`
 - Reports/evidence: `reports/README.md`
 
