@@ -1,0 +1,18 @@
+{
+  "prompt": "What is the capital of France?",
+  "candidate_answer": "Paris",
+  "candidate_samples": [
+    "Paris",
+    "The capital of France is Paris.",
+    "Paris, France."
+  ],
+  "threshold": 0.39,
+  "mode": "v1",
+  "metadata": {
+    "model": "external-generator-name",
+    "temperature": 0.0,
+    "top_p": null,
+    "top_k": null,
+    "source": "external_pipeline"
+  }
+}
