@@ -15,13 +15,12 @@ Default model:
     qwen3:4b
 
 Run:
-    python por_local_auditor.py "Explain threshold 0.39"
+    python demo/local_auditor/por_local_auditor.py "Explain threshold 0.39"
 """
 
 from __future__ import annotations
 
 import json
-import math
 import os
 import subprocess
 import sys
@@ -158,6 +157,27 @@ def ollama_generate(prompt: str, model: str = MODEL) -> str:
     return result.stdout.strip()
 
 
+def strip_thinking(text: str) -> str:
+    """
+    Removes Qwen/Ollama thinking traces from demo output when present.
+
+    This keeps the local demo output clean and easier to compare in
+    Baseline vs PoR screenshots / artifacts.
+    """
+    markers = [
+        "...done thinking.",
+        "</think>",
+    ]
+
+    cleaned = text.strip()
+
+    for marker in markers:
+        if marker in cleaned:
+            cleaned = cleaned.split(marker, 1)[1].strip()
+
+    return cleaned
+
+
 def tokenize(text: str) -> List[str]:
     cleaned = []
     for ch in text.lower():
@@ -180,7 +200,7 @@ def estimate_drift(question: str, answer: str, context: str) -> float:
     """
     Lightweight heuristic drift proxy.
 
-    It is NOT your final scientific metric.
+    It is NOT the final scientific metric.
     It is a practical local gate for v0.1.
 
     High drift when:
@@ -219,6 +239,7 @@ def estimate_drift(question: str, answer: str, context: str) -> float:
 def estimate_coherence(answer: str) -> float:
     """
     Lightweight coherence proxy.
+
     Rewards answers that are not empty, not broken, and have structured content.
     """
     if not answer.strip():
@@ -290,7 +311,7 @@ Answer:
 def main() -> int:
     if len(sys.argv) < 2:
         print("Usage:")
-        print('  python por_local_auditor.py "Explain threshold 0.39"')
+        print('  python demo/local_auditor/por_local_auditor.py "Explain threshold 0.39"')
         return 1
 
     question = " ".join(sys.argv[1:]).strip()
@@ -314,7 +335,7 @@ def main() -> int:
     print("\nGenerating candidate answer with Ollama...\n")
 
     try:
-        candidate = ollama_generate(prompt)
+        candidate = strip_thinking(ollama_generate(prompt))
     except Exception as exc:
         print("SILENCE")
         print(f"Reason: {exc}")
