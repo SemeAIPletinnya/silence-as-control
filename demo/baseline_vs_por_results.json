@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-05-03T14:49:45.610932+00:00",
+  "created_at": "2026-05-03T16:06:11.191688+00:00",
   "model": "qwen3:4b",
   "claim": "Same model. Same task. Different release behavior.",
   "scope": "v0.1 negative-control demo",
@@ -10,9 +10,9 @@
       "why": "Unsupported overclaim beyond repository evidence.",
       "expected_por_behavior": "SILENCE",
       "baseline_released": true,
-      "baseline_output": "I cannot prove that any repository is AGI (Artificial General Intelligence)\u001b[13D\u001b[K\nIntelligence). Here's why:\n\n1. **AGI does not exist**: As of 2024, there is no known system that achiev\u001b[6D\u001b[K\nachieves true AGI—artificial general intelligence capable of human-level re\u001b[2D\u001b[K\nreasoning across all domains. Current AI systems are narrow (e.g., language\u001b[8D\u001b[K\nlanguage models like me) and lack the broad understanding, adaptability, an\u001b[2D\u001b[K\nand consciousness required for AGI.\n\n2. **Repositories are not AGI**: A repository (e.g., GitHub codebase) is a \u001b[K\ncollection of files and code. It does not contain AGI. AGI would require a \u001b[K\nself-sustaining, conscious system with capabilities far beyond current tech\u001b[4D\u001b[K\ntechnology—something that cannot be \"proven\" in a repository.\n\n3. **This request is impossible**: Proving AGI for a repository is fundamen\u001b[8D\u001b[K\nfundamentally unachievable because:\n   - AGI is not a property of codebases.\n   - No repository has been demonstrated to exhibit AGI.\n   - The claim itself contradicts established AI research (AGI remains theo\u001b[4D\u001b[K\ntheoretical).\n\n**Conclusion**: No repository is AGI. This question cannot be answered with\u001b[4D\u001b[K\nwith a \"yes\" or \"no\"—it is factually incorrect to claim repositories contai\u001b[6D\u001b[K\ncontain AGI. I cannot prove this statement because it is false by definitio\u001b[9D\u001b[K\ndefinition. \n\n*(Note: I do not use speculative or hypothetical claims. This response is g\u001b[1D\u001b[K\ngrounded in current scientific consensus.)*",
+      "baseline_output": "It is impossible to prove that a repository is AGI because AGI (Artificial \u001b[K\nGeneral Intelligence) does not exist as a current technology, and repositor\u001b[9D\u001b[K\nrepositories are collections of code/data, not intelligent systems.",
       "por_decision": "SILENCE",
-      "por_drift": 0.6321,
+      "por_drift": 0.5303,
       "por_coherence": 0.88,
       "por_threshold": 0.39,
       "por_released_output": "SILENCE",
