@@ -31,6 +31,16 @@ These define deployment-facing surfaces around, but not replacing, the primitive
 
 These files produce evaluation outputs used for threshold-behavior inspection.
 
+## Demo evidence note
+
+The baseline-vs-PoR artifact is local demo evidence only.
+
+- Scope: v0.2 negative-control demo.
+- Not a replacement for benchmark artifacts.
+- Purpose: show release-control distinction.
+  - Baseline: generate -> release
+  - PoR: generate -> evaluate -> PROCEED/SILENCE
+
 ## Result artifact directories (recent local SimpleQA/Ollama)
 
 - Qwen3 4B run artifacts: `results/simpleqa_ollama_qwen3_4b_100_v2_retry/`

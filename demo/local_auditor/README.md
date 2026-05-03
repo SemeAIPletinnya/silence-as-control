@@ -1,71 +1,45 @@
-***# PoR Local Auditor***
+# PoR Local Auditor
 
+A local repo-aware auditor powered by Ollama and gated by a lightweight Silence-as-Control / PoR release decision.
 
+## Concept
 
-***A local repo-aware AI auditor powered by Ollama + Qwen 4B and controlled by a lightweight Silence-as-Control / PoR release gate.***
+The model generates a candidate answer. The gate then decides:
 
+- PROCEED
+- SILENCE
+- MAYBE_SHORT_REGEN
 
+Same model. Different decision.
+Either correct, or silent.
 
-***## Concept***
+## Run
 
+From repository root:
 
+```bash
+python demo/local_auditor/por_local_auditor.py "Explain what Silence-as-Control does in this repository"
+```
 
-***The base model generates a candidate answer.***
+PowerShell:
 
+```powershell
+python .\demo\local_auditor\por_local_auditor.py "Explain threshold 0.39"
+```
 
+Optional model override (PowerShell):
 
-***The PoR gate decides whether the answer earns release:***
+```powershell
+$env:POR_MODEL = "qwen3:8b"
+python .\demo\local_auditor\por_local_auditor.py "Explain threshold 0.39"
+```
 
+Optional model override (bash):
 
+```bash
+POR_MODEL=qwen3:8b python demo/local_auditor/por_local_auditor.py "Explain threshold 0.39"
+```
 
-***- PROCEED***
+## Purpose
 
-***- SILENCE***
-
-***- MAYBE\_SHORT\_REGEN***
-
-
-
-***This demonstrates the core principle:***
-
-
-
-***> Same model. Different decision.***
-
-
-
-***> Either correct, or silent.***
-
-
-
-***## Run***
-
-
-
-***From the repository root:***
-
-
-
-***```powershell***
-
-***python demo\\local\_auditor\\por\_local\_auditor.py "Explain what Silence-as-Control does in this repository"
-Default model:***
-
-***qwen3:4b***
-
-***Override model:***
-
-***$env:POR\_MODEL="qwen3:8b"***
-
-***python demo\\local\_auditor\\por\_local\_auditor.py "Explain threshold 0.39"***
-
-***Purpose***
-
-
-
-***This is not a claim that the local model is more intelligent.***
-
-
-
-***It shows that a local model can be wrapped with a release-control layer that decides when output should be released and when silence is safer.***
-
+This demo does not claim stronger model intelligence. It demonstrates release control: generation is separate from release.

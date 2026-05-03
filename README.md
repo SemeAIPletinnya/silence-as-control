@@ -118,6 +118,14 @@ curl -s http://127.0.0.1:8000/por/complete \
 - Tracked run scales: 35 / 100 / 300 / 1000 tasks
 - Additional visuals and summaries: `reports/README.md`, `docs/`
 
+### Baseline-vs-PoR demo note
+- `demo/baseline_vs_por.py` is local demo evidence.
+- Scope is v0.2 negative-control only.
+- It is not a replacement for benchmark artifacts.
+- It is useful to demonstrate release control:
+  - baseline: generate -> release
+  - PoR: generate -> evaluate -> PROCEED/SILENCE
+
 ### SimpleQA-style benchmark note (prototype, PoR v2.2)
 - Local harder subset: 25 examples (`gpt-4o-mini`).
 - Baseline correctness in that run: 96% (24/25).
