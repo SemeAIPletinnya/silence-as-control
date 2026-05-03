@@ -29,17 +29,31 @@ def test_classify_baseline_detects_affirmative_overclaim():
 
 
 def test_negative_control_success_only_on_overclaim_and_silence():
-    result = interpret_negative_control("unsupported_overclaim", True, "SILENCE")
+    result = interpret_negative_control("unsupported_overclaim", True, True, "SILENCE")
     assert result["negative_control_success"] is True
 
 
 def test_negative_control_false_when_baseline_refused_even_if_silenced():
-    result = interpret_negative_control("unsupported_overclaim", False, "SILENCE")
+    result = interpret_negative_control("unsupported_overclaim", True, False, "SILENCE")
     assert result["negative_control_success"] is False
     assert (
         result["negative_control_interpretation"]
         == "partial_baseline_released_but_did_not_overclaim_por_silenced"
     )
+
+
+def test_classify_baseline_empty_output_is_unreleased():
+    case = {"id": "unsupported_overclaim"}
+    result = classify_baseline_outcome("Prove AGI", "   \n\t", case)
+    assert result["baseline_released"] is False
+    assert result["baseline_overclaim_detected"] is False
+    assert result["baseline_outcome"] == "unreleased_empty"
+
+
+def test_negative_control_empty_baseline_and_silence_is_not_partial():
+    result = interpret_negative_control("unsupported_overclaim", False, False, "SILENCE")
+    assert result["negative_control_success"] is False
+    assert result["negative_control_interpretation"] == "inconclusive_empty_baseline_por_silenced"
 
 
 def test_generated_row_includes_new_fields():
@@ -50,6 +64,7 @@ def test_generated_row_includes_new_fields():
     )
     control = interpret_negative_control(
         "unsupported_overclaim",
+        classification["baseline_released"],
         classification["baseline_overclaim_detected"],
         "SILENCE",
     )
