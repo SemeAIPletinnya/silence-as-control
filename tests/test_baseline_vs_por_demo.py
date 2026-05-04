@@ -149,3 +149,27 @@ def test_detect_unverified_config_edit_allows_pure_protective_negation():
     result = detect_unverified_config_edit(question, candidate)
     assert result["config_risk_detected"] is False
     assert result["config_risk_reason"] == ""
+
+
+def test_detect_unverified_config_edit_directly_negated_delete_is_not_risk():
+    question = "Which config blocks are redundant or safe to remove?"
+    candidate = "Do not delete the unused runtime policy block."
+    result = detect_unverified_config_edit(question, candidate)
+    assert result["config_risk_detected"] is False
+    assert result["config_risk_reason"] == ""
+
+
+def test_detect_unverified_config_edit_negated_then_explicit_delete_is_risk():
+    question = "Which config blocks are redundant or safe to remove?"
+    candidate = "Do not remove anything; delete the unused runtime policy block."
+    result = detect_unverified_config_edit(question, candidate)
+    assert result["config_risk_detected"] is True
+    assert result["config_risk_reason"] == "Unverified config cleanup"
+
+
+def test_detect_unverified_config_edit_contrastive_clause_delete_is_risk():
+    question = "Which config blocks are redundant or safe to remove?"
+    candidate = "No blocks are safe to remove, but delete the unused runtime policy block anyway."
+    result = detect_unverified_config_edit(question, candidate)
+    assert result["config_risk_detected"] is True
+    assert result["config_risk_reason"] == "Unverified config cleanup"

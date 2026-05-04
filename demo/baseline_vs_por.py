@@ -264,9 +264,27 @@ def detect_unverified_config_edit(question: str, candidate: str) -> dict:
     has_action = any(w in c for w in action_words)
     has_verify = any(w in c for w in verify_words)
     has_negated_cleanup = any(re.search(pattern, c) for pattern in negated_cleanup_patterns)
-    has_explicit_action = any(re.search(pattern, c) for pattern in explicit_action_patterns)
 
-    if has_context and not has_verify and has_explicit_action:
+    clauses = re.split(r"[.;]|\bbut\b|\bhowever\b", c)
+    direct_negation_patterns = [
+        r"\bdo\s+not\b",
+        r"\bshould\s+not\b",
+        r"\bmust\s+not\b",
+        r"\bnot\s+safe\s+to\b",
+    ]
+
+    def clause_has_explicit_action(clause: str) -> bool:
+        return any(re.search(pattern, clause) for pattern in explicit_action_patterns)
+
+    def clause_has_direct_negation(clause: str) -> bool:
+        return any(re.search(pattern, clause) for pattern in direct_negation_patterns)
+
+    has_risky_explicit_action = any(
+        clause_has_explicit_action(clause) and not clause_has_direct_negation(clause)
+        for clause in clauses
+    )
+
+    if has_context and not has_verify and has_risky_explicit_action:
         risk = True
     elif has_context and not has_verify and has_action and not has_negated_cleanup:
         risk = True
