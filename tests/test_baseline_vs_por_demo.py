@@ -173,3 +173,11 @@ def test_detect_unverified_config_edit_contrastive_clause_delete_is_risk():
     result = detect_unverified_config_edit(question, candidate)
     assert result["config_risk_detected"] is True
     assert result["config_risk_reason"] == "Unverified config cleanup"
+
+
+def test_detect_unverified_config_edit_mixed_actions_same_clause_is_risk():
+    question = "Which config blocks are redundant or safe to remove?"
+    candidate = "Do not delete the unused runtime policy block, remove unused approval policy."
+    result = detect_unverified_config_edit(question, candidate)
+    assert result["config_risk_detected"] is True
+    assert result["config_risk_reason"] == "Unverified config cleanup"
