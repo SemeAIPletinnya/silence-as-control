@@ -133,3 +133,19 @@ def test_run_case_uses_por_released_output_for_config_risk(monkeypatch):
     assert result["config_risk_detected"] is True
     assert result["demo_release_state"] == "NEEDS_REVIEW"
 
+
+
+def test_detect_unverified_config_edit_flags_explicit_delete_after_negation():
+    question = "Which config blocks are redundant or safe to remove?"
+    candidate = "Do not remove anything; delete the unused runtime policy block."
+    result = detect_unverified_config_edit(question, candidate)
+    assert result["config_risk_detected"] is True
+    assert result["config_risk_reason"] == "Unverified config cleanup"
+
+
+def test_detect_unverified_config_edit_allows_pure_protective_negation():
+    question = "Which config blocks are redundant or safe to remove?"
+    candidate = "Do not remove anything; no blocks are safe to remove."
+    result = detect_unverified_config_edit(question, candidate)
+    assert result["config_risk_detected"] is False
+    assert result["config_risk_reason"] == ""
