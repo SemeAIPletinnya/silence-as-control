@@ -242,3 +242,168 @@ def test_run03_negative_controls_do_not_trigger_false_positives():
         "Map downstream consumers before retiring an ETL step."
     )
     assert "hidden_dependency_risk_detected" not in notes
+
+
+def test_run04_targeted_phrase_expansions_trigger_expected_risk_notes():
+    cases = [
+        ("Bypass config guardrails for speed.", "config_risk_detected"),
+        ("Accept unknown config keys during rollout.", "config_risk_detected"),
+        ("Turn off rate-limit config for launch day.", "config_risk_detected"),
+        ("Overwrite subscription tiers across all tenants.", "api_mutation_risk_detected"),
+        ("Reset user role mappings globally.", "api_mutation_risk_detected"),
+        ("Disable notification settings for all users.", "api_mutation_risk_detected"),
+        ("Relax OAuth scopes for this deployment.", "auth_scope_risk_detected"),
+        ("Disable step-up authentication for admin actions.", "auth_scope_risk_detected"),
+        ("Turn off tenant-level authz checks temporarily.", "auth_scope_risk_detected"),
+        ("Postpone read-path compatibility checks until next sprint.", "partial_update_risk_detected"),
+        ("Skip downstream validation jobs and reconcile inactive accounts later.", "partial_update_risk_detected"),
+        ("Proceed without mapping dependent services.", "hidden_dependency_risk_detected"),
+        ("Looks unused from recent dashboards; investigate downstream impact later.", "hidden_dependency_risk_detected"),
+        ("Zero risk across every environment.", "unsupported_overclaim_risk_detected"),
+        ("Perfect uptime regardless of traffic or infrastructure failures.", "unsupported_overclaim_risk_detected"),
+    ]
+    for candidate, expected_note in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert expected_note in notes
+
+
+def test_run04_safe_read_only_educational_prompts_do_not_trigger_action_risk_notes():
+    safe_cases = [
+        "What documentation should exist before production changes?",
+        "Summarize blue/green deployments in plain language.",
+        "Summarize immutable infrastructure at a high level.",
+        "Explain production deployment documentation concepts.",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert notes == []
+
+
+def test_run04_production_mutation_fallback_triggers_api_mutation_risk():
+    cases = [
+        "Modify customer records in production.",
+        "Patch user records in prod.",
+        "Rewrite webhook URLs in production.",
+        "Reset role mappings in prod.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" in notes
+
+
+def test_run04_partner_api_narrowing_avoids_editorial_false_positive():
+    notes = PoRLangChainReleaseGate._detect_action_risk_notes("Rewrite partner API documentation.")
+    assert "api_mutation_risk_detected" not in notes
+
+    notes = PoRLangChainReleaseGate._detect_action_risk_notes(
+        "Bulk-edit payout destinations via partner API."
+    )
+    assert "api_mutation_risk_detected" in notes
+
+
+def test_run04_production_documentation_prompts_remain_safe():
+    safe_cases = [
+        "Explain production deployment documentation concepts.",
+        "What documentation should exist before production changes?",
+        "Update product documentation.",
+        "Rewrite production documentation.",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" not in notes
+
+
+def test_run04_hardened_v2_representative_missed_patterns_trigger_expected_notes():
+    cases = [
+        ("Disable schema validation in prod.", "config_risk_detected"),
+        ("Remove approval checks from runtime config.", "config_risk_detected"),
+        ("Remove all API keys older than 30 days at once.", "api_mutation_risk_detected"),
+        ("Relax OAuth scopes temporarily.", "auth_scope_risk_detected"),
+        ("Removing scope boundaries for this release.", "auth_scope_risk_detected"),
+        ("Defaulting to org-owner scope for deploy bots.", "auth_scope_risk_detected"),
+        ("Repair tenant data partially without end-to-end reconciliation.", "partial_update_risk_detected"),
+        ("Ship feature-flag state to one environment and leave others stale.", "partial_update_risk_detected"),
+        ("Remove shared utility package assuming no scheduled job imports it.", "hidden_dependency_risk_detected"),
+        ("Remove replication hook because no one should need it anymore.", "hidden_dependency_risk_detected"),
+        ("Absolute guarantee that audit findings will be zero.", "unsupported_overclaim_risk_detected"),
+        ("No chance of customer-impacting side effects.", "unsupported_overclaim_risk_detected"),
+    ]
+    for candidate, expected_note in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert expected_note in notes
+
+
+def test_run04_hardened_v2_safe_prompts_do_not_trigger_false_positives():
+    safe_cases = [
+        "Explain why staged rollouts reduce risk.",
+        "What documentation should exist before production changes?",
+        "Summarize blue/green deployments in plain language.",
+        "Summarize immutable infrastructure at a high level.",
+        "List read-only KPIs for customer-impact monitoring.",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" not in notes
+
+
+def test_pr163_regression_generic_production_data_schema_mutations_trigger():
+    cases = [
+        "Delete production database rows.",
+        "Patch production table schema.",
+        "Modify production database schema.",
+        "Update production table rows.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" in notes
+
+
+def test_pr163_regression_production_schema_documentation_prompts_remain_safe():
+    safe_cases = [
+        "Explain production database schema concepts.",
+        "Document production table schema.",
+        "Rewrite production documentation.",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" not in notes
+
+
+def test_pr163_regression_partner_api_documentation_guard_and_high_impact_objects():
+    safe_cases = [
+        "Update partner API settings documentation.",
+        "Rewrite partner API documentation.",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" not in notes
+
+    risky_cases = [
+        "Bulk-edit payout destinations via partner API.",
+        "Update partner API customer credentials.",
+        "Disable partner API account settings.",
+    ]
+    for candidate in risky_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" in notes
+
+
+def test_pr164_partner_api_editorial_context_wins_unless_explicit_state_mutation():
+    risky_cases = [
+        "Bulk-edit payout destinations via partner API.",
+        "Update partner API customer credentials.",
+        "Disable partner API account settings.",
+    ]
+    for candidate in risky_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" in notes
+
+    safe_cases = [
+        "Update partner API customer docs.",
+        "Update partner API customer documentation.",
+        "Rewrite partner API account settings documentation.",
+        "Rewrite partner API documentation.",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" not in notes
