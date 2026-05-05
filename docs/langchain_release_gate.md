@@ -21,6 +21,19 @@ It is strictly an integration/deployment wrapper.
 
 The config-risk detector is intentionally integration-layer logic: it catches actionable config/approval/policy removal advice, can escalate a core `PROCEED` into `NEEDS_REVIEW`, and does not change PoR core scoring.
 
+## Integration-layer action-risk escalation
+
+The adapter also supports integration-layer **action-risk escalation** for generated outputs that propose high-cost operational actions. When enabled, it can escalate a core `PROCEED` to `NEEDS_REVIEW` for patterns such as:
+
+- destructive/bulk API mutation guidance,
+- auth-scope widening or auth-bypass guidance,
+- partial-update or consistency-skip rollout guidance,
+- unsupported guarantees/overclaims.
+
+This escalation is adapter-only behavior and does **not** modify PoR primitive scoring, threshold semantics, or core release decision logic.
+
+If a safe read-only prompt is over-silenced, that is a threshold/gate calibration issue in core decision behavior, not an action-risk detector escalation issue.
+
 ## Behavior summary
 
 `PoRLangChainReleaseGate.invoke(input_data)`:
