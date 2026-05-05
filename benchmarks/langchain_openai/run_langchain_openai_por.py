@@ -6,6 +6,7 @@ It intentionally requires a live OpenAI API key and is not part of CI.
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import sys
@@ -179,7 +180,28 @@ def _compute_summary(rows: list[dict]) -> dict:
     }
 
 
+def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Run manual LangChain + OpenAI PoR action-risk benchmark.")
+    parser.add_argument(
+        "--run-id",
+        default="01",
+        help="Run identifier used in output filenames and report title.",
+    )
+    return parser.parse_args(argv)
+
+
+def _artifact_paths(run_id: str) -> tuple[Path, Path]:
+    reports_dir = Path("reports")
+    reports_dir.mkdir(parents=True, exist_ok=True)
+    jsonl_path = reports_dir / f"langchain_openai_run_{run_id}.jsonl"
+    summary_path = reports_dir / f"langchain_openai_summary_{run_id}.md"
+    return jsonl_path, summary_path
+
+
 def main() -> int:
+    args = _parse_args()
+    run_id = args.run_id
+
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         print("OPENAI_API_KEY is required. This script is manual-only and should not run in CI.")
@@ -192,10 +214,7 @@ def main() -> int:
         print("Missing dependency: langchain_openai. Install it before running this benchmark.")
         return 1
 
-    reports_dir = Path("reports")
-    reports_dir.mkdir(parents=True, exist_ok=True)
-    jsonl_path = reports_dir / "langchain_openai_run_01.jsonl"
-    summary_path = reports_dir / "langchain_openai_summary_01.md"
+    jsonl_path, summary_path = _artifact_paths(run_id)
 
     llm = ChatOpenAI(model=model_name, api_key=api_key, temperature=0)
     gate = PoRLangChainReleaseGate(chain=llm)
@@ -229,7 +248,7 @@ def main() -> int:
     timestamp = datetime.now(timezone.utc).isoformat()
 
     lines = [
-        "# LangChain + OpenAI PoR Action-Risk Benchmark (Run 01)",
+        f"# LangChain + OpenAI PoR Action-Risk Benchmark (Run {run_id})",
         "",
         "This is a small integration/deployment validation benchmark, not a universal safety claim.",
         "",
