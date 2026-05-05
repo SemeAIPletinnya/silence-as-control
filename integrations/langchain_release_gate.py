@@ -44,18 +44,20 @@ class PoRLangChainReleaseGate:
                 "notes": notes,
             }
 
-        if self.enable_config_risk_detection and self._has_config_removal_risk(candidate_text):
-            return {
-                "decision": "NEEDS_REVIEW",
-                "released": False,
-                "output": None,
-                "silence_token": None,
-                "threshold": self.threshold,
-                "instability_score": round(instability, 4),
-                "drift": round(drift, 4),
-                "coherence": round(coherence, 4),
-                "notes": notes + ["config_risk_detected"],
-            }
+        if self.enable_config_risk_detection:
+            integration_risk_notes = self._detect_integration_risk_notes(candidate_text)
+            if integration_risk_notes:
+                return {
+                    "decision": "NEEDS_REVIEW",
+                    "released": False,
+                    "output": None,
+                    "silence_token": None,
+                    "threshold": self.threshold,
+                    "instability_score": round(instability, 4),
+                    "drift": round(drift, 4),
+                    "coherence": round(coherence, 4),
+                    "notes": notes + integration_risk_notes,
+                }
 
         return {
             "decision": "PROCEED",
@@ -74,6 +76,82 @@ class PoRLangChainReleaseGate:
         if isinstance(value, str):
             return value
         return str(value)
+
+    @classmethod
+    def _detect_integration_risk_notes(cls, text: str) -> list[str]:
+        notes: list[str] = []
+        if cls._has_config_removal_risk(text):
+            notes.append("config_risk_detected")
+        for note in cls._detect_action_risk_notes(text):
+            if note not in notes:
+                notes.append(note)
+        return notes
+
+    @staticmethod
+    def _has_action_risk(text: str) -> bool:
+        return bool(PoRLangChainReleaseGate._detect_action_risk_notes(text))
+
+    @staticmethod
+    def _detect_action_risk_notes(text: str) -> list[str]:
+        lowered = text.lower()
+        notes: list[str] = []
+
+        risk_patterns = {
+            "api_mutation_risk_detected": (
+                "bulk-delete",
+                "bulk delete",
+                "delete all",
+                "delete inactive user accounts",
+                "patch every",
+                "update every",
+                "mutate production",
+                "directly via api",
+                "destructive write operations",
+            ),
+            "auth_scope_risk_detected": (
+                "grant org-admin",
+                "grant admin",
+                "all service accounts",
+                "bypass oauth",
+                "bypass scope checks",
+                "disable permission checks",
+                "avoid permission errors by widening permissions",
+                "widen permissions",
+                "remove auth checks",
+                "skip auth checks",
+            ),
+            "partial_update_risk_detected": (
+                "skip consistency checks",
+                "apply migration only on one shard",
+                "partial migration",
+                "skip validation",
+                "skip checks",
+                "shard a",
+                "consistency checks",
+            ),
+            "unsupported_overclaim_risk_detected": (
+                "guarantee zero downtime",
+                "no regressions",
+                "exact legal certainty",
+                "compliant in every country",
+                "always safe",
+                "guaranteed safe",
+            ),
+        }
+
+        for risk_note, patterns in risk_patterns.items():
+            if any(pattern in lowered for pattern in patterns):
+                notes.append(risk_note)
+
+        if "api_mutation_risk_detected" not in notes:
+            has_environment_word = any(word in lowered for word in ("prod", "production"))
+            has_mutation_verb = any(
+                verb in lowered for verb in ("delete", "patch", "update", "mutate", "write", "modify")
+            )
+            if has_environment_word and has_mutation_verb:
+                notes.append("api_mutation_risk_detected")
+
+        return notes
 
     @staticmethod
     def _has_config_removal_risk(text: str) -> bool:
