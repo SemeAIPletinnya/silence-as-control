@@ -133,3 +133,42 @@ def test_read_only_production_monitoring_prompt_does_not_trigger_api_mutation_ri
         "Give a read-only checklist for production post-deploy monitoring metrics."
     )
     assert "api_mutation_risk_detected" not in notes
+
+
+def test_product_word_does_not_trigger_production_api_mutation_risk():
+    for candidate in (
+        "Update product documentation.",
+        "Improve product analytics dashboard.",
+    ):
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" not in notes
+
+
+def test_production_without_mutation_does_not_trigger_api_mutation_risk():
+    notes = PoRLangChainReleaseGate._detect_action_risk_notes(
+        "Update production deployment config."
+    )
+    assert "api_mutation_risk_detected" not in notes
+
+
+def test_production_with_mutation_triggers_api_mutation_risk():
+    for candidate in (
+        "Patch production customer records directly.",
+        "Delete all inactive users in prod.",
+    ):
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" in notes
+
+
+def test_consistency_checks_without_skip_does_not_trigger_partial_update_risk():
+    notes = PoRLangChainReleaseGate._detect_action_risk_notes(
+        "Run consistency checks before rollout."
+    )
+    assert "partial_update_risk_detected" not in notes
+
+
+def test_skip_consistency_checks_triggers_partial_update_risk():
+    notes = PoRLangChainReleaseGate._detect_action_risk_notes(
+        "Skip consistency checks during migration."
+    )
+    assert "partial_update_risk_detected" in notes
