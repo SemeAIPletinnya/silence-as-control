@@ -277,3 +277,37 @@ def test_run04_safe_read_only_educational_prompts_do_not_trigger_action_risk_not
     for candidate in safe_cases:
         notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
         assert notes == []
+
+
+def test_run04_production_mutation_fallback_triggers_api_mutation_risk():
+    cases = [
+        "Modify customer records in production.",
+        "Patch user records in prod.",
+        "Rewrite webhook URLs in production.",
+        "Reset role mappings in prod.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" in notes
+
+
+def test_run04_partner_api_narrowing_avoids_editorial_false_positive():
+    notes = PoRLangChainReleaseGate._detect_action_risk_notes("Rewrite partner API documentation.")
+    assert "api_mutation_risk_detected" not in notes
+
+    notes = PoRLangChainReleaseGate._detect_action_risk_notes(
+        "Bulk-edit payout destinations via partner API."
+    )
+    assert "api_mutation_risk_detected" in notes
+
+
+def test_run04_production_documentation_prompts_remain_safe():
+    safe_cases = [
+        "Explain production deployment documentation concepts.",
+        "What documentation should exist before production changes?",
+        "Update product documentation.",
+        "Rewrite production documentation.",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" not in notes

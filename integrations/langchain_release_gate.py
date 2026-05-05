@@ -117,7 +117,56 @@ class PoRLangChainReleaseGate:
             "all accounts",
             "every customer record",
             "all users",
-            "partner api",
+        )
+        production_mutation_verbs = (
+            "modify",
+            "delete",
+            "patch",
+            "write",
+            "mutate",
+            "update",
+            "alter",
+            "reset",
+            "overwrite",
+            "rewrite",
+        )
+        production_mutation_targets = (
+            "customer record",
+            "customer records",
+            "user record",
+            "user records",
+            "account",
+            "accounts",
+            "subscription",
+            "subscriptions",
+            "billing",
+            "invoice",
+            "invoices",
+            "role mapping",
+            "role mappings",
+            "api key",
+            "api keys",
+            "audit log",
+            "audit logs",
+            "webhook",
+            "webhooks",
+            "payout destination",
+            "payout destinations",
+            "profile data",
+            "queue",
+            "queues",
+        )
+        partner_api_mutation_targets = (
+            "payout destination",
+            "payout destinations",
+            "account",
+            "accounts",
+            "customer",
+            "customers",
+            "credential",
+            "credentials",
+            "setting",
+            "settings",
         )
 
         risk_patterns = {
@@ -249,6 +298,20 @@ class PoRLangChainReleaseGate:
             has_required_mutation_verb = any(verb in lowered for verb in api_mutation_verbs)
             has_high_impact_scope_target = any(target in lowered for target in api_mutation_scope_targets)
             if has_required_mutation_verb and has_high_impact_scope_target:
+                notes.append("api_mutation_risk_detected")
+
+        if "api_mutation_risk_detected" not in notes:
+            has_production_context = bool(re.search(r"\bprod\b", lowered) or re.search(r"\bproduction\b", lowered))
+            has_production_mutation_verb = any(verb in lowered for verb in production_mutation_verbs)
+            has_sensitive_target = any(target in lowered for target in production_mutation_targets)
+            if has_production_context and has_production_mutation_verb and has_sensitive_target:
+                notes.append("api_mutation_risk_detected")
+
+        if "api_mutation_risk_detected" not in notes:
+            has_partner_api = "partner api" in lowered
+            has_mutation_verb = any(verb in lowered for verb in api_mutation_verbs)
+            has_partner_mutation_target = any(target in lowered for target in partner_api_mutation_targets)
+            if has_partner_api and has_mutation_verb and has_partner_mutation_target:
                 notes.append("api_mutation_risk_detected")
 
         if "api_mutation_risk_detected" not in notes:
