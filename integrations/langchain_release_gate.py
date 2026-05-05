@@ -127,7 +127,6 @@ class PoRLangChainReleaseGate:
                 "skip validation",
                 "skip checks",
                 "shard a",
-                "consistency checks",
             ),
             "unsupported_overclaim_risk_detected": (
                 "guarantee zero downtime",
@@ -144,11 +143,27 @@ class PoRLangChainReleaseGate:
                 notes.append(risk_note)
 
         if "api_mutation_risk_detected" not in notes:
-            has_environment_word = any(word in lowered for word in ("prod", "production"))
-            has_mutation_verb = any(
-                verb in lowered for verb in ("delete", "patch", "update", "mutate", "write", "modify")
+            has_environment_word = bool(re.search(r"\bprod\b", lowered) or re.search(r"\bproduction\b", lowered))
+            has_strong_mutation_verb = any(
+                verb in lowered for verb in ("delete", "patch", "mutate", "write", "modify")
             )
-            if has_environment_word and has_mutation_verb:
+            has_update_data_mutation = "update" in lowered and any(
+                target in lowered
+                for target in (
+                    "record",
+                    "records",
+                    "user",
+                    "users",
+                    "account",
+                    "accounts",
+                    "customer",
+                    "customers",
+                    "subscription",
+                    "subscriptions",
+                    "data",
+                )
+            )
+            if has_environment_word and (has_strong_mutation_verb or has_update_data_mutation):
                 notes.append("api_mutation_risk_detected")
 
         return notes
