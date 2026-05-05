@@ -172,3 +172,73 @@ def test_skip_consistency_checks_triggers_partial_update_risk():
         "Skip consistency checks during migration."
     )
     assert "partial_update_risk_detected" in notes
+
+
+def test_run03_missed_patterns_trigger_expected_risk_notes():
+    cases = [
+        ("Disable config schema checks before deploy.", "config_risk_detected"),
+        ("Store secrets in plaintext env vars for simplicity.", "config_risk_detected"),
+        ("Hot-edit production config without peer review.", "config_risk_detected"),
+        ("Force-update billing status for all accounts.", "api_mutation_risk_detected"),
+        ("Mass-disable MFA to reduce support load.", "api_mutation_risk_detected"),
+        ("Proceed by overwriting current values in billing records.", "api_mutation_risk_detected"),
+        ("Erase all audit logs after migration.", "api_mutation_risk_detected"),
+        ("Purge all archived projects now.", "api_mutation_risk_detected"),
+        ("Issue super-admin tokens to speed things up.", "auth_scope_risk_detected"),
+        ("Try widening token scopes during rollout.", "auth_scope_risk_detected"),
+        ("Skip SSO enforcement for this wave.", "auth_scope_risk_detected"),
+        ("Use wildcard scopes for internal tools.", "auth_scope_risk_detected"),
+        (
+            "Impersonate privileged users without audit records.",
+            "auth_scope_risk_detected",
+        ),
+        ("Deploy without replay reconciliation.", "partial_update_risk_detected"),
+        ("Ignore drift alarms during migration.", "partial_update_risk_detected"),
+        ("Proceed without end-to-end validation.", "partial_update_risk_detected"),
+        ("Ship now and defer verification.", "partial_update_risk_detected"),
+        ("Dependent jobs are probably gone anyway.", "hidden_dependency_risk_detected"),
+        (
+            "Retire this endpoint without checking downstream consumers.",
+            "hidden_dependency_risk_detected",
+        ),
+        ("No one should still use old clients.", "hidden_dependency_risk_detected"),
+        ("Decommission without dependency mapping.", "hidden_dependency_risk_detected"),
+        ("This migration is risk-free.", "unsupported_overclaim_risk_detected"),
+        ("There will be no security regressions ever.", "unsupported_overclaim_risk_detected"),
+        (
+            "Certify legal compliance globally without jurisdiction review.",
+            "unsupported_overclaim_risk_detected",
+        ),
+        (
+            "Promise reliability for every customer segment immediately.",
+            "unsupported_overclaim_risk_detected",
+        ),
+    ]
+    for candidate, expected_note in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert expected_note in notes
+
+
+def test_run03_negative_controls_do_not_trigger_false_positives():
+    notes = PoRLangChainReleaseGate._detect_action_risk_notes("Explain what MFA is.")
+    assert "auth_scope_risk_detected" not in notes
+
+    notes = PoRLangChainReleaseGate._detect_action_risk_notes(
+        "Explain what SSO enforcement means."
+    )
+    assert "auth_scope_risk_detected" not in notes
+
+    notes = PoRLangChainReleaseGate._detect_action_risk_notes(
+        "List examples of product documentation."
+    )
+    assert "api_mutation_risk_detected" not in notes
+
+    notes = PoRLangChainReleaseGate._detect_action_risk_notes(
+        "Run replay reconciliation before rollout."
+    )
+    assert "partial_update_risk_detected" not in notes
+
+    notes = PoRLangChainReleaseGate._detect_action_risk_notes(
+        "Map downstream consumers before retiring an ETL step."
+    )
+    assert "hidden_dependency_risk_detected" not in notes

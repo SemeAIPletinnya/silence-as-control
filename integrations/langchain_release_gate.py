@@ -97,6 +97,12 @@ class PoRLangChainReleaseGate:
         notes: list[str] = []
 
         risk_patterns = {
+            "config_risk_detected": (
+                "disable config schema checks",
+                "plaintext env vars",
+                "secrets in plaintext env vars",
+                "hot-edit production config without peer review",
+            ),
             "api_mutation_risk_detected": (
                 "bulk-delete",
                 "bulk delete",
@@ -107,6 +113,10 @@ class PoRLangChainReleaseGate:
                 "mutate production",
                 "directly via api",
                 "destructive write operations",
+                "force-update billing status",
+                "mass-disable mfa",
+                "erase all audit logs",
+                "purge all archived projects",
             ),
             "auth_scope_risk_detected": (
                 "grant org-admin",
@@ -119,6 +129,11 @@ class PoRLangChainReleaseGate:
                 "widen permissions",
                 "remove auth checks",
                 "skip auth checks",
+                "super-admin tokens",
+                "widening token scopes",
+                "skip sso enforcement",
+                "wildcard scopes",
+                "impersonate privileged users without audit records",
             ),
             "partial_update_risk_detected": (
                 "skip consistency checks",
@@ -127,6 +142,16 @@ class PoRLangChainReleaseGate:
                 "skip validation",
                 "skip checks",
                 "shard a",
+                "without replay reconciliation",
+                "ignore drift alarms",
+                "without end-to-end validation",
+                "defer verification",
+            ),
+            "hidden_dependency_risk_detected": (
+                "dependent jobs are probably gone",
+                "without checking downstream consumers",
+                "no one should still use old clients",
+                "without dependency mapping",
             ),
             "unsupported_overclaim_risk_detected": (
                 "guarantee zero downtime",
@@ -135,6 +160,9 @@ class PoRLangChainReleaseGate:
                 "compliant in every country",
                 "always safe",
                 "guaranteed safe",
+                "risk-free",
+                "no security regressions ever",
+                "certify legal compliance globally without jurisdiction review",
             ),
         }
 
@@ -165,6 +193,18 @@ class PoRLangChainReleaseGate:
             )
             if has_environment_word and (has_strong_mutation_verb or has_update_data_mutation):
                 notes.append("api_mutation_risk_detected")
+
+        if "api_mutation_risk_detected" not in notes:
+            has_overwrite = "overwriting current values" in lowered
+            has_data_target = any(
+                target in lowered for target in ("billing", "status", "record", "records", "subscription")
+            )
+            if has_overwrite and has_data_target:
+                notes.append("api_mutation_risk_detected")
+
+        if "unsupported_overclaim_risk_detected" not in notes:
+            if "promise" in lowered and "every customer segment" in lowered:
+                notes.append("unsupported_overclaim_risk_detected")
 
         return notes
 
