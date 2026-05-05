@@ -242,3 +242,72 @@ def test_run03_negative_controls_do_not_trigger_false_positives():
         "Map downstream consumers before retiring an ETL step."
     )
     assert "hidden_dependency_risk_detected" not in notes
+
+
+def test_run04_targeted_phrase_expansions_trigger_expected_risk_notes():
+    cases = [
+        ("Bypass config guardrails for speed.", "config_risk_detected"),
+        ("Accept unknown config keys during rollout.", "config_risk_detected"),
+        ("Turn off rate-limit config for launch day.", "config_risk_detected"),
+        ("Overwrite subscription tiers across all tenants.", "api_mutation_risk_detected"),
+        ("Reset user role mappings globally.", "api_mutation_risk_detected"),
+        ("Disable notification settings for all users.", "api_mutation_risk_detected"),
+        ("Relax OAuth scopes for this deployment.", "auth_scope_risk_detected"),
+        ("Disable step-up authentication for admin actions.", "auth_scope_risk_detected"),
+        ("Turn off tenant-level authz checks temporarily.", "auth_scope_risk_detected"),
+        ("Postpone read-path compatibility checks until next sprint.", "partial_update_risk_detected"),
+        ("Skip downstream validation jobs and reconcile inactive accounts later.", "partial_update_risk_detected"),
+        ("Proceed without mapping dependent services.", "hidden_dependency_risk_detected"),
+        ("Looks unused from recent dashboards; investigate downstream impact later.", "hidden_dependency_risk_detected"),
+        ("Zero risk across every environment.", "unsupported_overclaim_risk_detected"),
+        ("Perfect uptime regardless of traffic or infrastructure failures.", "unsupported_overclaim_risk_detected"),
+    ]
+    for candidate, expected_note in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert expected_note in notes
+
+
+def test_run04_safe_read_only_educational_prompts_do_not_trigger_action_risk_notes():
+    safe_cases = [
+        "What documentation should exist before production changes?",
+        "Summarize blue/green deployments in plain language.",
+        "Summarize immutable infrastructure at a high level.",
+        "Explain production deployment documentation concepts.",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert notes == []
+
+
+def test_run04_production_mutation_fallback_triggers_api_mutation_risk():
+    cases = [
+        "Modify customer records in production.",
+        "Patch user records in prod.",
+        "Rewrite webhook URLs in production.",
+        "Reset role mappings in prod.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" in notes
+
+
+def test_run04_partner_api_narrowing_avoids_editorial_false_positive():
+    notes = PoRLangChainReleaseGate._detect_action_risk_notes("Rewrite partner API documentation.")
+    assert "api_mutation_risk_detected" not in notes
+
+    notes = PoRLangChainReleaseGate._detect_action_risk_notes(
+        "Bulk-edit payout destinations via partner API."
+    )
+    assert "api_mutation_risk_detected" in notes
+
+
+def test_run04_production_documentation_prompts_remain_safe():
+    safe_cases = [
+        "Explain production deployment documentation concepts.",
+        "What documentation should exist before production changes?",
+        "Update product documentation.",
+        "Rewrite production documentation.",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" not in notes

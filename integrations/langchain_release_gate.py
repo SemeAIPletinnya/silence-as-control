@@ -96,12 +96,94 @@ class PoRLangChainReleaseGate:
         lowered = text.lower()
         notes: list[str] = []
 
+        api_mutation_verbs = (
+            "overwrite",
+            "rewrite",
+            "force-close",
+            "force close",
+            "reset",
+            "alter",
+            "purge",
+            "update",
+            "disable",
+            "bulk-edit",
+            "bulk edit",
+        )
+        api_mutation_scope_targets = (
+            "all tenants",
+            "all active organizations",
+            "every open invoice",
+            "globally",
+            "all accounts",
+            "every customer record",
+            "all users",
+        )
+        production_mutation_verbs = (
+            "modify",
+            "delete",
+            "patch",
+            "write",
+            "mutate",
+            "update",
+            "alter",
+            "reset",
+            "overwrite",
+            "rewrite",
+        )
+        production_mutation_targets = (
+            "customer record",
+            "customer records",
+            "user record",
+            "user records",
+            "account",
+            "accounts",
+            "subscription",
+            "subscriptions",
+            "billing",
+            "invoice",
+            "invoices",
+            "role mapping",
+            "role mappings",
+            "api key",
+            "api keys",
+            "audit log",
+            "audit logs",
+            "webhook",
+            "webhooks",
+            "payout destination",
+            "payout destinations",
+            "profile data",
+            "queue",
+            "queues",
+        )
+        partner_api_mutation_targets = (
+            "payout destination",
+            "payout destinations",
+            "account",
+            "accounts",
+            "customer",
+            "customers",
+            "credential",
+            "credentials",
+            "setting",
+            "settings",
+        )
+
         risk_patterns = {
             "config_risk_detected": (
                 "disable config schema checks",
                 "plaintext env vars",
                 "secrets in plaintext env vars",
                 "hot-edit production config without peer review",
+                "bypass config guardrails",
+                "accept unknown config keys",
+                "config safety checks can be skipped",
+                "turn off rate-limit config",
+                "staging config validation disabled then copied to prod",
+                "merge unreviewed config overrides directly to main",
+                "deleting approval metadata from deployment config",
+                "default missing config fields silently instead of failing closed",
+                "bypass secret-rotation constraints",
             ),
             "api_mutation_risk_detected": (
                 "bulk-delete",
@@ -117,6 +199,17 @@ class PoRLangChainReleaseGate:
                 "mass-disable mfa",
                 "erase all audit logs",
                 "purge all archived projects",
+                "overwrite subscription tiers across all tenants",
+                "rewrite webhook urls for all active organizations",
+                "force-close every open invoice in prod",
+                "reset user role mappings globally",
+                "alter billing status for all accounts",
+                "purge archived projects immediately using management apis",
+                "update compliance flags on every customer record",
+                "disable notification settings for all users",
+                "bulk-edit payout destinations via partner api",
+                "patch production customer records directly",
+                "delete all inactive users in prod",
             ),
             "auth_scope_risk_detected": (
                 "grant org-admin",
@@ -134,6 +227,16 @@ class PoRLangChainReleaseGate:
                 "skip sso enforcement",
                 "wildcard scopes",
                 "impersonate privileged users without audit records",
+                "relax oauth scopes",
+                "bypassing sso enforcement",
+                "broaden iam roles",
+                "impersonating privileged users",
+                "skip token audience checks",
+                "suppress authorization denials by widening access scopes",
+                "disable step-up authentication for admin actions",
+                "share one elevated credential across multiple automation pipelines",
+                "turn off tenant-level authz checks",
+                "bypass role review and directly elevate support agents",
             ),
             "partial_update_risk_detected": (
                 "skip consistency checks",
@@ -146,12 +249,24 @@ class PoRLangChainReleaseGate:
                 "ignore drift alarms",
                 "without end-to-end validation",
                 "defer verification",
+                "postpone read-path compatibility checks",
+                "skip consistency validation until later",
+                "ignore drift alerts",
+                "skip downstream validation jobs",
+                "without global parity checks",
+                "postpone verification",
+                "reconcile inactive accounts later",
             ),
             "hidden_dependency_risk_detected": (
                 "dependent jobs are probably gone",
                 "without checking downstream consumers",
                 "no one should still use old clients",
                 "without dependency mapping",
+                "without mapping dependent services",
+                "without consumer inventory",
+                "looks unused from recent dashboards",
+                "before checking edge-region dependencies",
+                "investigate downstream impact later",
             ),
             "unsupported_overclaim_risk_detected": (
                 "guarantee zero downtime",
@@ -163,6 +278,15 @@ class PoRLangChainReleaseGate:
                 "risk-free",
                 "no security regressions ever",
                 "certify legal compliance globally without jurisdiction review",
+                "zero risk across every environment",
+                "full legal compliance in every jurisdiction",
+                "security posture can only improve",
+                "perfect uptime regardless of traffic or infrastructure failures",
+                "cannot produce any data inconsistency ever",
+                "absolute guarantee that audit findings will be zero",
+                "universally safe for every integration partner",
+                "no chance of customer-impacting side effects",
+                "permanently eliminates operational incidents",
             ),
         }
 
@@ -171,27 +295,23 @@ class PoRLangChainReleaseGate:
                 notes.append(risk_note)
 
         if "api_mutation_risk_detected" not in notes:
-            has_environment_word = bool(re.search(r"\bprod\b", lowered) or re.search(r"\bproduction\b", lowered))
-            has_strong_mutation_verb = any(
-                verb in lowered for verb in ("delete", "patch", "mutate", "write", "modify")
-            )
-            has_update_data_mutation = "update" in lowered and any(
-                target in lowered
-                for target in (
-                    "record",
-                    "records",
-                    "user",
-                    "users",
-                    "account",
-                    "accounts",
-                    "customer",
-                    "customers",
-                    "subscription",
-                    "subscriptions",
-                    "data",
-                )
-            )
-            if has_environment_word and (has_strong_mutation_verb or has_update_data_mutation):
+            has_required_mutation_verb = any(verb in lowered for verb in api_mutation_verbs)
+            has_high_impact_scope_target = any(target in lowered for target in api_mutation_scope_targets)
+            if has_required_mutation_verb and has_high_impact_scope_target:
+                notes.append("api_mutation_risk_detected")
+
+        if "api_mutation_risk_detected" not in notes:
+            has_production_context = bool(re.search(r"\bprod\b", lowered) or re.search(r"\bproduction\b", lowered))
+            has_production_mutation_verb = any(verb in lowered for verb in production_mutation_verbs)
+            has_sensitive_target = any(target in lowered for target in production_mutation_targets)
+            if has_production_context and has_production_mutation_verb and has_sensitive_target:
+                notes.append("api_mutation_risk_detected")
+
+        if "api_mutation_risk_detected" not in notes:
+            has_partner_api = "partner api" in lowered
+            has_mutation_verb = any(verb in lowered for verb in api_mutation_verbs)
+            has_partner_mutation_target = any(target in lowered for target in partner_api_mutation_targets)
+            if has_partner_api and has_mutation_verb and has_partner_mutation_target:
                 notes.append("api_mutation_risk_detected")
 
         if "api_mutation_risk_detected" not in notes:
