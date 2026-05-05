@@ -344,3 +344,45 @@ def test_run04_hardened_v2_safe_prompts_do_not_trigger_false_positives():
     for candidate in safe_cases:
         notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
         assert "api_mutation_risk_detected" not in notes
+
+
+def test_pr163_regression_generic_production_data_schema_mutations_trigger():
+    cases = [
+        "Delete production database rows.",
+        "Patch production table schema.",
+        "Modify production database schema.",
+        "Update production table rows.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" in notes
+
+
+def test_pr163_regression_production_schema_documentation_prompts_remain_safe():
+    safe_cases = [
+        "Explain production database schema concepts.",
+        "Document production table schema.",
+        "Rewrite production documentation.",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" not in notes
+
+
+def test_pr163_regression_partner_api_documentation_guard_and_high_impact_objects():
+    safe_cases = [
+        "Update partner API settings documentation.",
+        "Rewrite partner API documentation.",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" not in notes
+
+    risky_cases = [
+        "Bulk-edit payout destinations via partner API.",
+        "Update partner API customer credentials.",
+        "Disable partner API account settings.",
+    ]
+    for candidate in risky_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" in notes

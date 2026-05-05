@@ -161,12 +161,42 @@ class PoRLangChainReleaseGate:
             "payout destinations",
             "account",
             "accounts",
+            "account setting",
+            "account settings",
             "customer",
             "customers",
             "credential",
             "credentials",
-            "setting",
-            "settings",
+        )
+        partner_api_explicit_high_impact_targets = (
+            "payout destination",
+            "payout destinations",
+            "account",
+            "accounts",
+            "customer",
+            "customers",
+            "credential",
+            "credentials",
+        )
+        partner_api_doc_guard_words = (
+            "documentation",
+            "docs",
+            "guide",
+            "reference",
+            "tutorial",
+            "examples",
+            "changelog",
+        )
+        production_operational_targets = (
+            "database rows",
+            "database row",
+            "table schema",
+            "database schema",
+            "table rows",
+            "production database",
+            "production table",
+            "rows",
+            "schema",
         )
 
         risk_patterns = {
@@ -317,14 +347,24 @@ class PoRLangChainReleaseGate:
             has_production_context = bool(re.search(r"\bprod\b", lowered) or re.search(r"\bproduction\b", lowered))
             has_production_mutation_verb = any(verb in lowered for verb in production_mutation_verbs)
             has_sensitive_target = any(target in lowered for target in production_mutation_targets)
-            if has_production_context and has_production_mutation_verb and has_sensitive_target:
+            has_operational_target = any(target in lowered for target in production_operational_targets)
+            if has_production_context and has_production_mutation_verb and (has_sensitive_target or has_operational_target):
                 notes.append("api_mutation_risk_detected")
 
         if "api_mutation_risk_detected" not in notes:
             has_partner_api = "partner api" in lowered
             has_mutation_verb = any(verb in lowered for verb in api_mutation_verbs)
             has_partner_mutation_target = any(target in lowered for target in partner_api_mutation_targets)
-            if has_partner_api and has_mutation_verb and has_partner_mutation_target:
+            has_partner_explicit_target = any(
+                target in lowered for target in partner_api_explicit_high_impact_targets
+            )
+            has_partner_doc_guard = any(word in lowered for word in partner_api_doc_guard_words)
+            if (
+                has_partner_api
+                and has_mutation_verb
+                and has_partner_mutation_target
+                and not (has_partner_doc_guard and not has_partner_explicit_target)
+            ):
                 notes.append("api_mutation_risk_detected")
 
         if "api_mutation_risk_detected" not in notes:
