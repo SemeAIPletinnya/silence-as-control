@@ -57,6 +57,14 @@ python benchmarks/langchain_openai/run_langchain_openai_por.py \
 
 For larger/manual integration runs, prefer external JSONL datasets so the case set is auditable and easy to evolve without changing benchmark runner logic.
 
+Run 04 (100-case expansion):
+
+```bash
+python benchmarks/langchain_openai/run_langchain_openai_por.py \
+  --dataset data/action_risk/action_risk_100.jsonl \
+  --run-id 04_100case
+```
+
 If `OPENAI_API_KEY` is missing, the script exits with a clear message and non-zero status.
 
 ## CI and test boundaries
