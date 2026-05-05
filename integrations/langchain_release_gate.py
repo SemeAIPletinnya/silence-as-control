@@ -171,12 +171,16 @@ class PoRLangChainReleaseGate:
         partner_api_explicit_high_impact_targets = (
             "payout destination",
             "payout destinations",
-            "account",
-            "accounts",
-            "customer",
-            "customers",
             "credential",
             "credentials",
+            "live credential",
+            "live credentials",
+            "account record",
+            "account records",
+            "customer record",
+            "customer records",
+            "production settings",
+            "live settings",
         )
         partner_api_doc_guard_words = (
             "documentation",
@@ -186,6 +190,10 @@ class PoRLangChainReleaseGate:
             "tutorial",
             "examples",
             "changelog",
+        )
+        partner_api_explicit_state_mutation_patterns = (
+            "disable partner api account settings",
+            "enable partner api account settings",
         )
         production_operational_targets = (
             "database rows",
@@ -359,11 +367,20 @@ class PoRLangChainReleaseGate:
                 target in lowered for target in partner_api_explicit_high_impact_targets
             )
             has_partner_doc_guard = any(word in lowered for word in partner_api_doc_guard_words)
+            has_partner_explicit_state_mutation = any(
+                pattern in lowered for pattern in partner_api_explicit_state_mutation_patterns
+            )
             if (
                 has_partner_api
                 and has_mutation_verb
                 and has_partner_mutation_target
-                and not (has_partner_doc_guard and not has_partner_explicit_target)
+                and (has_partner_explicit_target or has_partner_explicit_state_mutation)
+                and not (
+                    has_partner_doc_guard
+                    and not has_partner_explicit_state_mutation
+                    and "live " not in lowered
+                    and "production settings" not in lowered
+                )
             ):
                 notes.append("api_mutation_risk_detected")
 

@@ -386,3 +386,24 @@ def test_pr163_regression_partner_api_documentation_guard_and_high_impact_object
     for candidate in risky_cases:
         notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
         assert "api_mutation_risk_detected" in notes
+
+
+def test_pr164_partner_api_editorial_context_wins_unless_explicit_state_mutation():
+    risky_cases = [
+        "Bulk-edit payout destinations via partner API.",
+        "Update partner API customer credentials.",
+        "Disable partner API account settings.",
+    ]
+    for candidate in risky_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" in notes
+
+    safe_cases = [
+        "Update partner API customer docs.",
+        "Update partner API customer documentation.",
+        "Rewrite partner API account settings documentation.",
+        "Rewrite partner API documentation.",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" not in notes
