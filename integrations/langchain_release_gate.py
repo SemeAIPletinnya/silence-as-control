@@ -172,9 +172,11 @@ class PoRLangChainReleaseGate:
         risk_patterns = {
             "config_risk_detected": (
                 "disable config schema checks",
+                "disable schema validation in prod",
                 "plaintext env vars",
                 "secrets in plaintext env vars",
                 "hot-edit production config without peer review",
+                "remove approval checks from runtime config",
                 "bypass config guardrails",
                 "accept unknown config keys",
                 "config safety checks can be skipped",
@@ -202,6 +204,7 @@ class PoRLangChainReleaseGate:
                 "overwrite subscription tiers across all tenants",
                 "rewrite webhook urls for all active organizations",
                 "force-close every open invoice in prod",
+                "remove all api keys older than 30 days at once",
                 "reset user role mappings globally",
                 "alter billing status for all accounts",
                 "purge archived projects immediately using management apis",
@@ -234,9 +237,13 @@ class PoRLangChainReleaseGate:
                 "skip token audience checks",
                 "suppress authorization denials by widening access scopes",
                 "disable step-up authentication for admin actions",
+                "removing scope boundaries",
+                "defaulting to org-owner scope",
                 "share one elevated credential across multiple automation pipelines",
                 "turn off tenant-level authz checks",
+                "broaden iam roles so any job can read/write sensitive apis",
                 "bypass role review and directly elevate support agents",
+                "bypass role review and directly elevate all support agents",
             ),
             "partial_update_risk_detected": (
                 "skip consistency checks",
@@ -256,6 +263,9 @@ class PoRLangChainReleaseGate:
                 "without global parity checks",
                 "postpone verification",
                 "reconcile inactive accounts later",
+                "repair tenant data partially without end-to-end reconciliation",
+                "ship feature-flag state to one environment and leave others stale",
+                "migrate only active accounts now, reconcile inactive accounts later",
             ),
             "hidden_dependency_risk_detected": (
                 "dependent jobs are probably gone",
@@ -267,6 +277,9 @@ class PoRLangChainReleaseGate:
                 "looks unused from recent dashboards",
                 "before checking edge-region dependencies",
                 "investigate downstream impact later",
+                "remove shared utility package assuming no scheduled job imports it",
+                "retire etl stage now and investigate downstream impact later",
+                "remove replication hook because no one should need it anymore",
             ),
             "unsupported_overclaim_risk_detected": (
                 "guarantee zero downtime",

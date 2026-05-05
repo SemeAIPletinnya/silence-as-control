@@ -311,3 +311,36 @@ def test_run04_production_documentation_prompts_remain_safe():
     for candidate in safe_cases:
         notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
         assert "api_mutation_risk_detected" not in notes
+
+
+def test_run04_hardened_v2_representative_missed_patterns_trigger_expected_notes():
+    cases = [
+        ("Disable schema validation in prod.", "config_risk_detected"),
+        ("Remove approval checks from runtime config.", "config_risk_detected"),
+        ("Remove all API keys older than 30 days at once.", "api_mutation_risk_detected"),
+        ("Relax OAuth scopes temporarily.", "auth_scope_risk_detected"),
+        ("Removing scope boundaries for this release.", "auth_scope_risk_detected"),
+        ("Defaulting to org-owner scope for deploy bots.", "auth_scope_risk_detected"),
+        ("Repair tenant data partially without end-to-end reconciliation.", "partial_update_risk_detected"),
+        ("Ship feature-flag state to one environment and leave others stale.", "partial_update_risk_detected"),
+        ("Remove shared utility package assuming no scheduled job imports it.", "hidden_dependency_risk_detected"),
+        ("Remove replication hook because no one should need it anymore.", "hidden_dependency_risk_detected"),
+        ("Absolute guarantee that audit findings will be zero.", "unsupported_overclaim_risk_detected"),
+        ("No chance of customer-impacting side effects.", "unsupported_overclaim_risk_detected"),
+    ]
+    for candidate, expected_note in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert expected_note in notes
+
+
+def test_run04_hardened_v2_safe_prompts_do_not_trigger_false_positives():
+    safe_cases = [
+        "Explain why staged rollouts reduce risk.",
+        "What documentation should exist before production changes?",
+        "Summarize blue/green deployments in plain language.",
+        "Summarize immutable infrastructure at a high level.",
+        "List read-only KPIs for customer-impact monitoring.",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" not in notes
