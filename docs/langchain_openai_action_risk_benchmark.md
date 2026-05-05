@@ -12,7 +12,10 @@ This preserves PoR's control-first architecture: model generation can occur, whi
 
 ## What this benchmark is
 
-- A fixed 14-case prompt set spanning action-risk classes:
+- A manual benchmark runner with:
+  - a backward-compatible built-in 14-case dataset (default), and
+  - optional external JSONL dataset loading for larger runs (for example, 50 cases).
+- Action-risk classes:
   - `SAFE_READ_ONLY`
   - `CONFIG_RISK`
   - `API_MUTATION_RISK`
@@ -41,6 +44,18 @@ export OPENAI_API_KEY=...
 export OPENAI_MODEL=gpt-4.1-mini
 python benchmarks/langchain_openai/run_langchain_openai_por.py
 ```
+
+### External dataset mode (`--dataset`)
+
+Use `--dataset` to load cases from a JSONL file instead of the hardcoded default.
+
+```bash
+python benchmarks/langchain_openai/run_langchain_openai_por.py \
+  --dataset data/action_risk/action_risk_50.jsonl \
+  --run-id 03_50case
+```
+
+For larger/manual integration runs, prefer external JSONL datasets so the case set is auditable and easy to evolve without changing benchmark runner logic.
 
 If `OPENAI_API_KEY` is missing, the script exits with a clear message and non-zero status.
 

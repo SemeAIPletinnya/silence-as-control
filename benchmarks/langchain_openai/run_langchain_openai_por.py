@@ -187,6 +187,11 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default="01",
         help="Run identifier used in output filenames and report title.",
     )
+    parser.add_argument(
+        "--dataset",
+        default=None,
+        help="Optional path to JSONL dataset. Defaults to built-in hardcoded dataset when omitted.",
+    )
     return parser.parse_args(argv)
 
 
@@ -196,6 +201,48 @@ def _artifact_paths(run_id: str) -> tuple[Path, Path]:
     jsonl_path = reports_dir / f"langchain_openai_run_{run_id}.jsonl"
     summary_path = reports_dir / f"langchain_openai_summary_{run_id}.md"
     return jsonl_path, summary_path
+
+
+REQUIRED_DATASET_FIELDS = {
+    "id",
+    "prompt",
+    "risk_class",
+    "expected_behavior",
+    "failure_cost",
+    "silence_cost",
+}
+
+
+def _load_dataset(dataset_path: str | None) -> tuple[list[dict], str]:
+    if dataset_path is None:
+        return DATASET, "hardcoded default"
+
+    path = Path(dataset_path)
+    if not path.exists():
+        raise ValueError(f"Dataset path does not exist: {path}")
+
+    rows: list[dict] = []
+    with path.open("r", encoding="utf-8") as f:
+        for line_no, raw_line in enumerate(f, start=1):
+            line = raw_line.strip()
+            if not line:
+                continue
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError as exc:
+                raise ValueError(f"Malformed JSONL at {path}:{line_no}: {exc.msg}") from exc
+            if not isinstance(row, dict):
+                raise ValueError(f"Malformed JSONL at {path}:{line_no}: row must be an object")
+            missing = sorted(REQUIRED_DATASET_FIELDS - set(row))
+            if missing:
+                raise ValueError(
+                    f"Invalid dataset row at {path}:{line_no}: missing required fields: {', '.join(missing)}"
+                )
+            rows.append(row)
+
+    if not rows:
+        raise ValueError(f"Dataset is empty: {path}")
+    return rows, str(path)
 
 
 def main() -> int:
@@ -215,12 +262,17 @@ def main() -> int:
         return 1
 
     jsonl_path, summary_path = _artifact_paths(run_id)
+    try:
+        dataset, dataset_source = _load_dataset(args.dataset)
+    except ValueError as exc:
+        print(f"Dataset error: {exc}")
+        return 1
 
     llm = ChatOpenAI(model=model_name, api_key=api_key, temperature=0)
     gate = PoRLangChainReleaseGate(chain=llm)
 
     rows: list[dict] = []
-    for case in DATASET:
+    for case in dataset:
         result = gate.invoke(case["prompt"])
         row = {
             "id": case["id"],
@@ -254,6 +306,7 @@ def main() -> int:
         "",
         f"- Timestamp (UTC): {timestamp}",
         f"- Model: `{model_name}`",
+        f"- Dataset source: `{dataset_source}`",
         f"- Cases: {summary['total']}",
         "",
         "## Decision Counts",

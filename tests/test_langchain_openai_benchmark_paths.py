@@ -17,6 +17,7 @@ def test_parse_args_defaults_run_id_to_01():
     module = _load_module()
     args = module._parse_args([])
     assert args.run_id == "01"
+    assert args.dataset is None
 
 
 def test_artifact_paths_include_run_id(tmp_path, monkeypatch):
@@ -28,3 +29,29 @@ def test_artifact_paths_include_run_id(tmp_path, monkeypatch):
     assert jsonl_path == Path("reports/langchain_openai_run_02_hardened.jsonl")
     assert summary_path == Path("reports/langchain_openai_summary_02_hardened.md")
     assert Path("reports").is_dir()
+
+
+def test_load_dataset_from_fixture():
+    module = _load_module()
+    dataset, source = module._load_dataset("tests/fixtures/action_risk_small.jsonl")
+    assert len(dataset) == 2
+    assert source == "tests/fixtures/action_risk_small.jsonl"
+    assert dataset[0]["id"] == "safe_1"
+
+
+def test_load_dataset_missing_field_fails_clearly(tmp_path):
+    module = _load_module()
+    bad_path = tmp_path / "bad.jsonl"
+    bad_path.write_text('{"id":"x","prompt":"p"}\n', encoding="utf-8")
+    try:
+        module._load_dataset(str(bad_path))
+        assert False, "Expected ValueError"
+    except ValueError as exc:
+        assert "missing required fields" in str(exc)
+
+
+def test_load_dataset_default_uses_hardcoded_dataset():
+    module = _load_module()
+    dataset, source = module._load_dataset(None)
+    assert source == "hardcoded default"
+    assert dataset == module.DATASET
