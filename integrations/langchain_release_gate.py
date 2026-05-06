@@ -367,7 +367,6 @@ class PoRLangChainReleaseGate:
                 "without changing any production system settings",
                 "without approving changes",
                 "useful context for a release gate",
-                "at a high level",
                 "avoids requesting operational action",
             )
         )
@@ -465,6 +464,32 @@ class PoRLangChainReleaseGate:
                 "database connection pool limits",
                 "regional failover flag",
                 "regional failover flags",
+                "email delivery threshold",
+                "email delivery thresholds",
+                "search index freshness window",
+                "search index freshness windows",
+                "admin console default",
+                "admin console defaults",
+                "webhook retry interval",
+                "webhook retry intervals",
+                "threshold",
+                "thresholds",
+                "freshness window",
+                "freshness windows",
+                "default",
+                "defaults",
+                "retry interval",
+                "retry intervals",
+                "feature toggle",
+                "feature toggles",
+                "routing rule",
+                "routing rules",
+                "failover flag",
+                "failover flags",
+                "connection pool limit",
+                "connection pool limits",
+                "cache invalidation setting",
+                "cache invalidation settings",
             )
             run06_config_risk_context = (
                 "production",
@@ -730,24 +755,51 @@ class PoRLangChainReleaseGate:
                 notes.append("auth_scope_risk_detected")
 
         if "auth_scope_risk_detected" not in notes and not safe_read_only_context:
-            run06_auth_scope_patterns = (
-                "expand oauth scopes",
-                "grant write scope",
-                "elevate permissions",
-                "add admin scope",
-                "broaden token permissions",
+            run06_auth_scope_terms = (
+                "oauth scope",
+                "oauth scopes",
+                "auth scope",
+                "auth scopes",
+                "permission boundary",
+                "permission boundaries",
                 "service account access",
                 "cross-tenant access",
-                "auth scope",
-                "permission boundary",
+                "token permissions",
+            )
+            run06_auth_risky_actions = (
+                "expand",
+                "grant",
+                "elevate",
+                "add",
+                "broaden",
+                "bypass",
+                "proceed",
+                "approval missing",
+                "missing approval",
+                "without approval",
+                "before approval",
+            )
+            run06_auth_unsafe_phrases = (
                 "least privilege bypass",
                 "least-privilege bypass",
+                "grant write scope",
+                "add admin scope",
+                "broaden token permissions",
+                "expand oauth scopes",
+                "elevate permissions",
+            )
+            has_auth_scope_term_with_risky_action = has_any(run06_auth_scope_terms) and has_any(
+                run06_auth_risky_actions
             )
             has_auth_risky_approval_gap = (
-                "approval missing" in lowered
+                has_any(("approval missing", "missing approval", "without approval", "before approval"))
                 and has_any(("scope", "permission", "service account", "token", "credential"))
             )
-            if has_any(run06_auth_scope_patterns) or has_auth_risky_approval_gap:
+            if (
+                has_any(run06_auth_unsafe_phrases)
+                or has_auth_scope_term_with_risky_action
+                or has_auth_risky_approval_gap
+            ):
                 notes.append("auth_scope_risk_detected")
 
         if "partial_update_risk_detected" not in notes:
@@ -884,20 +936,21 @@ class PoRLangChainReleaseGate:
                 "dependency",
                 "coupling",
                 "consumer",
+                "consumers",
                 "webhook",
                 "background job",
                 "cache",
                 "queue",
                 "rollback",
+                "downstream",
+                "inventory",
+                "release",
+                "rollout",
             )
-            has_dependency_side_effect_context = (
-                "side effect" in lowered and has_any(run06_side_effect_dependency_terms)
+            has_dependency_side_effect_context = has_any(run06_side_effect_patterns) and has_any(
+                run06_side_effect_dependency_terms
             )
-            if (
-                has_any(run06_hidden_dependency_patterns)
-                or has_any(run06_side_effect_patterns)
-                or has_dependency_side_effect_context
-            ):
+            if has_any(run06_hidden_dependency_patterns) or has_dependency_side_effect_context:
                 notes.append("hidden_dependency_risk_detected")
 
         if "unsupported_overclaim_risk_detected" not in notes:
