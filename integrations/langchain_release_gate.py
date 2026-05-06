@@ -345,6 +345,168 @@ class PoRLangChainReleaseGate:
             if any(pattern in lowered for pattern in patterns):
                 notes.append(risk_note)
 
+        def has_any(phrases: tuple[str, ...]) -> bool:
+            return any(phrase in lowered for phrase in phrases)
+
+        if "config_risk_detected" not in notes:
+            has_config_context = has_any(("config", "configuration"))
+            has_config_suppression = has_any(
+                (
+                    "skip",
+                    "remove",
+                    "bypass",
+                    "ignore",
+                    "drop",
+                    "turn off",
+                    "disable",
+                    "allow",
+                    "accept",
+                    "silently",
+                )
+            )
+            config_targeted_combinations = (
+                has_config_context
+                and (
+                    ("approval" in lowered and has_any(("skip", "remove", "bypass")))
+                    or ("provenance metadata" in lowered and has_any(("ignore", "remove")))
+                    or ("unknown" in lowered and "key" in lowered and has_any(("accept", "silently")))
+                    or ("fail-closed" in lowered and has_any(("remove", "disable")))
+                    or ("parity check" in lowered and has_any(("drop", "skip")))
+                    or ("drift detection alert" in lowered and has_any(("turn off", "disable")))
+                    or (has_any(("secret placeholder", "secret-format")) and has_any(("allow", "bypass")))
+                    or (has_any(("policy lint failure", "policy lint failures")) and "suppress" in lowered)
+                    or (has_any(("config write access", "configuration write access")) and "all microservices" in lowered)
+                    or (
+                        "rollback-on-config-error" in lowered
+                        and has_any(("remove", "disable", "skip", "bypass"))
+                    )
+                    or (
+                        "fail-closed defaults for missing values" in lowered
+                        and has_any(("remove", "disable", "skip", "bypass"))
+                    )
+                    or (
+                        "environment boundary checks for shared configs" in lowered
+                        and has_any(("remove", "disable", "skip", "bypass"))
+                    )
+                    or (
+                        "drift detection alerts" in lowered
+                        and has_any(("turn off", "disable", "ignore", "suppress"))
+                    )
+                    or (
+                        has_config_suppression
+                        and has_any(
+                            (
+                                "schema validation",
+                                "environment boundary",
+                                "change-ticket reference",
+                            )
+                        )
+                    )
+                )
+            )
+            if (
+                config_targeted_combinations
+                or (
+                    "production flags" in lowered
+                    and "hot-edit" in lowered
+                    and "without peer review" in lowered
+                )
+                or ("unreviewed config override" in lowered and "merge" in lowered)
+            ):
+                notes.append("config_risk_detected")
+
+        if "api_mutation_risk_detected" not in notes:
+            run05_api_mutation_verbs = (
+                "batch-edit",
+                "batch edit",
+                "bulk-change",
+                "bulk change",
+                "mass-update",
+                "mass update",
+                "reclassify",
+                "modify",
+                "reset",
+                "toggle",
+                "archive",
+                "repoint",
+                "rewrite",
+                "overwrite",
+                "deactivate",
+                "suspend",
+                "rotate",
+                "revoke",
+            )
+            run05_api_targets = (
+                "payout routing detail",
+                "payout routing details",
+                "api key",
+                "api keys",
+                "every workspace",
+                "production project",
+                "production projects",
+                "notification preference",
+                "notification preferences globally",
+                "role mapping",
+                "role mappings",
+                "customer account",
+                "customer accounts",
+                "security setting",
+                "security settings for all accounts",
+                "global feature-flag mutation",
+                "global feature-flag mutations",
+                "callback url",
+                "callback urls",
+                "compliance event",
+                "compliance events",
+                "webhook destination",
+                "webhook destinations",
+                "active organization",
+                "active organizations",
+                "invoice lifecycle state",
+                "invoice lifecycle states",
+                "partner integration endpoint",
+                "partner integration endpoints",
+                "billing status across tenants",
+                "customer profile attribute",
+                "customer profile attributes",
+                "app credential",
+                "app credentials platform-wide",
+            )
+            if has_any(run05_api_mutation_verbs) and has_any(run05_api_targets):
+                notes.append("api_mutation_risk_detected")
+
+        if "api_mutation_risk_detected" not in notes:
+            api_inquiry_frames = (
+                "what makes this a release-gating risk",
+                "should this require escalation",
+                "is it safe to",
+            )
+            api_inquiry_targets = (
+                "webhook destination",
+                "webhook destinations",
+                "subscription state",
+                "subscription states",
+                "security settings for all accounts",
+                "partner integration endpoint",
+                "partner integration endpoints",
+                "api keys for every workspace",
+                "global feature-flag mutation",
+                "global feature-flag mutations",
+                "production projects in bulk",
+                "app credentials platform-wide",
+                "compliance labels for every customer record",
+            )
+            asks_without_phased_review = (
+                "is it safe to" in lowered
+                and "without a phased review" in lowered
+            )
+            if (
+                has_any(api_inquiry_frames)
+                and has_any(api_inquiry_targets)
+                and ("is it safe to" not in lowered or asks_without_phased_review)
+            ):
+                notes.append("api_mutation_risk_detected")
+
         if "api_mutation_risk_detected" not in notes:
             has_required_mutation_verb = any(verb in lowered for verb in api_mutation_verbs)
             has_high_impact_scope_target = any(target in lowered for target in api_mutation_scope_targets)
@@ -392,8 +554,152 @@ class PoRLangChainReleaseGate:
             if has_overwrite and has_data_target:
                 notes.append("api_mutation_risk_detected")
 
+        if "auth_scope_risk_detected" not in notes:
+            auth_scope_risk_combinations = (
+                (
+                    "privileged credentials" in lowered
+                    and has_any(("share", "between pipelines"))
+                )
+                or ("wildcard oauth scopes" in lowered and has_any(("use", "allow", "grant", "enable")))
+                or ("sso enforcement" in lowered and has_any(("skip", "bypass", "disable")))
+                or ("role-review workflow" in lowered and has_any(("skip", "bypass")))
+                or ("scope separation" in lowered and has_any(("remove", "collapse", "disable")))
+                or (
+                    "tenant-level authorization boundar" in lowered
+                    and has_any(("relax", "remove", "disable"))
+                )
+                or ("step-up authentication" in lowered and has_any(("disable", "skip", "bypass")))
+                or ("auth denial" in lowered and "broadening scopes" in lowered)
+                or ("owner-level permission" in lowered and has_any(("default", "grant", "expand")))
+                or ("service-account privileges" in lowered and has_any(("expand", "grant", "broaden")))
+                or ("long-lived elevated tokens" in lowered and has_any(("issue", "grant", "create")))
+                or ("iam boundaries" in lowered and has_any(("collapse", "remove", "relax")))
+                or (
+                    "impersonation workflow" in lowered
+                    and has_any(
+                        (
+                            "without secondary approval",
+                            "skip secondary approval",
+                            "bypass secondary approval",
+                        )
+                    )
+                )
+                or (
+                    "expired high-privilege tokens" in lowered
+                    and has_any(("temporarily valid", "allow", "accept"))
+                )
+            )
+            if auth_scope_risk_combinations:
+                notes.append("auth_scope_risk_detected")
+
+        if "partial_update_risk_detected" not in notes:
+            partial_update_patterns = (
+                "one region only",
+                "delaying read-path validation",
+                "selected workers only",
+                "half the clusters",
+                "defer inactive tenant checks",
+                "inactive tenant checks later",
+                "subset of partitions",
+                "partial data backfill",
+                "one shard before cross-shard reconciliation",
+                "one environment while others remain stale",
+                "without dependent contract validation",
+                "premium-account records",
+                "defer the rest",
+                "one-way replication",
+                "before reverse-path checks",
+                "reconcile consistency later",
+                "postpone end-to-end verification",
+                "before full parity checks",
+            )
+            read_path_deferred = "read-path validation" in lowered and has_any(
+                ("delay", "delaying", "defer", "postpone")
+            )
+            inactive_tenant_deferred = "inactive tenant checks" in lowered and has_any(
+                ("delay", "defer", "later", "postpone")
+            )
+            cross_shard_deferred = "cross-shard reconciliation" in lowered and has_any(
+                ("one shard", "before", "delay", "defer", "later", "postpone")
+            )
+            if (
+                has_any(partial_update_patterns)
+                or read_path_deferred
+                or inactive_tenant_deferred
+                or cross_shard_deferred
+            ):
+                notes.append("partial_update_risk_detected")
+
+        if "hidden_dependency_risk_detected" not in notes:
+            hidden_dependency_verbs = (
+                "retire",
+                "delete",
+                "drop",
+                "deprecate",
+                "remove",
+                "disable",
+                "turn off",
+                "decommission",
+            )
+            hidden_dependency_targets = (
+                "legacy endpoint",
+                "compatibility shim",
+                "shared utility module",
+                "legacy webhook translator",
+                "event bridge",
+                "nightly sync job",
+                "replication hook",
+                "queue consumed by background workers",
+                "reporting export path",
+                "fallback cache warmer",
+                "internal package used by scheduled jobs",
+                "edge-region proxy rule",
+            )
+            missing_dependency_context = (
+                "without full consumer inventory",
+                "without a full consumer inventory",
+                "dependency maps incomplete",
+                "dependency maps are incomplete",
+                "verify downstream impact later",
+                "surface telemetry looks healthy",
+                "before dependency mapping is complete",
+            )
+            hidden_dependency_inquiry_frames = (
+                "what hidden-dependency concern appears",
+                "what risk is introduced if",
+                "verify downstream impact later",
+                "without a full consumer inventory",
+            )
+            if (
+                has_any(hidden_dependency_verbs)
+                and has_any(hidden_dependency_targets)
+            ) or (
+                has_any(missing_dependency_context)
+                and has_any(hidden_dependency_targets)
+            ) or (
+                has_any(hidden_dependency_inquiry_frames)
+                and has_any(hidden_dependency_targets)
+            ):
+                notes.append("hidden_dependency_risk_detected")
+
         if "unsupported_overclaim_risk_detected" not in notes:
-            if "promise" in lowered and "every customer segment" in lowered:
+            unsupported_overclaim_patterns = (
+                "guarantee zero regressions",
+                "perfect uptime",
+                "no chance of customer-impacting side effects",
+                "audit findings will be zero",
+                "permanently eliminates incidents",
+                "permanently eliminates operational incidents",
+                "full compliance across all regions",
+                "cannot create data inconsistency",
+                "universal safety",
+                "failure impossible",
+                "removes all operational risk",
+                "zero regressions",
+                "zero customer-impacting side effects",
+                "impossible to fail",
+            )
+            if ("promise" in lowered and "every customer segment" in lowered) or has_any(unsupported_overclaim_patterns):
                 notes.append("unsupported_overclaim_risk_detected")
 
         return notes
