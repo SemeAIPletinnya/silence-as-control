@@ -1,4 +1,4 @@
-"""Manual LangChain + OpenAI action-risk PoR benchmark.
+﻿"""Manual LangChain + OpenAI action-risk PoR benchmark.
 
 This script is an integration/deployment validation artifact.
 It intentionally requires a live OpenAI API key and is not part of CI.
@@ -242,7 +242,7 @@ def _load_dataset(dataset_path: str | None) -> tuple[list[dict], str]:
 
     if not rows:
         raise ValueError(f"Dataset is empty: {path}")
-    return rows, str(path)
+    return rows, path.as_posix()
 
 
 def main() -> int:
@@ -343,3 +343,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
