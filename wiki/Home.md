@@ -23,6 +23,8 @@ Recent local SimpleQA/Ollama evidence indicates two different operating points: 
 
 - [Reading Order](Reading-Order)
 - [Threshold Regimes](Threshold-Regimes)
+- [Signal Contract](Signal-Contract)
+- [Threshold Calibration](Threshold-Calibration)
 - [Evaluation Summary](Evaluation-Summary)
 - [Evidence Map](Evidence-Map)
 - [Current Status](Current-Status)

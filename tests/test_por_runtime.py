@@ -53,6 +53,18 @@ def test_runtime_local_embedding_truncates_by_configured_max_chars(monkeypatch):
     assert vec_b != vec_c
 
 
+def test_runtime_max_embedding_chars_env_overrides_custom_default(monkeypatch):
+    monkeypatch.setenv("MAX_EMBEDDING_CHARS", "7")
+
+    assert por_runtime.get_max_embedding_chars(default=11) == 7
+
+
+def test_runtime_max_embedding_chars_invalid_env_falls_back_to_custom_default(monkeypatch):
+    monkeypatch.setenv("MAX_EMBEDDING_CHARS", "not-an-int")
+
+    assert por_runtime.get_max_embedding_chars(default=11) == 11
+
+
 def test_runtime_estimate_uses_custom_embedding_hook_by_default(monkeypatch):
     calls = {"count": 0}
 
@@ -77,3 +89,29 @@ def test_runtime_explicit_embedding_fn_overrides_custom_hook(monkeypatch):
 
     coherence, _ = por_runtime.estimate_coherence("p", "c", embedding_fn=explicit_embedding)
     assert coherence == 1.0
+
+
+def test_runtime_adaptive_threshold_clips_to_config_bounds():
+    config = por_runtime.AdaptiveThresholdConfig(alpha=1.0, minimum=0.25, maximum=0.50)
+    adapted_high = por_runtime.compute_adaptive_threshold(
+        base_threshold=0.39,
+        recent_drifts=[1.0],
+        recent_coherences=[0.0],
+        config=config,
+    )
+    adapted_low = por_runtime.compute_adaptive_threshold(
+        base_threshold=0.10,
+        recent_drifts=[],
+        recent_coherences=[],
+        config=config,
+    )
+
+    assert adapted_high == 0.50
+    assert adapted_low == 0.25
+
+
+def test_core_release_decision_exact_threshold_equality_proceeds():
+    from api.core_primitive import fixed_threshold_release_decision
+
+    assert fixed_threshold_release_decision(0.42, 0.42) == "PROCEED"
+    assert fixed_threshold_release_decision(0.4200001, 0.42) == "SILENCE"
