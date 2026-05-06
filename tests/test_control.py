@@ -27,3 +27,24 @@ def test_boundary_conditions_allow_output():
         "status": "ok",
         "output": "edge",
     }
+
+
+def test_exact_equality_threshold_edges_allow_output():
+    assert por_control("edge", coherence=0.7, drift=0.3) == {
+        "status": "ok",
+        "output": "edge",
+    }
+
+
+def test_boundary_just_beyond_drift_abstains():
+    assert por_control("edge", coherence=0.7, drift=0.3000001) == {
+        "status": "abstained",
+        "reason": "control_abstention",
+    }
+
+
+def test_boundary_just_below_coherence_abstains():
+    assert por_control("edge", coherence=0.6999999, drift=0.3) == {
+        "status": "abstained",
+        "reason": "control_abstention",
+    }

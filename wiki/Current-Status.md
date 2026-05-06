@@ -24,3 +24,12 @@
 - Broader benchmark and domain-transfer testing.
 - Stronger applied demo surface for outsiders evaluating the release-control framing.
 - Continue strict claim-to-evidence discipline: separate what is demonstrated, partially established, and still pending.
+
+## Maintainability cleanup status
+
+- Configuration defaults now have a centralized module with environment-variable
+  overrides for runtime tunables.
+- Runtime/demo signal estimation has a shared helper, while benchmark/eval signal
+  contracts remain separate.
+- Package restructuring into deeper subpackages is deferred to avoid breaking
+  benchmark paths; see `docs/package_migration_plan.md`.

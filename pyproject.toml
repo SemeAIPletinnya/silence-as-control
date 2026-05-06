@@ -12,6 +12,10 @@ dependencies = [
   "fastapi==0.115.12",
   "uvicorn==0.34.0",
   "pydantic==2.11.1",
+  "httpx",
+  "openai",
+  "python-dotenv",
+  "matplotlib",
 ]
 
 [tool.setuptools]

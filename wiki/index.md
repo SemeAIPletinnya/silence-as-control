@@ -8,6 +8,8 @@ This wiki describes Silence-as-Control / Proof of Resonance (PoR) as a runtime r
 - [Current Status](./Current-Status.md)
 - [API Walkthrough](./API-Walkthrough.md)
 - [Threshold Regimes](./Threshold-Regimes.md)
+- [Signal Contract](./Signal-Contract.md)
+- [Threshold Calibration](./Threshold-Calibration.md)
 - [Evaluation Summary](./Evaluation-Summary.md)
 - [Evidence Map](./Evidence-Map.md)
 - [Reading Order](./Reading-Order.md)

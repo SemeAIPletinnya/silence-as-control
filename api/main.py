@@ -6,12 +6,17 @@ Layering in this module:
 - EXPERIMENTAL recovery: imported from `api.experimental_recovery`.
 """
 
+from __future__ import annotations
+
 import json
 import logging
-from typing import List, Optional
+from typing import Any, TypedDict
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
+
+from silence_as_control.config import get_legacy_generate_coherence
+from silence_as_control.types import DecisionResult
 
 from api.core_primitive import (
     CORE_FIXED_THRESHOLD,
@@ -43,10 +48,10 @@ SILENCE_TOKEN = "[SILENCE: UNSTABLE OUTPUT BLOCKED]"
 class EvaluateRequest(BaseModel):
     prompt: str
     candidate: str
-    threshold: Optional[float] = None
+    threshold: float | None = None
     use_adaptive_threshold: bool = False
-    recent_drifts: List[float] = Field(default_factory=list)
-    recent_coherences: List[float] = Field(default_factory=list)
+    recent_drifts: list[float] = Field(default_factory=list)
+    recent_coherences: list[float] = Field(default_factory=list)
 
 
 class EvaluateResponse(BaseModel):
@@ -55,37 +60,37 @@ class EvaluateResponse(BaseModel):
     instability_score: float
     threshold: float
     decision: str
-    release_output: Optional[str] = None
-    silence_token: Optional[str] = None
-    notes: List[str]
+    release_output: str | None = None
+    silence_token: str | None = None
+    notes: list[str]
 
 
 class CompleteRequest(BaseModel):
     prompt: str
-    threshold: Optional[float] = None
+    threshold: float | None = None
     use_adaptive_threshold: bool = False
-    recent_drifts: List[float] = Field(default_factory=list)
-    recent_coherences: List[float] = Field(default_factory=list)
+    recent_drifts: list[float] = Field(default_factory=list)
+    recent_coherences: list[float] = Field(default_factory=list)
     model: str = DEFAULT_MODEL
     system_prompt: str = "You are a precise technical assistant."
     temperature: float = 0.0
     drift_samples: int = 3
     enable_experimental_short_regen: bool = True
     # Backward-compatible alias for older clients.
-    enable_short_regen: Optional[bool] = None
+    enable_short_regen: bool | None = None
 
 
 class CompleteResponse(BaseModel):
     model: str
-    candidate: Optional[str] = None
+    candidate: str | None = None
     drift: float
     coherence: float
     instability_score: float
     threshold: float
     decision: str
-    release_output: Optional[str] = None
-    silence_token: Optional[str] = None
-    notes: List[str]
+    release_output: str | None = None
+    silence_token: str | None = None
+    notes: list[str]
 
 
 class LegacyGenerateRequest(BaseModel):
@@ -97,14 +102,25 @@ class LegacyGenerateRequest(BaseModel):
 
 class LegacyGenerateResponse(BaseModel):
     status: str
-    output: Optional[str] = None
-    reason: Optional[str] = None
+    output: str | None = None
+    reason: str | None = None
 
 
-def check_json_validity(prompt: str, candidate: str) -> dict:
+class RuntimeScore(TypedDict):
+    drift: float
+    coherence: float
+    instability_score: float
+    threshold: float
+    decision: str
+    release_output: str | None
+    silence_token: str | None
+    notes: list[str]
+
+
+def check_json_validity(prompt: str, candidate: str) -> dict[str, Any]:
     """[RUNTIME] Enforce JSON validity when prompt explicitly asks for JSON."""
     prompt_lower = prompt.lower()
-    notes: List[str] = []
+    notes: list[str] = []
 
     expects_json = "json" in prompt_lower
 
@@ -136,10 +152,10 @@ def check_json_validity(prompt: str, candidate: str) -> dict:
 
 
 def resolve_runtime_threshold(
-    request_threshold: Optional[float],
+    request_threshold: float | None,
     use_adaptive_threshold: bool,
-    recent_drifts: List[float],
-    recent_coherences: List[float],
+    recent_drifts: list[float],
+    recent_coherences: list[float],
 ) -> float:
     """[RUNTIME] Resolve the threshold used by API runtime decisions.
 
@@ -163,8 +179,8 @@ def score_candidate_runtime(
     prompt: str,
     candidate: str,
     threshold: float,
-    candidate_samples: Optional[List[str]] = None,
-) -> dict:
+    candidate_samples: list[str] | None = None,
+) -> RuntimeScore:
     """[RUNTIME] Score one candidate and apply the core release decision."""
     samples = candidate_samples or [candidate]
     drift, drift_notes = estimate_drift(samples)
@@ -180,7 +196,8 @@ def score_candidate_runtime(
         notes.append("forced_silence_invalid_json")
 
     LOGGER.info(
-        "por_runtime_scoring drift=%.4f coherence=%.4f instability=%.4f threshold=%.4f decision=%s",
+        "por_runtime_scoring "
+        "drift=%.4f coherence=%.4f instability=%.4f threshold=%.4f decision=%s",
         drift,
         coherence,
         instability,
@@ -188,15 +205,22 @@ def score_candidate_runtime(
         decision,
     )
 
+    decision_result = DecisionResult(
+        status=decision,
+        output=candidate if decision == "PROCEED" else None,
+        coherence=round(coherence, 4),
+        drift=round(drift, 4),
+        notes=notes,
+    )
     return {
-        "drift": round(drift, 4),
-        "coherence": round(coherence, 4),
+        "drift": decision_result.drift,
+        "coherence": decision_result.coherence,
         "instability_score": round(instability, 4),
         "threshold": threshold,
-        "decision": decision,
-        "release_output": candidate if decision == "PROCEED" else None,
+        "decision": decision_result.status,
+        "release_output": decision_result.output,
         "silence_token": SILENCE_TOKEN if decision == "SILENCE" else None,
-        "notes": notes,
+        "notes": decision_result.notes,
     }
 
 
@@ -208,7 +232,7 @@ def resolve_experimental_short_regen_flag(req: CompleteRequest) -> bool:
 
 
 @app.get("/health")
-def health() -> dict:
+def health() -> dict[str, str]:
     """Health endpoint for API runtime checks."""
     return {"status": "healthy"}
 
@@ -233,7 +257,7 @@ def evaluate(req: EvaluateRequest) -> EvaluateResponse:
 @app.post("/generate", response_model=LegacyGenerateResponse, response_model_exclude_none=True)
 def legacy_generate(req: LegacyGenerateRequest) -> LegacyGenerateResponse:
     """Backward-compatible legacy endpoint preserved for existing tests/clients."""
-    if req.coherence >= 0.8:
+    if req.coherence >= get_legacy_generate_coherence():
         return LegacyGenerateResponse(
             status="ok",
             output=req.output,
@@ -257,7 +281,7 @@ def complete(req: CompleteRequest) -> CompleteResponse:
         )
 
         sample_count = max(1, req.drift_samples)
-        candidates: List[str] = []
+        candidates: list[str] = []
         for _ in range(sample_count):
             candidates.append(
                 generate_candidate(
@@ -279,7 +303,7 @@ def complete(req: CompleteRequest) -> CompleteResponse:
         # Experimental lane only: MAYBE_SHORT_REGEN is post-silence and non-core.
         if result["decision"] == "SILENCE":
 
-            def _regen_once() -> dict:
+            def _regen_once() -> dict[str, Any]:
                 regen_candidate = generate_candidate(
                     prompt=(
                         "Answer briefly and directly in <= 80 tokens. "

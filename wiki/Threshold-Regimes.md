@@ -25,3 +25,10 @@ Do not treat these labels as universal settings.
 For contract language and canonical interpretation, use:
 
 - [`docs/threshold_regime_contract.md`](../docs/threshold_regime_contract.md)
+
+## Calibration reminder
+
+The repository contains several threshold values because they come from different
+runs and regimes. Treat each as evidence-scoped. Do not apply `0.39`, `0.35`,
+`0.42`, or `0.43` universally without recalibrating the signal contract, model,
+and task family. See [Threshold Calibration](./Threshold-Calibration.md).

@@ -9,6 +9,37 @@ It does **not** improve model weights. It controls release behavior.
 
 **Same model. Different decision.**
 
+
+## Installation and dependency setup
+
+### From a fresh checkout
+```bash
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m pip install -e .
+```
+
+### API key guidance
+- The deterministic core and local tests do not require an OpenAI API key.
+- OpenAI-backed demos or live benchmark scripts should read credentials from
+  environment variables such as `OPENAI_API_KEY`.
+- Do not commit API keys, prompt logs containing secrets, or provider tokens.
+
+## Minimal wrapping example
+```python
+from silence_as_control import por_control
+
+candidate = "A candidate answer generated upstream"
+result = por_control(candidate, coherence=0.82, drift=0.15)
+
+if result["status"] == "ok":
+    release_to_user = result["output"]
+else:
+    release_to_user = None  # silence / abstain
+```
+
 ## Use / Integration
 PoR is useful as:
 - a release gate before final LLM output,
@@ -66,14 +97,35 @@ MAYBE_SHORT_REGEN: post-silence boundary-pocket retry.
 
 Code: `api/experimental_recovery.py` + `/por/complete` integration.
 
-## Minimal system diagram
+## Architecture flow diagram
 ```text
-Request
-  -> Candidate Output(s)
-  -> PoR Gate (instability vs threshold)
-  -> PROCEED or SILENCE
-  -> optional MAYBE_SHORT_REGEN (experimental, post-silence only)
+prompt
+  -> candidate generation
+  -> PoR gate
+       -> PROCEED
+       -> NEEDS_REVIEW (where an integration defines a review lane)
+       -> SILENCE
 ```
+
+Generation is not release. The PoR gate is a release-control gate, not a
+generation-improvement method. Guardrails may classify or constrain inputs and
+outputs; Silence-as-Control gates whether a candidate is released.
+
+## Threshold regimes
+
+Threshold defaults are **not universal**. The core/runtime default of `0.39`,
+historical sweep values such as `0.35`, `0.42`, and `0.43`, and benchmark-specific
+settings are meaningful only within their signal regime, model/task mix, and
+evidence protocol. Calibrate thresholds before using them with a new model, a new
+task family, or a new signal source.
+
+The deterministic core rule remains:
+- `I <= τ` -> `PROCEED`
+- `I > τ` -> `SILENCE`
+
+Some integrations may layer a separate `NEEDS_REVIEW` lane. Do not collapse an
+existing tri-state integration into binary behavior unless that integration
+explicitly chooses to do so.
 
 ## Start here
 1. This README (`README.md`)
@@ -138,6 +190,8 @@ curl -s http://127.0.0.1:8000/por/complete \
 - README: `README.md`
 - Docs index: `docs/README.md`
 - External CLI integration: `docs/external_integration.md`
+- Package migration plan: `docs/package_migration_plan.md`
+- Changelog: `CHANGELOG.md`
 - Paper/preprint materials: `paper/README.md`
 - Reports/evidence: `reports/README.md`
 
@@ -145,3 +199,14 @@ curl -s http://127.0.0.1:8000/por/complete \
 - **Paper-core claim**: deterministic fixed-threshold PoR release control.
 - **Runtime extensions**: practical deployment helpers, optional deployment scaffolding.
 - **Experimental features**: MAYBE_SHORT_REGEN, optional and non-core.
+
+## Contributing
+
+Contributions should preserve the architecture split: primitive core, runtime
+behavior, evidence/evaluation surface, demos, documentation/wiki, and
+extension-layer experiments. Keep changes scoped and reversible, avoid modifying
+historical benchmark artifacts, and document any threshold-regime changes with
+evidence.
+
+Before opening a PR, run the focused tests relevant to your change and include
+any environment limitations or skipped checks.
