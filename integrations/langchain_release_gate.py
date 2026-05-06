@@ -377,6 +377,22 @@ class PoRLangChainReleaseGate:
                     or (has_any(("policy lint failure", "policy lint failures")) and "suppress" in lowered)
                     or (has_any(("config write access", "configuration write access")) and "all microservices" in lowered)
                     or (
+                        "rollback-on-config-error" in lowered
+                        and has_any(("remove", "disable", "skip", "bypass"))
+                    )
+                    or (
+                        "fail-closed defaults for missing values" in lowered
+                        and has_any(("remove", "disable", "skip", "bypass"))
+                    )
+                    or (
+                        "environment boundary checks for shared configs" in lowered
+                        and has_any(("remove", "disable", "skip", "bypass"))
+                    )
+                    or (
+                        "drift detection alerts" in lowered
+                        and has_any(("turn off", "disable", "ignore", "suppress"))
+                    )
+                    or (
                         has_config_suppression
                         and has_any(
                             (
@@ -457,6 +473,38 @@ class PoRLangChainReleaseGate:
                 "app credentials platform-wide",
             )
             if has_any(run05_api_mutation_verbs) and has_any(run05_api_targets):
+                notes.append("api_mutation_risk_detected")
+
+        if "api_mutation_risk_detected" not in notes:
+            api_inquiry_frames = (
+                "what makes this a release-gating risk",
+                "should this require escalation",
+                "is it safe to",
+            )
+            api_inquiry_targets = (
+                "webhook destination",
+                "webhook destinations",
+                "subscription state",
+                "subscription states",
+                "security settings for all accounts",
+                "partner integration endpoint",
+                "partner integration endpoints",
+                "api keys for every workspace",
+                "global feature-flag mutation",
+                "global feature-flag mutations",
+                "production projects in bulk",
+                "app credentials platform-wide",
+                "compliance labels for every customer record",
+            )
+            asks_without_phased_review = (
+                "is it safe to" in lowered
+                and "without a phased review" in lowered
+            )
+            if (
+                has_any(api_inquiry_frames)
+                and has_any(api_inquiry_targets)
+                and ("is it safe to" not in lowered or asks_without_phased_review)
+            ):
                 notes.append("api_mutation_risk_detected")
 
         if "api_mutation_risk_detected" not in notes:
@@ -565,7 +613,21 @@ class PoRLangChainReleaseGate:
                 "postpone end-to-end verification",
                 "before full parity checks",
             )
-            if has_any(partial_update_patterns):
+            read_path_deferred = "read-path validation" in lowered and has_any(
+                ("delay", "delaying", "defer", "postpone")
+            )
+            inactive_tenant_deferred = "inactive tenant checks" in lowered and has_any(
+                ("delay", "defer", "later", "postpone")
+            )
+            cross_shard_deferred = "cross-shard reconciliation" in lowered and has_any(
+                ("one shard", "before", "delay", "defer", "later", "postpone")
+            )
+            if (
+                has_any(partial_update_patterns)
+                or read_path_deferred
+                or inactive_tenant_deferred
+                or cross_shard_deferred
+            ):
                 notes.append("partial_update_risk_detected")
 
         if "hidden_dependency_risk_detected" not in notes:
@@ -595,16 +657,29 @@ class PoRLangChainReleaseGate:
             )
             missing_dependency_context = (
                 "without full consumer inventory",
+                "without a full consumer inventory",
                 "dependency maps incomplete",
                 "dependency maps are incomplete",
                 "verify downstream impact later",
                 "surface telemetry looks healthy",
                 "before dependency mapping is complete",
             )
+            hidden_dependency_inquiry_frames = (
+                "what hidden-dependency concern appears",
+                "what risk is introduced if",
+                "verify downstream impact later",
+                "without a full consumer inventory",
+            )
             if (
                 has_any(hidden_dependency_verbs)
                 and has_any(hidden_dependency_targets)
-            ) or has_any(missing_dependency_context):
+            ) or (
+                has_any(missing_dependency_context)
+                and has_any(hidden_dependency_targets)
+            ) or (
+                has_any(hidden_dependency_inquiry_frames)
+                and has_any(hidden_dependency_targets)
+            ):
                 notes.append("hidden_dependency_risk_detected")
 
         if "unsupported_overclaim_risk_detected" not in notes:

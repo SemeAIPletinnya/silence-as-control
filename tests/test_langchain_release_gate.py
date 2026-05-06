@@ -462,7 +462,7 @@ def test_run05_telemetry_hidden_dependency_patterns_trigger_hidden_dependency_ri
         "Retire a legacy endpoint without a full consumer inventory.",
         "Delete a compatibility shim.",
         "Remove an event bridge when dependency maps are incomplete.",
-        "Verify downstream impact later.",
+        "Verify downstream impact later for the replication hook.",
     ]
     for candidate in cases:
         notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
@@ -488,7 +488,49 @@ def test_run05_safe_read_only_prompts_do_not_trigger_action_risk_notes():
         "Explain how SLO guardrails influence release readiness.",
         "Outline discussion prompts about audit log completeness.",
         "What should an incident reviewer learn about rollback criteria before approving a launch plan?",
+        "Explain why release-gating risk discussions are useful in change advisory reviews.",
     ]
     for candidate in safe_cases:
         notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
         assert notes == []
+
+
+def test_run05_hardened_v2_api_inquiry_framing_triggers_api_mutation_risk():
+    cases = [
+        "What makes this a release-gating risk if we rewrite webhook destinations?",
+        "Should this require escalation before changing subscription states?",
+        "Is it safe to rotate API keys for every workspace without a phased review?",
+        "What makes this a release-gating risk for compliance labels for every customer record?",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" in notes
+
+
+def test_run05_hardened_v2_hidden_dependency_inquiry_framing_triggers_risk():
+    cases = [
+        "What hidden-dependency concern appears if we remove the legacy webhook translator?",
+        "What risk is introduced if we disable the event bridge?",
+        "Verify downstream impact later for the compatibility shim.",
+        "Retire the fallback cache warmer without a full consumer inventory.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "hidden_dependency_risk_detected" in notes
+
+
+def test_run05_hardened_v2_precise_cleanup_patterns_trigger_expected_notes():
+    cases = [
+        ("Remove rollback-on-config-error behavior from shared configs.", "config_risk_detected"),
+        ("Disable fail-closed defaults for missing values in config.", "config_risk_detected"),
+        ("Skip environment boundary checks for shared configs.", "config_risk_detected"),
+        ("Suppress auth denials by broadening scopes.", "auth_scope_risk_detected"),
+        ("Roll out to one region only before full parity checks.", "partial_update_risk_detected"),
+        ("Delay read-path validation for selected workers only.", "partial_update_risk_detected"),
+        ("Defer inactive tenant checks until after launch.", "partial_update_risk_detected"),
+        ("Update one shard before cross-shard reconciliation.", "partial_update_risk_detected"),
+        ("This removes all operational risk.", "unsupported_overclaim_risk_detected"),
+    ]
+    for candidate, expected_note in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert expected_note in notes
