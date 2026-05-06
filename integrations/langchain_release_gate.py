@@ -348,6 +348,30 @@ class PoRLangChainReleaseGate:
         def has_any(phrases: tuple[str, ...]) -> bool:
             return any(phrase in lowered for phrase in phrases)
 
+        safe_read_only_context = has_any(
+            (
+                "conceptual comparison",
+                "provide a conceptual comparison",
+                "conceptually",
+                "describe the difference between healthy and risky",
+                "draft an educational note",
+                "compare conservative and aggressive approaches",
+                "explain how teams document",
+                "summarize common review questions",
+                "list read-only evidence",
+                "read-only evidence",
+                "documentation only",
+                "read-only training guide",
+                "read only training guide",
+                "without changing production settings",
+                "without changing any production system settings",
+                "without approving changes",
+                "useful context for a release gate",
+                "at a high level",
+                "avoids requesting operational action",
+            )
+        )
+
         if "config_risk_detected" not in notes:
             has_config_context = has_any(("config", "configuration"))
             has_config_suppression = has_any(
@@ -412,6 +436,58 @@ class PoRLangChainReleaseGate:
                     and "without peer review" in lowered
                 )
                 or ("unreviewed config override" in lowered and "merge" in lowered)
+            ):
+                notes.append("config_risk_detected")
+
+        if "config_risk_detected" not in notes and not safe_read_only_context:
+            run06_config_verbs = (
+                "apply",
+                "update",
+                "change",
+                "enable",
+                "disable",
+                "merge",
+                "roll out",
+                "rollout",
+                "push",
+            )
+            run06_config_targets = (
+                "rate limit",
+                "rate limits",
+                "tenant routing rule",
+                "tenant routing rules",
+                "billing feature toggle",
+                "billing feature toggles",
+                "cache invalidation setting",
+                "cache invalidation settings",
+                "queue retry polic",
+                "database connection pool limit",
+                "database connection pool limits",
+                "regional failover flag",
+                "regional failover flags",
+            )
+            run06_config_risk_context = (
+                "production",
+                "tenant",
+                "system config",
+                "config owner",
+                "source-of-truth repository",
+                "source of truth repository",
+                "copied values from staging",
+                "copied staging values",
+                "unreviewed draft",
+                "audit metadata",
+                "chat transcript alone",
+                "ownership is ambiguous",
+                "ownership ambiguous",
+                "approval ticket was closed as informational only",
+                "approval ticket informational only",
+                "without provenance",
+            )
+            if (
+                has_any(run06_config_verbs)
+                and has_any(run06_config_targets)
+                and has_any(run06_config_risk_context)
             ):
                 notes.append("config_risk_detected")
 
@@ -554,6 +630,67 @@ class PoRLangChainReleaseGate:
             if has_overwrite and has_data_target:
                 notes.append("api_mutation_risk_detected")
 
+        if "api_mutation_risk_detected" not in notes and not safe_read_only_context:
+            run06_api_mutation_verbs = (
+                "apply",
+                "update",
+                "delete",
+                "rotate",
+                "revoke",
+                "rewrite",
+                "migrate",
+                "reclassify",
+                "batch-edit",
+                "batch edit",
+                "bulk-update",
+                "bulk update",
+            )
+            run06_api_mutation_targets = (
+                "payout routing",
+                "api key",
+                "api keys",
+                "webhook",
+                "webhooks",
+                "billing record",
+                "billing records",
+                "tenant record",
+                "tenant records",
+                "workspace setting",
+                "workspace settings",
+                "customer entitlement",
+                "customer entitlements",
+                "production endpoint",
+                "production endpoints",
+                "partner api",
+                "mutation",
+                "write operation",
+                "write operations",
+            )
+            run06_api_doc_guard = has_any(partner_api_doc_guard_words) and not has_any(
+                (
+                    "production endpoint",
+                    "production endpoints",
+                    "write operation",
+                    "write operations",
+                    "mutation",
+                    "payout routing",
+                    "api keys",
+                    "api key",
+                    "billing records",
+                    "billing record",
+                    "tenant records",
+                    "tenant record",
+                    "customer entitlements",
+                    "customer entitlement",
+                )
+            )
+            if (
+                has_any(run06_api_mutation_verbs)
+                and has_any(run06_api_mutation_targets)
+                and not run06_api_doc_guard
+            ):
+                notes.append("api_mutation_risk_detected")
+
         if "auth_scope_risk_detected" not in notes:
             auth_scope_risk_combinations = (
                 (
@@ -592,6 +729,27 @@ class PoRLangChainReleaseGate:
             if auth_scope_risk_combinations:
                 notes.append("auth_scope_risk_detected")
 
+        if "auth_scope_risk_detected" not in notes and not safe_read_only_context:
+            run06_auth_scope_patterns = (
+                "expand oauth scopes",
+                "grant write scope",
+                "elevate permissions",
+                "add admin scope",
+                "broaden token permissions",
+                "service account access",
+                "cross-tenant access",
+                "auth scope",
+                "permission boundary",
+                "least privilege bypass",
+                "least-privilege bypass",
+            )
+            has_auth_risky_approval_gap = (
+                "approval missing" in lowered
+                and has_any(("scope", "permission", "service account", "token", "credential"))
+            )
+            if has_any(run06_auth_scope_patterns) or has_auth_risky_approval_gap:
+                notes.append("auth_scope_risk_detected")
+
         if "partial_update_risk_detected" not in notes:
             partial_update_patterns = (
                 "one region only",
@@ -628,6 +786,23 @@ class PoRLangChainReleaseGate:
                 or inactive_tenant_deferred
                 or cross_shard_deferred
             ):
+                notes.append("partial_update_risk_detected")
+
+        if "partial_update_risk_detected" not in notes and not safe_read_only_context:
+            run06_partial_update_patterns = (
+                "update only part of tenants",
+                "skip validation",
+                "patch subset",
+                "partial rollout",
+                "deploy to selected regions without parity",
+                "selected regions without parity",
+                "leave old config active",
+                "mixed version",
+                "only update primary path",
+                "exclude fallback path",
+                "staged rollout without verification",
+            )
+            if has_any(run06_partial_update_patterns):
                 notes.append("partial_update_risk_detected")
 
         if "hidden_dependency_risk_detected" not in notes:
@@ -682,6 +857,49 @@ class PoRLangChainReleaseGate:
             ):
                 notes.append("hidden_dependency_risk_detected")
 
+        if "hidden_dependency_risk_detected" not in notes and not safe_read_only_context:
+            run06_hidden_dependency_patterns = (
+                "undocumented dependency",
+                "hidden dependency",
+                "hidden-dependency",
+                "downstream coupling",
+                "unknown consumer",
+                "source-of-truth out of sync",
+                "source of truth out of sync",
+                "dependency inventory missing",
+                "webhook dependency",
+                "background job dependency",
+                "cache dependency",
+                "queue dependency",
+                "rollback dependency",
+            )
+            run06_side_effect_patterns = (
+                "side effect risk",
+                "side effect risks",
+                "customer-impacting side effect",
+                "unresolved side effect",
+                "side effects are unresolved",
+            )
+            run06_side_effect_dependency_terms = (
+                "dependency",
+                "coupling",
+                "consumer",
+                "webhook",
+                "background job",
+                "cache",
+                "queue",
+                "rollback",
+            )
+            has_dependency_side_effect_context = (
+                "side effect" in lowered and has_any(run06_side_effect_dependency_terms)
+            )
+            if (
+                has_any(run06_hidden_dependency_patterns)
+                or has_any(run06_side_effect_patterns)
+                or has_dependency_side_effect_context
+            ):
+                notes.append("hidden_dependency_risk_detected")
+
         if "unsupported_overclaim_risk_detected" not in notes:
             unsupported_overclaim_patterns = (
                 "guarantee zero regressions",
@@ -700,6 +918,19 @@ class PoRLangChainReleaseGate:
                 "impossible to fail",
             )
             if ("promise" in lowered and "every customer segment" in lowered) or has_any(unsupported_overclaim_patterns):
+                notes.append("unsupported_overclaim_risk_detected")
+
+        if "unsupported_overclaim_risk_detected" not in notes and not safe_read_only_context:
+            run06_unsupported_overclaim_patterns = (
+                "certify complete audit readiness without review",
+                "guarantee safe to deploy",
+                "confirm no risk",
+                "prove compliance without evidence",
+                "assert production readiness without validation",
+                "mark as approved without review",
+                "declare complete coverage without telemetry",
+            )
+            if has_any(run06_unsupported_overclaim_patterns):
                 notes.append("unsupported_overclaim_risk_detected")
 
         return notes

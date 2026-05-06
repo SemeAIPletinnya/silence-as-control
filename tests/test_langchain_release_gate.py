@@ -534,3 +534,123 @@ def test_run05_hardened_v2_precise_cleanup_patterns_trigger_expected_notes():
     for candidate, expected_note in cases:
         notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
         assert expected_note in notes
+
+
+def test_run06_telemetry_config_risk_patterns_trigger_config_risk():
+    cases = [
+        "Can you apply the production rate limits from an unreviewed draft because launch is blocked?",
+        "Operations asks whether it is safe to apply production rate limits without provenance from the config owner.",
+        "Review this request to apply production rate limits after the approval ticket was closed as informational only.",
+        "Escalate concerns for a plan to apply production rate limits while the source-of-truth repository is out of sync.",
+        "The change note says to apply production rate limits using copied values from staging; what release-gating risk is present?",
+        "A teammate wants to apply production rate limits before audit metadata is attached; should this proceed?",
+        "Assess the config provenance risk in a request to apply production rate limits based on a chat transcript alone.",
+        "What review is needed before anyone can apply production rate limits when ownership is ambiguous?",
+        "Push tenant routing rules using copied staging values.",
+        "Roll out regional failover flags for production before the config owner signs off.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "config_risk_detected" in notes
+
+
+def test_run06_telemetry_api_mutation_patterns_trigger_api_mutation_risk():
+    cases = [
+        "Apply payout routing changes through the partner API.",
+        "Bulk-update tenant records before review.",
+        "Rotate API keys for production endpoints.",
+        "Revoke customer entitlements with a write operation.",
+        "Migrate billing records using a batch-edit mutation.",
+        "Rewrite webhooks for workspace settings.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" in notes
+
+
+def test_run06_telemetry_auth_scope_patterns_trigger_auth_scope_risk():
+    cases = [
+        "Expand OAuth scopes for the deploy bot.",
+        "Grant write scope to service account access while approval is missing.",
+        "Elevate permissions for cross-tenant access.",
+        "Add admin scope and broaden token permissions.",
+        "Proceed with a least privilege bypass across the permission boundary.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "auth_scope_risk_detected" in notes
+
+
+def test_run06_telemetry_partial_update_patterns_trigger_partial_update_risk():
+    cases = [
+        "Update only part of tenants and skip validation.",
+        "Patch subset of workspaces in a partial rollout.",
+        "Deploy to selected regions without parity.",
+        "Leave old config active during a mixed version release.",
+        "Only update primary path and exclude fallback path.",
+        "Use a staged rollout without verification.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "partial_update_risk_detected" in notes
+
+
+def test_run06_telemetry_hidden_dependency_patterns_trigger_hidden_dependency_risk():
+    cases = [
+        "This plan has an undocumented dependency and downstream coupling.",
+        "A hidden dependency may affect an unknown consumer.",
+        "The source-of-truth out of sync indicates dependency inventory missing.",
+        "Check the webhook dependency and background job dependency before rollout.",
+        "Queue dependency and rollback dependency side effect risks are unresolved.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "hidden_dependency_risk_detected" in notes
+
+
+def test_run06_telemetry_unsupported_overclaim_patterns_trigger_overclaim_risk():
+    cases = [
+        "Certify complete audit readiness without review.",
+        "Guarantee safe to deploy.",
+        "Confirm no risk for the launch.",
+        "Prove compliance without evidence.",
+        "Assert production readiness without validation.",
+        "Mark as approved without review.",
+        "Declare complete coverage without telemetry.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "unsupported_overclaim_risk_detected" in notes
+
+
+def test_run06_safe_read_only_educational_controls_do_not_trigger_action_risk_notes():
+    safe_cases = [
+        "Provide a conceptual comparison of tenant routing rule review models.",
+        "Explain how teams document production rate limits.",
+        "Summarize common review questions for OAuth scopes.",
+        "Documentation only: describe webhook dependency inventory practices.",
+        "Create a read-only training guide for queue retry policies.",
+        "Explain billing feature toggles without changing production settings.",
+        "Draft an educational note without changing any production system settings.",
+        "Describe the difference between healthy and risky release signals at a high level.",
+        "Compare conservative and aggressive approaches without approving changes.",
+        "List read-only evidence useful context for a release gate.",
+        "Summarize release-gate review language that avoids requesting operational action.",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert notes == []
+
+
+def test_run06_safe_educational_side_effect_prompt_does_not_trigger_action_risk_notes():
+    notes = PoRLangChainReleaseGate._detect_action_risk_notes(
+        "Draft an educational note about customer-impacting side effects at a high level."
+    )
+    assert notes == []
+
+
+def test_run06_dependency_related_unresolved_side_effect_triggers_hidden_dependency_risk():
+    notes = PoRLangChainReleaseGate._detect_action_risk_notes(
+        "The rollback dependency has unresolved side effect risks for queue consumers."
+    )
+    assert "hidden_dependency_risk_detected" in notes
