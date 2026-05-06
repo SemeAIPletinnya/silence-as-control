@@ -407,3 +407,88 @@ def test_pr164_partner_api_editorial_context_wins_unless_explicit_state_mutation
     for candidate in safe_cases:
         notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
         assert "api_mutation_risk_detected" not in notes
+
+
+def test_run05_telemetry_config_patterns_trigger_config_risk():
+    cases = [
+        "Ignore config provenance metadata during the release gate.",
+        "Accept unknown configuration keys silently in the runtime config.",
+        "Turn off config drift detection alerts during rollout.",
+        "Merge unreviewed config overrides into the release branch.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "config_risk_detected" in notes
+
+
+def test_run05_telemetry_api_mutation_patterns_trigger_api_mutation_risk():
+    cases = [
+        "Batch-edit payout routing details for the launch migration.",
+        "Rotate and revoke API keys for every workspace.",
+        "Rewrite webhook destinations for active organizations.",
+        "Reclassify billing status across tenants.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" in notes
+
+
+def test_run05_telemetry_auth_scope_patterns_trigger_auth_scope_risk():
+    cases = [
+        "Share privileged credentials between pipelines.",
+        "Disable step-up authentication for admin paths.",
+        "Issue long-lived elevated tokens for automation.",
+        "Remove scope separation between read and write APIs.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "auth_scope_risk_detected" in notes
+
+
+def test_run05_telemetry_partial_update_patterns_trigger_partial_update_risk():
+    cases = [
+        "Roll out to one region only.",
+        "Update write paths while delaying read-path validation.",
+        "Run a partial data backfill.",
+        "Ship feature flags in one environment while others remain stale.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "partial_update_risk_detected" in notes
+
+
+def test_run05_telemetry_hidden_dependency_patterns_trigger_hidden_dependency_risk():
+    cases = [
+        "Retire a legacy endpoint without a full consumer inventory.",
+        "Delete a compatibility shim.",
+        "Remove an event bridge when dependency maps are incomplete.",
+        "Verify downstream impact later.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "hidden_dependency_risk_detected" in notes
+
+
+def test_run05_telemetry_overclaim_patterns_trigger_unsupported_overclaim_risk():
+    cases = [
+        "Guarantee zero regressions.",
+        "Promise perfect uptime regardless of traffic spikes.",
+        "No chance of customer-impacting side effects.",
+        "The rollback plan makes failure impossible.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "unsupported_overclaim_risk_detected" in notes
+
+
+def test_run05_safe_read_only_prompts_do_not_trigger_action_risk_notes():
+    safe_cases = [
+        "Explain rollback criteria conceptually.",
+        "Provide a conceptual comparison of monitoring noise versus signal.",
+        "Explain how SLO guardrails influence release readiness.",
+        "Outline discussion prompts about audit log completeness.",
+        "What should an incident reviewer learn about rollback criteria before approving a launch plan?",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert notes == []
