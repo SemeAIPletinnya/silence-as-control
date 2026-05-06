@@ -9,20 +9,34 @@ These helpers are deployment-oriented additions around the core primitive:
 
 from __future__ import annotations
 
-import math
-import os
-from hashlib import sha256
+from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass
-from typing import Callable, Iterable, Sequence
+
+from silence_as_control.config import (
+    ADAPTIVE_THRESHOLD_ALPHA_DEFAULT,
+    ADAPTIVE_THRESHOLD_MAXIMUM_DEFAULT,
+    ADAPTIVE_THRESHOLD_MINIMUM_DEFAULT,
+    MAX_EMBEDDING_CHARS_DEFAULT,
+    RUNTIME_EXTENSION_THRESHOLD_DEFAULT,
+    get_max_embedding_chars as resolve_max_embedding_chars,
+    get_runtime_gate_threshold,
+)
+from silence_as_control.signals import (
+    cosine_similarity,
+    is_nonnegative_vector,
+    local_bow_embedding,
+    map_similarity_to_coherence,
+    stable_token_index,
+)
 
 # Runtime extension default. Kept aligned to the core default by default.
-RUNTIME_EXTENSION_DEFAULT_THRESHOLD = 0.39
+RUNTIME_EXTENSION_DEFAULT_THRESHOLD = RUNTIME_EXTENSION_THRESHOLD_DEFAULT
 # Backward-compatible alias.
 RUNTIME_GATE_THRESHOLD_DEFAULT = RUNTIME_EXTENSION_DEFAULT_THRESHOLD
 
 THRESHOLD_ENV_VAR = "POR_RUNTIME_GATE_THRESHOLD"
 MAX_EMBEDDING_CHARS_ENV_VAR = "MAX_EMBEDDING_CHARS"
-DEFAULT_MAX_EMBEDDING_CHARS = 4000
+DEFAULT_MAX_EMBEDDING_CHARS = MAX_EMBEDDING_CHARS_DEFAULT
 EmbeddingFn = Callable[[str], list[float]]
 CUSTOM_EMBEDDING_FN: EmbeddingFn | None = None
 
@@ -31,9 +45,9 @@ CUSTOM_EMBEDDING_FN: EmbeddingFn | None = None
 class AdaptiveThresholdConfig:
     """[RUNTIME] Adaptive-threshold policy parameters."""
 
-    alpha: float = 0.4
-    minimum: float = 0.20
-    maximum: float = 0.80
+    alpha: float = ADAPTIVE_THRESHOLD_ALPHA_DEFAULT
+    minimum: float = ADAPTIVE_THRESHOLD_MINIMUM_DEFAULT
+    maximum: float = ADAPTIVE_THRESHOLD_MAXIMUM_DEFAULT
 
 
 def _clip(value: float, low: float = 0.0, high: float = 1.0) -> float:
@@ -41,30 +55,12 @@ def _clip(value: float, low: float = 0.0, high: float = 1.0) -> float:
 
 
 def _stable_token_index(token: str, dim: int) -> int:
-    """Map token to embedding slot with deterministic hashing.
-
-    Python's built-in `hash()` is process-randomized, so we use SHA-256 and
-    take the first 8 bytes for a stable integer across runs and machines.
-    """
-    digest = sha256(token.encode("utf-8")).digest()
-    return int.from_bytes(digest[:8], byteorder="big") % dim
-
-
-def map_similarity_to_coherence(similarity: float, *, nonnegative_space: bool) -> float:
-    """Convert cosine similarity to coherence in [0, 1] for runtime gating.
-
-    - For nonnegative bag-of-words fallback embeddings, cosine is already in
-      [0, 1], so we only clamp.
-    - For signed embedding spaces, cosine is in [-1, 1], so we map with
-      `(cos + 1) / 2`.
-    """
-    if nonnegative_space:
-        return _clip(similarity)
-    return _clip((similarity + 1.0) / 2.0)
+    """Backward-compatible wrapper around the shared stable token index."""
+    return stable_token_index(token, dim)
 
 
 def _is_nonnegative_vector(vec: Sequence[float]) -> bool:
-    return all(v >= 0.0 for v in vec)
+    return is_nonnegative_vector(vec)
 
 
 def get_runtime_threshold(default: float = RUNTIME_EXTENSION_DEFAULT_THRESHOLD) -> float:
@@ -72,26 +68,12 @@ def get_runtime_threshold(default: float = RUNTIME_EXTENSION_DEFAULT_THRESHOLD) 
 
     Uses `POR_RUNTIME_GATE_THRESHOLD` if set; otherwise returns `default`.
     """
-    raw = os.getenv(THRESHOLD_ENV_VAR)
-    if raw is None:
-        return default
-    try:
-        value = float(raw)
-    except ValueError:
-        return default
-    return _clip(value)
+    return get_runtime_gate_threshold(default)
 
 
 def get_max_embedding_chars(default: int = DEFAULT_MAX_EMBEDDING_CHARS) -> int:
     """[RUNTIME] Resolve max chars for local embedding with safe fallback."""
-    raw = os.getenv(MAX_EMBEDDING_CHARS_ENV_VAR)
-    if raw is None:
-        return default
-    try:
-        value = int(raw)
-    except ValueError:
-        return default
-    return max(1, value)
+    return resolve_max_embedding_chars(default)
 
 
 def _truncate_for_local_embedding(text: str) -> str:
@@ -113,26 +95,7 @@ def get_embedding(text: str) -> list[float]:
     This lightweight fallback keeps offline usage and tests stable.
     Production integrations can inject a stronger embedding function.
     """
-    vec = [0.0] * 64
-    truncated = _truncate_for_local_embedding(text)
-    for token in truncated.lower().split():
-        vec[_stable_token_index(token, len(vec))] += 1.0
-
-    norm = math.sqrt(sum(v * v for v in vec))
-    if norm == 0.0:
-        return vec
-    return [v / norm for v in vec]
-
-
-def cosine_similarity(vec_a: Sequence[float], vec_b: Sequence[float]) -> float:
-    """[RUNTIME] Compute cosine similarity with zero-vector safeguards."""
-    dot = sum(a * b for a, b in zip(vec_a, vec_b))
-    norm_a = math.sqrt(sum(a * a for a in vec_a))
-    norm_b = math.sqrt(sum(b * b for b in vec_b))
-    denom = norm_a * norm_b
-    if denom == 0.0:
-        return 0.0
-    return dot / denom
+    return local_bow_embedding(text)
 
 
 def estimate_coherence(
@@ -154,7 +117,9 @@ def estimate_coherence(
         candidate_vec
     )
     coherence = map_similarity_to_coherence(cos, nonnegative_space=nonnegative_space)
-    notes.append("embedding_cosine_nonnegative" if nonnegative_space else "embedding_cosine")
+    notes.append(
+        "embedding_cosine_nonnegative" if nonnegative_space else "embedding_cosine"
+    )
     return coherence, notes
 
 
@@ -204,7 +169,9 @@ def compute_adaptive_threshold(
         return _clip(base_threshold, config.minimum, config.maximum)
 
     n = min(len(drifts), len(coherences))
-    instabilities = [_clip((drifts[i] + (1.0 - coherences[i])) / 2.0) for i in range(n)]
+    instabilities = [
+        _clip((drifts[i] + (1.0 - coherences[i])) / 2.0) for i in range(n)
+    ]
     mean_instability = sum(instabilities) / len(instabilities)
 
     adapted = base_threshold + config.alpha * (mean_instability - base_threshold)

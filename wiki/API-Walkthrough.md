@@ -47,3 +47,16 @@ Current documented endpoints in this repository:
 See:
 - `docs/api_walkthrough.md`
 - `api/main.py`
+
+## Release-control flow
+
+The API keeps candidate generation and release separate:
+
+1. `/por/complete` asks the configured generator for one or more candidates.
+2. Runtime estimators compute drift/coherence for the candidate set.
+3. The core PoR gate applies the threshold rule.
+4. The response releases output only on `PROCEED`; otherwise it returns a silence
+   token and notes.
+
+`/por/evaluate` skips generation and evaluates a caller-provided candidate.
+This is the safest entry point for wrapping an existing generation stack.

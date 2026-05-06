@@ -9,7 +9,12 @@ No runtime adaptation or experimental recovery belongs here.
 
 from __future__ import annotations
 
-CORE_FIXED_THRESHOLD = 0.39
+from typing import Literal
+
+from silence_as_control.config import get_core_fixed_threshold
+
+DecisionStatus = Literal["PROCEED", "SILENCE"]
+CORE_FIXED_THRESHOLD = get_core_fixed_threshold()
 
 
 def compute_instability_score(drift: float, coherence: float) -> float:
@@ -21,7 +26,10 @@ def compute_instability_score(drift: float, coherence: float) -> float:
     return max(0.0, min(instability, 1.0))
 
 
-def fixed_threshold_release_decision(instability_score: float, threshold: float) -> str:
+def fixed_threshold_release_decision(
+    instability_score: float,
+    threshold: float,
+) -> DecisionStatus:
     """[CORE] Deterministically return `PROCEED` or `SILENCE`.
 
     Rule: release when instability <= threshold, else silence.

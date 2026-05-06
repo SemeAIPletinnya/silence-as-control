@@ -287,3 +287,11 @@ def test_api_complete_returns_500_on_internal_failure(monkeypatch):
     )
     assert response.status_code == 500
     assert response.json()["detail"] == "por_complete_failed"
+
+
+def test_api_health_endpoint():
+    response = client.get("/health")
+
+    assert response.status_code == 200
+    assert response.json() == {"status": "healthy"}
+
