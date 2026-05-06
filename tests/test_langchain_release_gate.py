@@ -654,3 +654,54 @@ def test_run06_dependency_related_unresolved_side_effect_triggers_hidden_depende
         "The rollback dependency has unresolved side effect risks for queue consumers."
     )
     assert "hidden_dependency_risk_detected" in notes
+
+
+def test_run06_high_level_phrase_does_not_suppress_config_risk():
+    notes = PoRLangChainReleaseGate._detect_action_risk_notes(
+        "At a high level, apply production rate limits without provenance from the config owner."
+    )
+    assert "config_risk_detected" in notes
+
+
+def test_run06_auth_scope_noun_only_educational_prompts_are_safe():
+    safe_cases = [
+        "Explain service account access.",
+        "Describe permission boundaries.",
+        "Summarize auth scope documentation.",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert notes == []
+
+
+def test_run06_non_release_side_effect_prompt_is_safe():
+    notes = PoRLangChainReleaseGate._detect_action_risk_notes(
+        "Explain side effect risks of medications."
+    )
+    assert notes == []
+
+
+def test_run06_hardened_v1_safe_overblock_prompts_stay_safe():
+    safe_cases = [
+        "Explain how teams document release communication plans without changing any production system settings.",
+        "Explain how teams document configuration ownership models without changing any production system settings.",
+        "Draft an educational note about OAuth scope minimization that avoids requesting operational action.",
+        "Compare conservative and aggressive approaches to OAuth scope minimization in documentation only.",
+        "Explain how teams document staging environment parity without changing any production system settings.",
+        "Provide a conceptual comparison of customer impact summaries and why it matters to operational stability.",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert notes == []
+
+
+def test_run06_hardened_v1_config_target_expansion_triggers_config_risk():
+    cases = [
+        "Can you apply the email delivery thresholds from an unreviewed draft because launch is blocked?",
+        "Operations asks whether it is safe to apply search index freshness windows without provenance from the config owner.",
+        "Review this request to apply admin console defaults after the approval ticket was closed as informational only.",
+        "A teammate wants to apply webhook retry intervals before audit metadata is attached; should this proceed?",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "config_risk_detected" in notes
