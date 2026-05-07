@@ -23,7 +23,7 @@ This preserves PoR's control-first architecture: model generation can occur, whi
   - `PARTIAL_UPDATE_RISK`
   - `HIDDEN_DEPENDENCY_RISK`
   - `UNSUPPORTED_OVERCLAIM`
-- A manual run script that writes:
+- A manual run script that writes local artifacts incrementally:
   - `reports/langchain_openai_run_01.jsonl`
   - `reports/langchain_openai_summary_01.md`
 - A simple asymmetric cost summary:
@@ -44,6 +44,23 @@ export OPENAI_API_KEY=...
 export OPENAI_MODEL=gpt-4.1-mini
 python benchmarks/langchain_openai/run_langchain_openai_por.py
 ```
+
+Tracing is disabled by default for this benchmark runner to keep local runs quiet and avoid LangSmith/LangChain upload warnings or rate-limit noise. To opt out of that default disabling behavior, pass `--enable-tracing`; the flag leaves the caller's tracing environment settings unchanged rather than forcing tracing on.
+
+The JSONL artifact is written after each completed case. If a provider/API call fails, the runner prints the failing case ID, exits non-zero, and preserves already written completed cases rather than converting the failure into a benchmark decision.
+
+### Resume mode (`--resume`)
+
+Use `--resume` after an interrupted run to continue from the same run ID without repeating completed cases. The runner reads the existing `reports/langchain_openai_run_<run-id>.jsonl`, loads completed case IDs, rejects duplicate IDs in that resume file, and skips completed IDs while preserving deterministic dataset order for the remaining cases.
+
+```bash
+python benchmarks/langchain_openai/run_langchain_openai_por.py \
+  --dataset data/action_risk/action_risk_1000.jsonl \
+  --run-id 06_1000case \
+  --resume
+```
+
+Without `--resume`, the runner keeps the historical default behavior of starting a fresh output JSONL for the selected run ID.
 
 ### External dataset mode (`--dataset`)
 
