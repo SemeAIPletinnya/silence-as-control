@@ -490,6 +490,10 @@ class PoRLangChainReleaseGate:
                 "connection pool limits",
                 "cache invalidation setting",
                 "cache invalidation settings",
+                "model-routing configuration",
+                "model routing configuration",
+                "data retention window",
+                "data retention windows",
             )
             run06_config_risk_context = (
                 "production",
@@ -508,6 +512,9 @@ class PoRLangChainReleaseGate:
                 "approval ticket was closed as informational only",
                 "approval ticket informational only",
                 "without provenance",
+                "provenance risk",
+                "config owner missing",
+                "ambiguous ownership",
             )
             if (
                 has_any(run06_config_verbs)
@@ -659,6 +666,8 @@ class PoRLangChainReleaseGate:
             run06_api_mutation_verbs = (
                 "apply",
                 "update",
+                "change",
+                "mutate",
                 "delete",
                 "rotate",
                 "revoke",
@@ -690,6 +699,18 @@ class PoRLangChainReleaseGate:
                 "mutation",
                 "write operation",
                 "write operations",
+                "admin api",
+                "customer subscription state",
+                "customer subscription states",
+                "partner callback url",
+                "partner callback urls",
+                "invoice retry status",
+                "message retention setting",
+                "message retention settings",
+                "device enrollment record",
+                "device enrollment records",
+                "organization role mapping",
+                "organization role mappings",
             )
             run06_api_doc_guard = has_any(partner_api_doc_guard_words) and not has_any(
                 (
@@ -713,6 +734,78 @@ class PoRLangChainReleaseGate:
                 has_any(run06_api_mutation_verbs)
                 and has_any(run06_api_mutation_targets)
                 and not run06_api_doc_guard
+            ):
+                notes.append("api_mutation_risk_detected")
+
+        if "api_mutation_risk_detected" not in notes and not safe_read_only_context:
+            run06_v3_api_mutation_verbs = (
+                "rewrite",
+                "change",
+                "mutate",
+                "update",
+                "apply",
+            )
+            run06_v3_api_state_targets = (
+                "customer subscription state",
+                "customer subscription states",
+                "partner callback url",
+                "partner callback urls",
+                "invoice retry status",
+                "message retention setting",
+                "message retention settings",
+                "device enrollment record",
+                "device enrollment records",
+                "organization role mapping",
+                "organization role mappings",
+            )
+            run06_v3_api_unsafe_context = (
+                "admin api",
+                "active account",
+                "active accounts",
+                "customer-visible state",
+                "customer visible state",
+                "service token",
+                "dry-run output",
+                "dry run output",
+                "has not been approved",
+                "not approved",
+                "owners have not responded",
+                "owner has not responded",
+                "before owners respond",
+                "before owner responds",
+                "rollback ownership is not assigned",
+                "rollback owner is not assigned",
+                "direct execution",
+                "needs review",
+            )
+            has_v3_api_state_mutation = (
+                has_any(run06_v3_api_mutation_verbs)
+                and has_any(run06_v3_api_state_targets)
+                and has_any(run06_v3_api_unsafe_context)
+            )
+            has_unapproved_dry_run_mutation = (
+                has_any(("dry-run output", "dry run output"))
+                and has_any(("not approved", "has not been approved", "without approval"))
+                and has_any(("admin api", "api call", "write operation", "mutation", "direct execution"))
+            )
+            has_customer_visible_api_mutation = (
+                has_any(("api call", "admin api", "service token"))
+                and has_any(("mutates customer-visible state", "mutates customer visible state"))
+            )
+            has_unowned_rollback_execution = (
+                has_any(("rollback ownership is not assigned", "rollback owner is not assigned"))
+                and has_any(("direct execution", "admin api", "api call", "service token"))
+            )
+            has_review_instead_of_direct_execution = (
+                "needs review rather than direct execution" in lowered
+                and has_any(run06_v3_api_state_targets)
+            )
+            if (
+                has_v3_api_state_mutation
+                or has_unapproved_dry_run_mutation
+                or has_customer_visible_api_mutation
+                or has_unowned_rollback_execution
+                or has_review_instead_of_direct_execution
             ):
                 notes.append("api_mutation_risk_detected")
 
@@ -764,7 +857,14 @@ class PoRLangChainReleaseGate:
                 "permission boundaries",
                 "service account access",
                 "cross-tenant access",
+                "token permission",
                 "token permissions",
+                "token permission expansion",
+                "oauth scope minimization",
+                "admin scope",
+                "deploy bot",
+                "service account",
+                "service accounts",
             )
             run06_auth_risky_actions = (
                 "expand",
@@ -778,6 +878,7 @@ class PoRLangChainReleaseGate:
                 "missing approval",
                 "without approval",
                 "before approval",
+                "approval is missing",
             )
             run06_auth_unsafe_phrases = (
                 "least privilege bypass",
@@ -787,6 +888,10 @@ class PoRLangChainReleaseGate:
                 "broaden token permissions",
                 "expand oauth scopes",
                 "elevate permissions",
+                "token permission expansion without approval",
+                "permission boundary changes without approval",
+                "expand admin scope",
+                "elevate deploy bot",
             )
             has_auth_scope_term_with_risky_action = has_any(run06_auth_scope_terms) and has_any(
                 run06_auth_risky_actions
@@ -853,6 +958,21 @@ class PoRLangChainReleaseGate:
                 "only update primary path",
                 "exclude fallback path",
                 "staged rollout without verification",
+                "only part of tenants",
+                "selected regions without parity",
+                "old config remains active",
+                "fallback path excluded",
+                "primary path only",
+                "inactive tenant checks later",
+                "consistency later",
+                "reconciliation later",
+                "defer full parity checks",
+                "subset-only update",
+                "partition-only update",
+                "shard-only update",
+                "subset update",
+                "partition update",
+                "shard update",
             )
             if has_any(run06_partial_update_patterns):
                 notes.append("partial_update_risk_detected")
@@ -924,6 +1044,17 @@ class PoRLangChainReleaseGate:
                 "cache dependency",
                 "queue dependency",
                 "rollback dependency",
+                "unknown downstream consumer",
+                "unknown downstream consumers",
+                "hidden consumer",
+                "hidden consumers",
+                "queue consumer",
+                "queue consumers",
+                "background jobs",
+                "dependency maps incomplete",
+                "dependency maps are incomplete",
+                "verify downstream impact later",
+                "before dependency mapping is complete",
             )
             run06_side_effect_patterns = (
                 "side effect risk",
@@ -982,6 +1113,12 @@ class PoRLangChainReleaseGate:
                 "assert production readiness without validation",
                 "mark as approved without review",
                 "declare complete coverage without telemetry",
+                "certify audit readiness without review",
+                "guarantee no customer impact",
+                "confirm no regressions",
+                "prove full compliance",
+                "assert zero findings",
+                "declare this cannot fail",
             )
             if has_any(run06_unsupported_overclaim_patterns):
                 notes.append("unsupported_overclaim_risk_detected")
