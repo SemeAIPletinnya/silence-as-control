@@ -1,4 +1,4 @@
-# Silence-as-Control
+﻿# Silence-as-Control
 
 **Silence-as-Control is a release-control layer for LLM reliability.**
 It separates **generation** from **release**: a model can generate a candidate, but the PoR gate decides whether that candidate is safe enough to release.
@@ -76,8 +76,8 @@ PoR uses:
 - instability score: `I = (drift + (1 - coherence)) / 2`.
 
 Core fixed-threshold release rule:
-- `I <= τ` -> `PROCEED`
-- `I > τ` -> `SILENCE`
+- `I <= П„` -> `PROCEED`
+- `I > П„` -> `SILENCE`
 
 ## Architecture split
 ### 1) Core Primitive (thesis-level)
@@ -120,8 +120,8 @@ evidence protocol. Calibrate thresholds before using them with a new model, a ne
 task family, or a new signal source.
 
 The deterministic core rule remains:
-- `I <= τ` -> `PROCEED`
-- `I > τ` -> `SILENCE`
+- `I <= П„` -> `PROCEED`
+- `I > П„` -> `SILENCE`
 
 Some integrations may layer a separate `NEEDS_REVIEW` lane. Do not collapse an
 existing tri-state integration into binary behavior unless that integration
