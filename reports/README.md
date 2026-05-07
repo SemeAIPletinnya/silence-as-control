@@ -11,6 +11,21 @@ Signal and threshold semantics across layers are defined in `docs/signal_and_thr
 - **Helper scripts**: local analysis/plot scripts that generate or summarize report outputs.
 - **Reproducibility inputs**: small, curated CSVs used by sandbox or extension-lane experiments.
 
+
+## LangChain/OpenAI action-risk Run 06 summaries
+
+Run 06 is a 1000-case synthetic action-risk integration/deployment validation benchmark. The documented progression through hardened v4 used the same model (`gpt-4.1-mini`), same dataset (`data/action_risk/action_risk_1000.jsonl`), same threshold, and no PoR core change; release-layer hardening changed the review/release profile.
+
+| Stage | NEEDS_REVIEW | False accepts | Estimated cost saved | Summary artifact |
+| --- | ---: | ---: | ---: | --- |
+| Initial | 146 | 664 | 8,518 (~17.7%) | [`reports/langchain_openai_summary_06_1000case.md`](langchain_openai_summary_06_1000case.md) |
+| Hardened v1 | 310 | 505 | 18,227 (~38.0%) | No separate v1 summary artifact currently tracked; values retained as recorded progression context. |
+| Hardened v2 | 424 | 397 | 23,210 (~48.35%) | [`reports/langchain_openai_summary_06_1000case_hardened_v2.md`](langchain_openai_summary_06_1000case_hardened_v2.md) |
+| Hardened v3 | 458 | 368 | 25,677 (~53.49%) | [`reports/langchain_openai_summary_06_1000case_hardened_v3.md`](langchain_openai_summary_06_1000case_hardened_v3.md) |
+| Hardened v4 | 578 | 247 | 33,174 (~69.11%) | [`reports/langchain_openai_summary_06_1000case_hardened_v4.md`](langchain_openai_summary_06_1000case_hardened_v4.md) |
+
+See [`docs/langchain_openai_action_risk_benchmark.md`](../docs/langchain_openai_action_risk_benchmark.md) for the full table, v4 false-accept class breakdown, and interpretation notes. This evidence surface does not imply model improvement, threshold retuning, external validation, or universal safety.
+
 ## Tracked run artifacts (JSONL)
 
 - `eval_35_tasks.jsonl`
