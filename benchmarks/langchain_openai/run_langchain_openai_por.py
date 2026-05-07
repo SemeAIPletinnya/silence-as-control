@@ -1,4 +1,4 @@
-﻿"""Manual LangChain + OpenAI action-risk PoR benchmark.
+"""Manual LangChain + OpenAI action-risk PoR benchmark.
 
 This script is an integration/deployment validation artifact.
 It intentionally requires a live OpenAI API key and is not part of CI.
@@ -19,6 +19,13 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from integrations.langchain_release_gate import PoRLangChainReleaseGate
+
+
+TRACING_ENV_VARS = (
+    "LANGCHAIN_TRACING",
+    "LANGCHAIN_TRACING_V2",
+    "LANGSMITH_TRACING",
+)
 
 
 DATASET = [
@@ -192,6 +199,19 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=None,
         help="Optional path to JSONL dataset. Defaults to built-in hardcoded dataset when omitted.",
     )
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Resume an interrupted run by skipping case IDs already present in the output JSONL.",
+    )
+    parser.add_argument(
+        "--enable-tracing",
+        action="store_true",
+        help=(
+            "Do not disable LangChain/LangSmith tracing for this run. "
+            "Tracing is disabled by default for local benchmark runs."
+        ),
+    )
     return parser.parse_args(argv)
 
 
@@ -245,9 +265,91 @@ def _load_dataset(dataset_path: str | None) -> tuple[list[dict], str]:
     return rows, path.as_posix()
 
 
+def _configure_tracing(enable_tracing: bool) -> None:
+    """Disable tracing by default; --enable-tracing leaves user env unchanged."""
+    if enable_tracing:
+        print("LangChain/LangSmith tracing environment left unchanged for this run.")
+        return
+
+    for name in TRACING_ENV_VARS:
+        os.environ[name] = "false"
+    print(
+        "LangChain/LangSmith tracing disabled for this local benchmark run. "
+        "Use --enable-tracing to leave tracing environment settings unchanged."
+    )
+
+
+def _load_resume_rows(jsonl_path: Path) -> tuple[list[dict], set[str]]:
+    if not jsonl_path.exists():
+        return [], set()
+
+    rows: list[dict] = []
+    completed_ids: set[str] = set()
+    with jsonl_path.open("r", encoding="utf-8") as f:
+        for line_no, raw_line in enumerate(f, start=1):
+            line = raw_line.strip()
+            if not line:
+                continue
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError as exc:
+                raise ValueError(f"Malformed resume JSONL at {jsonl_path}:{line_no}: {exc.msg}") from exc
+            if not isinstance(row, dict):
+                raise ValueError(f"Malformed resume JSONL at {jsonl_path}:{line_no}: row must be an object")
+            case_id = row.get("id")
+            if not isinstance(case_id, str) or not case_id:
+                raise ValueError(
+                    f"Malformed resume JSONL at {jsonl_path}:{line_no}: "
+                    "row must include a non-empty string id"
+                )
+            if case_id in completed_ids:
+                raise ValueError(f"Resume JSONL contains duplicate id {case_id!r} at {jsonl_path}:{line_no}")
+            rows.append(row)
+            completed_ids.add(case_id)
+    return rows, completed_ids
+
+
+def _remaining_cases(dataset: list[dict], completed_ids: set[str]) -> list[dict]:
+    return [case for case in dataset if case["id"] not in completed_ids]
+
+
+def _validate_unique_dataset_ids(dataset: list[dict]) -> None:
+    seen: set[str] = set()
+    for case in dataset:
+        case_id = case["id"]
+        if case_id in seen:
+            raise ValueError(f"Dataset contains duplicate id {case_id!r}")
+        seen.add(case_id)
+
+
+def _row_from_result(case: dict, result: dict) -> dict:
+    return {
+        "id": case["id"],
+        "prompt": case["prompt"],
+        "risk_class": case["risk_class"],
+        "expected_behavior": case["expected_behavior"],
+        "decision": result["decision"],
+        "released": result["released"],
+        "output_preview": _preview(result.get("output")),
+        "threshold": result["threshold"],
+        "instability_score": result["instability_score"],
+        "drift": result["drift"],
+        "coherence": result["coherence"],
+        "notes": result.get("notes", []),
+        "failure_cost": case["failure_cost"],
+        "silence_cost": case["silence_cost"],
+    }
+
+
+def _write_jsonl_row(handle, row: dict) -> None:
+    handle.write(json.dumps(row, ensure_ascii=False) + "\n")
+    handle.flush()
+
+
 def main() -> int:
     args = _parse_args()
     run_id = args.run_id
+    _configure_tracing(args.enable_tracing)
 
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
@@ -264,37 +366,35 @@ def main() -> int:
     jsonl_path, summary_path = _artifact_paths(run_id)
     try:
         dataset, dataset_source = _load_dataset(args.dataset)
+        _validate_unique_dataset_ids(dataset)
+        rows, completed_ids = _load_resume_rows(jsonl_path) if args.resume else ([], set())
     except ValueError as exc:
-        print(f"Dataset error: {exc}")
+        print(f"Benchmark setup error: {exc}")
         return 1
+
+    remaining_cases = _remaining_cases(dataset, completed_ids)
+    if args.resume:
+        print(f"Resume enabled: loaded {len(completed_ids)} completed case ID(s) from {jsonl_path}.")
+        print(f"Resume enabled: {len(remaining_cases)} case(s) remain in deterministic dataset order.")
 
     llm = ChatOpenAI(model=model_name, api_key=api_key, temperature=0)
     gate = PoRLangChainReleaseGate(chain=llm)
 
-    rows: list[dict] = []
-    for case in dataset:
-        result = gate.invoke(case["prompt"])
-        row = {
-            "id": case["id"],
-            "prompt": case["prompt"],
-            "risk_class": case["risk_class"],
-            "expected_behavior": case["expected_behavior"],
-            "decision": result["decision"],
-            "released": result["released"],
-            "output_preview": _preview(result.get("output")),
-            "threshold": result["threshold"],
-            "instability_score": result["instability_score"],
-            "drift": result["drift"],
-            "coherence": result["coherence"],
-            "notes": result.get("notes", []),
-            "failure_cost": case["failure_cost"],
-            "silence_cost": case["silence_cost"],
-        }
-        rows.append(row)
+    output_mode = "a" if args.resume else "w"
+    with jsonl_path.open(output_mode, encoding="utf-8") as f:
+        for case in remaining_cases:
+            case_id = case["id"]
+            try:
+                result = gate.invoke(case["prompt"])
+            except Exception as exc:
+                print(f"Provider/API error while processing case {case_id!r}: {exc}")
+                print(f"Completed cases already written to {jsonl_path} have been preserved.")
+                return 1
 
-    with jsonl_path.open("w", encoding="utf-8") as f:
-        for row in rows:
-            f.write(json.dumps(row, ensure_ascii=False) + "\n")
+            row = _row_from_result(case, result)
+            _write_jsonl_row(f, row)
+            rows.append(row)
+            completed_ids.add(case_id)
 
     summary = _compute_summary(rows)
     timestamp = datetime.now(timezone.utc).isoformat()
