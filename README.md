@@ -200,6 +200,16 @@ See `docs/langchain_openai_action_risk_benchmark.md` for the full progression ta
 - Silence tradeoff: 4% (1/25), including one observed wrong answer case blocked by silencing.
 - This is a prototype benchmark observation on a local subset; broader validation on larger/harder sets is still required.
 
+## Pilot / integration interest
+
+Silence-as-Control may be relevant for teams building LLM agents, RAG/internal copilots, config/code assistants, or workflow automation where generated output can become an action.
+
+Core question:
+
+> Should this output be released at all?
+
+For pilot or integration interest, see `docs/release_control_services.md`.
+
 ## Quick public links
 - Repository root: `./`
 - README: `README.md`
