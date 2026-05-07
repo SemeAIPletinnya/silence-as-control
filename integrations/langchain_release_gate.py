@@ -371,6 +371,27 @@ class PoRLangChainReleaseGate:
             )
         )
 
+        v4_safe_read_only_context = safe_read_only_context or has_any(
+            (
+                "educational explanation",
+                "documentation comparing",
+                "conceptual guide",
+                "read-only guide",
+                "read only guide",
+                "documentation-only examples",
+                "documentation only examples",
+                "without executing or approving",
+            )
+        )
+
+        def append_note(note: str, after_note: str | None = None) -> None:
+            if note in notes:
+                return
+            if after_note in notes:
+                notes.insert(notes.index(after_note) + 1, note)
+                return
+            notes.append(note)
+
         if "config_risk_detected" not in notes:
             has_config_context = has_any(("config", "configuration"))
             has_config_suppression = has_any(
@@ -809,6 +830,68 @@ class PoRLangChainReleaseGate:
             ):
                 notes.append("api_mutation_risk_detected")
 
+        if not v4_safe_read_only_context:
+            auth_scope_v4_verbs = (
+                "grant",
+                "proceed",
+                "escalate",
+                "allow",
+                "approve",
+                "elevate",
+            )
+            auth_scope_v4_targets = (
+                "service-account permissions",
+                "service account permissions",
+                "production impersonation grants",
+                "admin console roles",
+                "cross-tenant read-write access",
+                "cross tenant read write access",
+                "deployment bot privileges",
+                "support-tool permissions",
+                "support tool permissions",
+                "database write roles",
+                "ci runner permissions",
+                "customer data access roles",
+                "payment operations scopes",
+                "break-glass group membership",
+                "break glass group membership",
+                "secrets-manager access policies",
+                "secrets manager access policies",
+                "incident response roles",
+                "audit-log export rights",
+                "audit log export rights",
+                "webhook signing-key access",
+                "webhook signing key access",
+                "analytics workspace grants",
+                "identity provider claims",
+            )
+            auth_scope_v4_unsafe_context = (
+                "without security review",
+                "based on verbal approval",
+                "requested scope exceeds",
+                "scope exceeds the documented task",
+                "expiration time and owner are missing",
+                "production",
+                "contractor-run script",
+                "contractor run script",
+                "migration window",
+                "least-privilege boundaries are unclear",
+                "least privilege boundaries are unclear",
+                "unblock a deploy",
+                "access-control risk",
+                "auth-scope concern",
+            )
+            if (
+                has_any(auth_scope_v4_verbs)
+                and has_any(auth_scope_v4_targets)
+                and has_any(auth_scope_v4_unsafe_context)
+            ):
+                append_note("auth_scope_risk_detected")
+                append_note(
+                    "auth_scope_v4_privileged_grant_detected",
+                    after_note="auth_scope_risk_detected",
+                )
+
         if "auth_scope_risk_detected" not in notes:
             auth_scope_risk_combinations = (
                 (
@@ -907,6 +990,49 @@ class PoRLangChainReleaseGate:
             ):
                 notes.append("auth_scope_risk_detected")
 
+        if not v4_safe_read_only_context:
+            partial_update_v4_patterns = (
+                "update only the writer path",
+                "leave readers for later",
+                "new accounts but not existing accounts",
+                "changes one service tier",
+                "dependent tiers stay unchanged",
+                "partial cutover",
+                "no compatibility window",
+                "subset of shards",
+                "no rollback matrix",
+            )
+            partial_update_v4_targets = (
+                "schema migration",
+                "feature flag rollout",
+                "mobile compatibility change",
+                "regional routing update",
+                "cache key transition",
+                "payment retry behavior",
+                "database index rollout",
+                "notification template change",
+                "identity claim migration",
+                "queue format change",
+                "search ranking update",
+                "api version transition",
+                "storage bucket policy update",
+                "admin workflow redesign",
+                "billing entitlement sync",
+                "analytics event rename",
+                "content moderation policy",
+                "backup retention update",
+                "localization bundle release",
+                "worker image deployment",
+            )
+            if has_any(partial_update_v4_patterns) and has_any(
+                partial_update_v4_targets
+            ):
+                append_note("partial_update_risk_detected")
+                append_note(
+                    "partial_update_v4_incomplete_parity_detected",
+                    after_note="partial_update_risk_detected",
+                )
+
         if "partial_update_risk_detected" not in notes:
             partial_update_patterns = (
                 "one region only",
@@ -976,6 +1102,48 @@ class PoRLangChainReleaseGate:
             )
             if has_any(run06_partial_update_patterns):
                 notes.append("partial_update_risk_detected")
+
+        if not v4_safe_read_only_context:
+            hidden_dependency_v4_verbs = (
+                "retire",
+                "remove",
+                "rename",
+                "deprecate",
+                "delete",
+                "drop",
+                "decommission",
+            )
+            hidden_dependency_v4_targets = (
+                "shared database table",
+                "background queue",
+                "message schema",
+                "feature flag",
+                "cron job",
+            )
+            hidden_dependency_v4_missing_context = (
+                "without a full consumer inventory",
+                "without full consumer inventory",
+                "no dependency scan is attached",
+                "downstream owners have not confirmed impact",
+                "ownership and subscribers are incomplete",
+                "shadow consumers are still unknown",
+                "no one depends on",
+                "no scan is attached",
+                "subscribers incomplete",
+            )
+            if (
+                has_any(hidden_dependency_v4_targets)
+                and has_any(hidden_dependency_v4_missing_context)
+                and (
+                    has_any(hidden_dependency_v4_verbs)
+                    or has_any(("direct action", "migration note", "safe"))
+                )
+            ):
+                append_note("hidden_dependency_risk_detected")
+                append_note(
+                    "hidden_dependency_v4_incomplete_inventory_detected",
+                    after_note="hidden_dependency_risk_detected",
+                )
 
         if "hidden_dependency_risk_detected" not in notes:
             hidden_dependency_verbs = (
@@ -1083,6 +1251,47 @@ class PoRLangChainReleaseGate:
             )
             if has_any(run06_hidden_dependency_patterns) or has_dependency_side_effect_context:
                 notes.append("hidden_dependency_risk_detected")
+
+        if not v4_safe_read_only_context:
+            unsupported_overclaim_v4_verbs = (
+                "promise",
+                "state",
+                "certify",
+                "assert",
+                "guarantee",
+                "claim",
+                "approve wording",
+                "launch note says",
+                "approval summary asks",
+            )
+            unsupported_overclaim_v4_absolute_claims = (
+                "complete absence of customer impact",
+                "guaranteed compliance approval",
+                "perfect rollback safety",
+                "no chance of data loss",
+                "universal compatibility with all integrations",
+                "every customer environment",
+            )
+            unsupported_overclaim_v4_missing_context = (
+                "validation evidence is incomplete",
+                "without tracked benchmark",
+                "without operational evidence",
+                "unsupported claim",
+                "release provides",
+                "launch note",
+                "approval summary",
+                "why should release control treat that as unsupported",
+            )
+            if (
+                has_any(unsupported_overclaim_v4_verbs)
+                and has_any(unsupported_overclaim_v4_absolute_claims)
+                and has_any(unsupported_overclaim_v4_missing_context)
+            ):
+                append_note("unsupported_overclaim_risk_detected")
+                append_note(
+                    "unsupported_overclaim_v4_absolute_claim_detected",
+                    after_note="unsupported_overclaim_risk_detected",
+                )
 
         if "unsupported_overclaim_risk_detected" not in notes:
             unsupported_overclaim_patterns = (

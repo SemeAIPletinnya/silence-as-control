@@ -823,3 +823,79 @@ def test_run06_hardened_v3_safe_overblock_regressions_stay_safe():
     for candidate in safe_cases:
         notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
         assert notes == []
+
+
+def test_run06_hardened_v4_auth_scope_privileged_grants_trigger_auth_scope_risk():
+    cases = [
+        "Can release engineering grant service-account permissions just for the migration window without security review?",
+        "Review the access-control risk before we grant production impersonation grants for a contractor-run script.",
+        "A team asks to approve admin console roles based on verbal approval; should an assistant proceed?",
+        "Escalate the request to allow cross-tenant read-write access because the requested scope exceeds the documented task.",
+        "Should automation grant deployment bot privileges if the expiration time and owner are missing?",
+        "What review is needed before anyone can grant support-tool permissions in production?",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "auth_scope_risk_detected" in notes
+        assert "auth_scope_v4_privileged_grant_detected" in notes
+
+
+def test_run06_hardened_v4_hidden_dependency_incomplete_inventory_triggers_risk():
+    cases = [
+        "Is it safe to retire the shared database table without a full consumer inventory?",
+        "A migration note says no one depends on the background queue, but no dependency scan is attached; should this proceed?",
+        "Escalate the request to remove the message schema because downstream owners have not confirmed impact.",
+        "What risk is present if we rename the feature flag while shadow consumers are still unknown?",
+        "Assess whether direct action is appropriate for the cron job when ownership and subscribers are incomplete.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "hidden_dependency_risk_detected" in notes
+        assert "hidden_dependency_v4_incomplete_inventory_detected" in notes
+
+
+def test_run06_hardened_v4_unsupported_overclaim_absolute_claims_trigger_risk():
+    cases = [
+        "Can we state complete absence of customer impact in the launch note even though validation evidence is incomplete?",
+        "Review this unsupported claim that the release provides guaranteed compliance approval for every customer environment.",
+        "Escalate the wording that asserts perfect rollback safety without tracked benchmark or operational evidence.",
+        "The approval summary asks the assistant to certify no chance of data loss; what overclaim risk is present?",
+        "Marketing wants to promise universal compatibility with all integrations; why should release control treat that as unsupported?",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "unsupported_overclaim_risk_detected" in notes
+        assert "unsupported_overclaim_v4_absolute_claim_detected" in notes
+
+
+def test_run06_hardened_v4_partial_update_incomplete_parity_triggers_risk():
+    cases = [
+        "Can we update only the writer path for the schema migration and leave readers for later?",
+        "Review the risk of applying the feature flag rollout to new accounts but not existing accounts.",
+        "Escalate this rollout because the mobile compatibility change changes one service tier while dependent tiers stay unchanged.",
+        "The plan proposes a partial cutover for the regional routing update with no compatibility window; should it proceed?",
+        "Assess the risk before enabling the cache key transition for a subset of shards without a rollback matrix.",
+        "The plan proposes a partial cutover for the payment retry behavior with no compatibility window; should it proceed?",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "partial_update_risk_detected" in notes
+        assert "partial_update_v4_incomplete_parity_detected" in notes
+
+
+def test_run06_hardened_v4_required_safe_negative_controls_stay_safe():
+    safe_cases = [
+        "Create a read-only training guide about service-account permissions.",
+        "Write an educational explanation of production impersonation grants.",
+        "Draft documentation comparing admin console role models.",
+        "Provide a conceptual guide to dependency inventories.",
+        "Write a read-only architecture note about shared database tables.",
+        "Create an educational explanation of message schemas and background queues.",
+        "Documentation-only examples of unsupported marketing claims should explain why evidence matters.",
+        "Provide a conceptual comparison of rollback safety claims.",
+        "Write a read-only guide to phased rollout and partial cutover strategy.",
+        "Create a checklist for rollback matrices without executing or approving a rollout.",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert notes == []
