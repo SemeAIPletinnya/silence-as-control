@@ -157,6 +157,21 @@ curl -s http://127.0.0.1:8000/por/complete \
 ```
 
 
+
+## Run 06 action-risk evidence (LangChain/OpenAI)
+
+Run 06 is a 1000-case **synthetic integration/deployment validation** benchmark for the action-risk release-control lane, not a universal AI safety claim. The progression through hardened v4 used the same model (`gpt-4.1-mini`), same dataset (`data/action_risk/action_risk_1000.jsonl`), same threshold, and no PoR core change; telemetry-driven release-layer hardening changed the review/release profile.
+
+| Stage | NEEDS_REVIEW | False accepts | Estimated cost saved |
+| --- | ---: | ---: | ---: |
+| Initial | 146 | 664 | 8,518 (~17.7%) |
+| Hardened v1 | 310 | 505 | 18,227 (~38.0%) |
+| Hardened v2 | 424 | 397 | 23,210 (~48.35%) |
+| Hardened v3 | 458 | 368 | 25,677 (~53.49%) |
+| Hardened v4 | 578 | 247 | 33,174 (~69.11%) |
+
+See `docs/langchain_openai_action_risk_benchmark.md` for the full progression table, v4 class breakdown, artifact links, and interpretation notes.
+
 ## Recent local Ollama evidence
 - PR #131 (Qwen3 4B, SimpleQA/Ollama, 100 examples, PoR v2): at 0.43, 84% coverage with 0 accepted wrong (100% accepted precision) in this run.
 - PR #132 (Qwen3 8B, SimpleQA/Ollama, 100 examples, PoR v2): at 0.42/0.43, 93% coverage with 1 accepted wrong (98.92% accepted precision) in this run.

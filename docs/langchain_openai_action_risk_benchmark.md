@@ -67,6 +67,39 @@ python benchmarks/langchain_openai/run_langchain_openai_por.py \
 
 If `OPENAI_API_KEY` is missing, the script exits with a clear message and non-zero status.
 
+
+## Run 06 1000-case action-risk progression
+
+Run 06 is a **synthetic integration/deployment validation benchmark** for the LangChain/OpenAI release-control lane. It is not a universal AI safety claim, not external validation, and not evidence that the model itself improved.
+
+Strongest supported claim: **same model, same dataset, same threshold, no PoR core change; release-layer hardening changed the review/release profile.** Across this progression, the dataset was `data/action_risk/action_risk_1000.jsonl`, the model was `gpt-4.1-mini`, and the improvements came from telemetry-driven integration/release-layer detector hardening rather than threshold tuning, model changes, dataset changes, benchmark-runner changes, or primitive PoR core changes.
+
+| Run 06 stage | PROCEED | NEEDS_REVIEW | SILENCE | False accepts | Safe overblocks | Estimated cost saved | Report artifact |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Initial | 854 | 146 | 0 | 664 | n/a | 8,518 (~17.7%) | [`reports/langchain_openai_summary_06_1000case.md`](../reports/langchain_openai_summary_06_1000case.md) |
+| Hardened v1 | 695 | 310 | 0 | 505 | n/a | 18,227 (~38.0%) | No separate v1 summary artifact currently tracked; values retained as recorded progression context. |
+| Hardened v2 | 576 | 424 | 0 | 397 | n/a | 23,210 (~48.35%) | [`reports/langchain_openai_summary_06_1000case_hardened_v2.md`](../reports/langchain_openai_summary_06_1000case_hardened_v2.md) |
+| Hardened v3 | 542 | 458 | 0 | 368 | n/a | 25,677 (~53.49%) | [`reports/langchain_openai_summary_06_1000case_hardened_v3.md`](../reports/langchain_openai_summary_06_1000case_hardened_v3.md) |
+| Hardened v4 | 422 | 578 | 0 | 247 | 25 | 33,174 (~69.11%) | [`reports/langchain_openai_summary_06_1000case_hardened_v4.md`](../reports/langchain_openai_summary_06_1000case_hardened_v4.md) |
+
+### Hardened v4 remaining false accepts by class
+
+| Risk class | False accepts |
+| --- | ---: |
+| `HIDDEN_DEPENDENCY_RISK` | 65 |
+| `UNSUPPORTED_OVERCLAIM` | 57 |
+| `API_MUTATION_RISK` | 52 |
+| `AUTH_SCOPE_RISK` | 39 |
+| `PARTIAL_UPDATE_RISK` | 32 |
+| `CONFIG_RISK` | 2 |
+
+### How to read these results
+
+- **False accept** = a risky case incorrectly allowed to `PROCEED`.
+- **Safe overblock** = a safe read-only case sent to `NEEDS_REVIEW`.
+- `NEEDS_REVIEW` is a release-control outcome, not a model failure.
+- `SILENCE` remains separate from `NEEDS_REVIEW`; this progression moved cases between release and review lanes without collapsing the tri-state integration semantics.
+
 ## CI and test boundaries
 
 - This run is manual-only and should not run in CI.
