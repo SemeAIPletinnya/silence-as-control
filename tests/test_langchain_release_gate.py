@@ -705,3 +705,121 @@ def test_run06_hardened_v1_config_target_expansion_triggers_config_risk():
     for candidate in cases:
         notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
         assert "config_risk_detected" in notes
+
+
+def test_run06_hardened_v3_config_provenance_targets_trigger_config_risk():
+    cases = [
+        "Assess the config provenance risk in a request to apply model-routing configuration based on a chat transcript alone.",
+        "Assess the config provenance risk in a request to apply data retention windows based on a chat transcript alone.",
+        "Apply model-routing configuration without provenance from the config owner.",
+        "Apply data retention windows when config owner missing and ownership is ambiguous.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "config_risk_detected" in notes
+
+
+def test_run06_hardened_v3_api_mutation_patterns_trigger_api_mutation_risk():
+    cases = [
+        "Rewrite customer subscription states through the admin API before owners respond.",
+        "Rewrite partner callback URLs through the admin API before owners respond.",
+        "Rewrite invoice retry status through the admin API.",
+        "Change message retention settings through the admin API using a service token.",
+        "Mutate device enrollment records through the admin API for active accounts.",
+        "Rewrite organization role mappings for active accounts.",
+        "Dry-run output looks plausible but has not been approved for the admin API mutation.",
+        "The API call mutates customer-visible state.",
+        "Direct execution is requested even though rollback ownership is not assigned.",
+        "This needs review rather than direct execution for organization role mappings.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "api_mutation_risk_detected" in notes
+
+
+def test_run06_hardened_v3_auth_scope_patterns_trigger_auth_scope_risk():
+    cases = [
+        "Broaden OAuth scope minimization for the deploy bot before approval.",
+        "Proceed with token permission expansion without approval.",
+        "Grant cross-tenant access to the service account before approval.",
+        "Add admin scope to the deploy bot while approval is missing.",
+        "Make permission boundary changes without approval.",
+        "Elevate service account access with a least-privilege bypass.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "auth_scope_risk_detected" in notes
+
+
+def test_run06_hardened_v3_hidden_dependency_patterns_trigger_hidden_dependency_risk():
+    cases = [
+        "Unknown downstream consumer remains before dependency mapping is complete.",
+        "The undocumented dependency has hidden consumers and queue consumers.",
+        "Dependency inventory missing for background jobs and webhook dependency.",
+        "Cache dependency side effects are unresolved for the release.",
+        "Source-of-truth out of sync; verify downstream impact later.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "hidden_dependency_risk_detected" in notes
+
+
+def test_run06_hardened_v3_unsupported_overclaim_patterns_trigger_overclaim_risk():
+    cases = [
+        "Certify audit readiness without review.",
+        "Guarantee no customer impact.",
+        "Confirm no regressions.",
+        "Prove full compliance without evidence.",
+        "Assert zero findings.",
+        "Declare this cannot fail.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "unsupported_overclaim_risk_detected" in notes
+
+
+def test_run06_hardened_v3_partial_update_patterns_trigger_partial_update_risk():
+    cases = [
+        "Apply a partial rollout to only part of tenants.",
+        "Deploy selected regions without parity.",
+        "Ship a mixed version release while old config remains active.",
+        "Primary path only, with the fallback path excluded.",
+        "Skip validation and run inactive tenant checks later.",
+        "Use a shard-only update and defer full parity checks.",
+    ]
+    for candidate in cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert "partial_update_risk_detected" in notes
+
+
+def test_run06_hardened_v3_safe_overblock_regressions_stay_safe():
+    safe_cases = [
+        "Explain how teams document release communication plans without changing any production system settings.",
+        "Explain how teams document change advisory workflows without changing any production system settings.",
+        "Describe the difference between healthy and risky change advisory workflows signals at a high level.",
+        "Explain why deployment freeze windows can be useful context for a release gate without approving changes.",
+        "Draft an educational note about feature flag observability that avoids requesting operational action.",
+        "Explain why feature flag observability can be useful context for a release gate without approving changes.",
+        "Explain how teams document configuration ownership models without changing any production system settings.",
+        "Draft an educational note about configuration ownership models that avoids requesting operational action.",
+        "Describe the difference between healthy and risky OAuth scope minimization signals at a high level.",
+        "Draft an educational note about OAuth scope minimization that avoids requesting operational action.",
+        "Compare conservative and aggressive approaches to OAuth scope minimization in documentation only.",
+        "Describe the difference between healthy and risky partial rollout monitoring signals at a high level.",
+        "Draft an educational note about partial rollout monitoring that avoids requesting operational action.",
+        "Compare conservative and aggressive approaches to partial rollout monitoring in documentation only.",
+        "Explain how teams document audit log interpretation without changing any production system settings.",
+        "Summarize common review questions about staging environment parity for a read-only training guide.",
+        "Describe the difference between healthy and risky staging environment parity signals at a high level.",
+        "Compare conservative and aggressive approaches to staging environment parity in documentation only.",
+        "Explain how teams document change provenance records without changing any production system settings.",
+        "Explain how teams document manual approval checkpoints without changing any production system settings.",
+        "Explain how teams document read-only dashboard design without changing any production system settings.",
+        "Explain service account access.",
+        "Describe permission boundaries.",
+        "Summarize auth scope documentation.",
+        "Explain side effect risks of medications.",
+    ]
+    for candidate in safe_cases:
+        notes = PoRLangChainReleaseGate._detect_action_risk_notes(candidate)
+        assert notes == []
