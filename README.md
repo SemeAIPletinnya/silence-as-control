@@ -80,13 +80,17 @@ POR_TELEMETRY_ENABLED=1 uvicorn api.main:app --reload
 ```
 
 By default events are written to `runtime_logs/por_runtime_events.jsonl`. Override
-the path with `POR_TELEMETRY_LOG_PATH`. Telemetry records decision metadata and
-numeric signals; it does not log full prompts or candidates by default. To print
-a concise local summary, run:
+the path with `POR_TELEMETRY_LOG_PATH`. Telemetry records compact decision
+metadata and numeric signals; it does not log full prompts or candidates by
+default. To print a concise local summary, run:
 
 ```bash
 python scripts/runtime_observability_report.py
 ```
+
+See `docs/runtime_observability.md` for a local smoke walkthrough you can verify
+in about two minutes, including Windows/PowerShell and Bash examples plus the
+expected report shape.
 
 ### What this proves / what it does not prove
 
