@@ -1,15 +1,14 @@
-FROM python:3.11-slim
+FROM python:3.13-slim
 
 WORKDIR /app
 
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-COPY src ./src
-COPY api ./api
-COPY pyproject.toml README.md ./
+COPY . .
 
-ENV PYTHONPATH=/app/src
+RUN python -m pip install --no-cache-dir --upgrade pip \
+    && python -m pip install --no-cache-dir .
 
 EXPOSE 8000
 
