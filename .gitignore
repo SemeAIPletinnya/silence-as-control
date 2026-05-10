@@ -9,3 +9,4 @@ build/
 logs/
 .DS_Store
 .env
+runtime_logs/

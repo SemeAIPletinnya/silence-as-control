@@ -71,6 +71,23 @@ Run the canonical local runtime demo:
 python demo/canonical_runtime_demo.py
 ```
 
+## Runtime observability
+
+Runtime telemetry is local JSONL and disabled by default. Enable it explicitly:
+
+```bash
+POR_TELEMETRY_ENABLED=1 uvicorn api.main:app --reload
+```
+
+By default events are written to `runtime_logs/por_runtime_events.jsonl`. Override
+the path with `POR_TELEMETRY_LOG_PATH`. Telemetry records decision metadata and
+numeric signals; it does not log full prompts or candidates by default. To print
+a concise local summary, run:
+
+```bash
+python scripts/runtime_observability_report.py
+```
+
 ### What this proves / what it does not prove
 
 Proves:

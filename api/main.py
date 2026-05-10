@@ -10,12 +10,14 @@ from __future__ import annotations
 
 import json
 import logging
-from typing import Any, TypedDict
+import os
+from typing import Any, Mapping, TypedDict
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
 from silence_as_control.config import get_legacy_generate_coherence
+from silence_as_control.telemetry import write_runtime_event
 from silence_as_control.types import DecisionResult
 
 from api.core_primitive import (
@@ -43,6 +45,42 @@ LOGGER = logging.getLogger(__name__)
 # runtime configuration (`POR_RUNTIME_GATE_THRESHOLD`).
 RUNTIME_DEFAULT_THRESHOLD = get_runtime_threshold(CORE_FIXED_THRESHOLD)
 SILENCE_TOKEN = "[SILENCE: UNSTABLE OUTPUT BLOCKED]"
+_TRACE_ENABLED_VALUES = {"1", "true", "yes", "on"}
+
+
+def _trace_console_enabled() -> bool:
+    return os.getenv("POR_TRACE_CONSOLE", "").strip().lower() in _TRACE_ENABLED_VALUES
+
+
+def _record_runtime_event(event: Mapping[str, Any]) -> None:
+    """Best-effort runtime telemetry and optional compact console trace."""
+    try:
+        write_runtime_event(event)
+        if _trace_console_enabled():
+            LOGGER.info(
+                "por_trace event_type=%s decision=%s drift=%s coherence=%s instability_score=%s",
+                event.get("event_type"),
+                event.get("decision"),
+                event.get("drift"),
+                event.get("coherence"),
+                event.get("instability_score"),
+            )
+    except Exception:
+        LOGGER.warning("por_runtime_event_record_failed", exc_info=True)
+
+
+def _runtime_event_common(result: Mapping[str, Any]) -> dict[str, Any]:
+    decision = result.get("decision")
+    return {
+        "drift": result.get("drift"),
+        "coherence": result.get("coherence"),
+        "instability_score": result.get("instability_score"),
+        "threshold": result.get("threshold"),
+        "decision": decision,
+        "released": decision == "PROCEED",
+        "silenced": decision == "SILENCE",
+        "notes_count": len(result.get("notes") or []),
+    }
 
 
 class EvaluateRequest(BaseModel):
@@ -248,6 +286,17 @@ def evaluate(req: EvaluateRequest) -> EvaluateResponse:
             recent_coherences=req.recent_coherences,
         )
         result = score_candidate_runtime(req.prompt, req.candidate, threshold)
+        _record_runtime_event(
+            {
+                "event_type": "por.evaluate",
+                **_runtime_event_common(result),
+                "use_adaptive_threshold": req.use_adaptive_threshold,
+                "has_recent_drifts": bool(req.recent_drifts),
+                "has_recent_coherences": bool(req.recent_coherences),
+                "prompt_length": len(req.prompt),
+                "candidate_length": len(req.candidate),
+            }
+        )
         return EvaluateResponse(**result)
     except Exception:
         LOGGER.exception("por_evaluate_failed")
@@ -300,6 +349,8 @@ def complete(req: CompleteRequest) -> CompleteResponse:
             candidate_samples=candidates,
         )
 
+        regenerated = False
+
         # Experimental lane only: MAYBE_SHORT_REGEN is post-silence and non-core.
         if result["decision"] == "SILENCE":
 
@@ -343,12 +394,28 @@ def complete(req: CompleteRequest) -> CompleteResponse:
                 if regen_result["decision"] == "PROCEED":
                     result = regen_result
                     candidates[0] = regen_result["_regen_candidate"]
+                    regenerated = True
                 else:
                     result["notes"].append("experimental_maybe_short_regen_failed")
 
+        response_candidate = candidates[0] if result["decision"] == "PROCEED" else None
+        telemetry_event = {
+            "event_type": "por.complete",
+            **_runtime_event_common(result),
+            "model": req.model,
+            "use_adaptive_threshold": req.use_adaptive_threshold,
+            "drift_samples": req.drift_samples,
+            "enable_experimental_short_regen": resolve_experimental_short_regen_flag(req),
+            "prompt_length": len(req.prompt),
+            "regenerated": regenerated,
+        }
+        if response_candidate is not None:
+            telemetry_event["candidate_length"] = len(response_candidate)
+        _record_runtime_event(telemetry_event)
+
         return CompleteResponse(
             model=req.model,
-            candidate=candidates[0] if result["decision"] == "PROCEED" else None,
+            candidate=response_candidate,
             drift=result["drift"],
             coherence=result["coherence"],
             instability_score=result["instability_score"],
