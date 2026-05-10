@@ -20,6 +20,7 @@ These define the primitive thresholded release behavior (`PROCEED` / `SILENCE`).
 - `api/por_runtime.py`
 - `api/main.py`
 - `api/experimental_recovery.py` (explicitly experimental lane)
+- `docs/provider_configuration.md` (navigation/support for no-key vs provider-backed runtime setup)
 
 These define deployment-facing surfaces around, but not replacing, the primitive contract.
 
