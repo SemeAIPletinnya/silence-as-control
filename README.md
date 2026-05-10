@@ -27,6 +27,53 @@ python -m pip install -e .
   environment variables such as `OPENAI_API_KEY`.
 - Do not commit API keys, prompt logs containing secrets, or provider tokens.
 
+
+## Runtime Quickstart
+
+Local editable install:
+```bash
+python -m pip install -e .
+```
+
+Run the API locally:
+```bash
+uvicorn api.main:app --reload
+```
+
+Open the interactive API docs:
+```text
+http://127.0.0.1:8000/docs
+```
+
+Run with Docker Compose:
+```bash
+docker compose up --build
+```
+
+Docker smoke check from another terminal:
+```bash
+curl http://127.0.0.1:8000/health
+```
+
+Run the canonical local runtime demo:
+```bash
+python demo/canonical_runtime_demo.py
+```
+
+### What this proves / what it does not prove
+
+Proves:
+- installable local runtime package
+- API surface
+- deterministic release-control demo
+- Dockerized local runtime path
+
+Does not prove:
+- universal AI safety
+- production-grade deployment
+- guaranteed financial savings
+- model improvement
+
 ## Minimal wrapping example
 ```python
 from silence_as_control import por_control
@@ -130,10 +177,11 @@ explicitly chooses to do so.
 ## Start here
 1. This README (`README.md`)
 2. Canonical demo: `python demo/canonical_demo.py`
-3. Architecture split: `docs/architecture.md`
-4. Runtime extensions: `docs/runtime_extensions.md`
-5. Experimental features: `docs/experimental_features.md`
-6. Paper/preprint materials: `paper/README.md`, `paper/main.tex`
+3. Canonical runtime demo: `python demo/canonical_runtime_demo.py`
+4. Architecture split: `docs/architecture.md`
+5. Runtime extensions: `docs/runtime_extensions.md`
+6. Experimental features: `docs/experimental_features.md`
+7. Paper/preprint materials: `paper/README.md`, `paper/main.tex`
 
 ## Quick API examples
 Start API:
