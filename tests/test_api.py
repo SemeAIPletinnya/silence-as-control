@@ -14,11 +14,17 @@ client = TestClient(app)
 # Runtime provider configuration docs
 # ------------------------------
 
-def test_docker_compose_passes_xai_provider_environment():
+def test_docker_compose_passes_runtime_environment():
     compose = Path("docker-compose.yml").read_text()
 
     assert "XAI_API_KEY: ${XAI_API_KEY:-}" in compose
     assert "XAI_MODEL: ${XAI_MODEL:-}" in compose
+    assert "POR_RUNTIME_GATE_THRESHOLD: ${POR_RUNTIME_GATE_THRESHOLD:-0.39}" in compose
+    assert "POR_TELEMETRY_ENABLED: ${POR_TELEMETRY_ENABLED:-0}" in compose
+    assert (
+        "POR_TELEMETRY_LOG_PATH: "
+        "${POR_TELEMETRY_LOG_PATH:-runtime_logs/por_runtime_events.jsonl}"
+    ) in compose
     assert "OPENAI_API_KEY: ${OPENAI_API_KEY:-}" not in compose
     assert "OPENAI_MODEL: ${OPENAI_MODEL:-}" not in compose
 
@@ -29,7 +35,8 @@ def test_readme_documents_xai_provider_completion_guidance():
 
     assert "Provider-backed `/por/complete`" in readme
     assert "requires `XAI_API_KEY`" in readme
-    assert "Docker Compose passes `XAI_API_KEY` and `XAI_MODEL`" in readme
+    assert "Docker Compose maps `XAI_*`, `POR_RUNTIME_GATE_THRESHOLD`, and" in readme
+    assert "`POR_TELEMETRY_*` into the API container" in readme
     assert "demo/canonical_runtime_demo.py" in readme
     assert "do not require provider API keys" in normalized_readme
 

@@ -52,8 +52,9 @@ For Bash/macOS/Linux:
 cp .env.example .env
 ```
 
-Docker Compose passes `XAI_API_KEY` and `XAI_MODEL` through to the container
-for provider-backed completion. For Docker Compose with the local template:
+Docker Compose maps `XAI_*`, `POR_RUNTIME_GATE_THRESHOLD`, and
+`POR_TELEMETRY_*` into the API container. For Docker Compose with the local
+template:
 
 ```bash
 docker compose --env-file .env up --build
