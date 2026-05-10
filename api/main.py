@@ -404,7 +404,7 @@ def complete(req: CompleteRequest) -> CompleteResponse:
             **_runtime_event_common(result),
             "model": req.model,
             "use_adaptive_threshold": req.use_adaptive_threshold,
-            "drift_samples": req.drift_samples,
+            "drift_samples": sample_count,
             "enable_experimental_short_regen": resolve_experimental_short_regen_flag(req),
             "prompt_length": len(req.prompt),
             "regenerated": regenerated,
