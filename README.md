@@ -10,6 +10,20 @@ It does **not** improve model weights. It controls release behavior.
 **Same model. Different decision.**
 
 
+## Start here
+
+New users should start with the no-key path:
+
+1. Run the first-run checklist: `docs/first_run_checklist.md`
+2. Run the canonical demo: `python demo/canonical_runtime_demo.py`
+3. Inspect runtime observability: `docs/runtime_observability.md`
+4. Configure provider-backed completion only if needed: `docs/provider_configuration.md`
+5. Follow the claim-to-artifact map: `docs/evidence_map.md`
+
+The deterministic path does not require provider credentials.
+Provider-backed `/por/complete` may require `XAI_API_KEY` when generating candidate output.
+
+
 ## Installation and dependency setup
 
 ### From a fresh checkout
