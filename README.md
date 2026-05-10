@@ -65,6 +65,8 @@ Do not commit API keys, prompt logs containing secrets, or provider tokens.
 
 ## Runtime Quickstart
 
+For a no-key first-run verification path, see `docs/first_run_checklist.md`.
+
 Local editable install:
 ```bash
 python -m pip install -e .
