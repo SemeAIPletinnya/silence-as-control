@@ -136,6 +136,44 @@ def test_api_complete_writes_telemetry_without_prompt_or_candidate_text(monkeypa
     assert candidate not in serialized_event
 
 
+def test_api_complete_telemetry_records_clamped_drift_sample_count(monkeypatch, tmp_path):
+    log_path = tmp_path / "events.jsonl"
+    prompt = "complete zero drift samples prompt"
+    candidate = "complete zero drift samples candidate"
+    monkeypatch.setenv("POR_TELEMETRY_ENABLED", "1")
+    monkeypatch.setenv("POR_TELEMETRY_LOG_PATH", str(log_path))
+
+    def fake_generate_candidate(*args, **kwargs):
+        return candidate
+
+    def fake_score_candidate_runtime(prompt, candidate, threshold, candidate_samples=None):
+        return {
+            "drift": 0.10,
+            "coherence": 0.95,
+            "instability_score": 0.075,
+            "threshold": threshold,
+            "decision": "PROCEED",
+            "release_output": candidate,
+            "silence_token": None,
+            "notes": ["stable"],
+        }
+
+    monkeypatch.setattr(api_main, "generate_candidate", fake_generate_candidate)
+    monkeypatch.setattr(api_main, "score_candidate_runtime", fake_score_candidate_runtime)
+
+    response = client.post(
+        "/por/complete",
+        json={"prompt": prompt, "threshold": 0.39, "drift_samples": 0},
+    )
+
+    assert response.status_code == 200
+    events = _read_jsonl(log_path)
+    assert len(events) == 1
+    event = events[0]
+    assert event["event_type"] == "por.complete"
+    assert event["drift_samples"] == 1
+
+
 def test_api_evaluate_telemetry_failure_does_not_break_endpoint(monkeypatch):
     def broken_write_runtime_event(event):
         raise RuntimeError("telemetry boom")

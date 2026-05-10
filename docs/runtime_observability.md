@@ -19,9 +19,17 @@ In another terminal, send one deterministic evaluation request and print the
 local report:
 
 ```powershell
-curl.exe -s http://127.0.0.1:8000/por/evaluate `
-  -H "content-type: application/json" `
-  -d "{\"prompt\":\"Return valid JSON\",\"candidate\":\"not json\",\"threshold\":0.39}"
+$body = @{
+  prompt = "Return valid JSON"
+  candidate = "not json"
+  threshold = 0.39
+} | ConvertTo-Json -Compress
+
+Invoke-RestMethod `
+  -Uri "http://127.0.0.1:8000/por/evaluate" `
+  -Method Post `
+  -ContentType "application/json" `
+  -Body $body
 
 python scripts/runtime_observability_report.py
 ```
