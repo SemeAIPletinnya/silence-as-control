@@ -193,6 +193,12 @@ Open a GitHub issue if you want integration help, audit/evaluation support, or b
 - Not a claim of guaranteed truth.
 - Not a framework rewrite of inference stacks.
 
+## Applied bridges
+
+[`por-copilot-bridge`](https://github.com/SemeAIPletinnya/por-copilot-bridge) is a small deterministic release-governance bridge for AI coding-agent outputs. It demonstrates the same core separation: **generation is not release**.
+
+In that bridge, coding-agent output is treated as a release candidate. The bridge maps candidates to `PROCEED` / `NEEDS_REVIEW` / `SILENCE` so downstream release handling can remain explicit. It is dependency-free and compatible by state/schema; it is not a direct dependency of Silence-as-Control.
+
 ## Core primitive in 30 seconds
 PoR uses:
 - drift,

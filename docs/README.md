@@ -14,5 +14,6 @@ You are here: documentation for architecture boundaries and public-facing guidan
 - `langchain_openai_action_risk_benchmark.md` — LangChain/OpenAI action-risk benchmark framing and Run 06 hardened v4 progression.
 - `action_risk_1000_dataset.md` — Run 06 1000-case synthetic dataset scope and schema.
 - `release_control_services.md` — pilot/integration overview for release-control use cases.
+- `applied_bridges.md` — bounded notes on compatible applied bridges such as `por-copilot-bridge`.
 
 For paper/preprint context, see `../paper/README.md`.
