@@ -33,7 +33,7 @@ from api.por_runtime import (
     estimate_drift,
     get_runtime_threshold,
 )
-from api.xai_wrapper import DEFAULT_MODEL, generate_candidate
+from api.xai_wrapper import generate_candidate, get_default_model
 
 app = FastAPI(title="silence-as-control")
 LOGGER = logging.getLogger(__name__)
@@ -71,7 +71,7 @@ class CompleteRequest(BaseModel):
     use_adaptive_threshold: bool = False
     recent_drifts: list[float] = Field(default_factory=list)
     recent_coherences: list[float] = Field(default_factory=list)
-    model: str = DEFAULT_MODEL
+    model: str = Field(default_factory=get_default_model)
     system_prompt: str = "You are a precise technical assistant."
     temperature: float = 0.0
     drift_samples: int = 3

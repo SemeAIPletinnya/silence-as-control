@@ -3,8 +3,12 @@ import logging
 from openai import OpenAI
 
 XAI_BASE_URL = "https://api.x.ai/v1"
-DEFAULT_MODEL = "grok-4"
+FALLBACK_MODEL = "grok-4"
+DEFAULT_MODEL = FALLBACK_MODEL
 LOGGER = logging.getLogger(__name__)
+
+def get_default_model() -> str:
+    return os.getenv("XAI_MODEL") or FALLBACK_MODEL
 
 def get_client() -> OpenAI:
     api_key = os.getenv("XAI_API_KEY")
@@ -18,11 +22,12 @@ def get_client() -> OpenAI:
 def generate_candidate(
     prompt: str,
     system_prompt: str = "You are a precise technical assistant.",
-    model: str = DEFAULT_MODEL,
+    model: str | None = None,
     temperature: float = 0.0,
     timeout: float = 30.0,
 ) -> str:
     try:
+        model = model or get_default_model()
         client = get_client()
         resp = client.chat.completions.create(
             model=model,

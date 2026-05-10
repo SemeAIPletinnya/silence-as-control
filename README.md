@@ -22,9 +22,15 @@ python -m pip install -e .
 ```
 
 ### API key guidance
-- The deterministic core and local tests do not require an OpenAI API key.
-- OpenAI-backed demos or live benchmark scripts should read credentials from
-  environment variables such as `OPENAI_API_KEY`.
+- The deterministic core, local tests, and `demo/canonical_runtime_demo.py` do not
+  require provider API keys.
+- Provider-backed `/por/complete` currently uses the xAI-compatible runtime
+  wrapper and requires `XAI_API_KEY`; `XAI_MODEL` can override the default
+  provider model.
+- Docker Compose passes `XAI_API_KEY` and `XAI_MODEL` through to the container
+  for provider-backed completion.
+- OpenAI-backed demos or live benchmark scripts outside the Docker runtime path
+  should read credentials from environment variables such as `OPENAI_API_KEY`.
 - Do not commit API keys, prompt logs containing secrets, or provider tokens.
 
 
@@ -49,6 +55,11 @@ Run with Docker Compose:
 ```bash
 docker compose up --build
 ```
+
+For provider-backed `/por/complete` through Docker Compose, set `XAI_API_KEY`
+before starting the service. Set `XAI_MODEL` only when overriding the default
+provider model. The deterministic health check, `/por/evaluate`, and canonical
+runtime demo do not require provider credentials.
 
 Docker smoke check from another terminal:
 ```bash

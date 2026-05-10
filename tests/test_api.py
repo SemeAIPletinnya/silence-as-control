@@ -1,11 +1,37 @@
 """API tests across legacy, runtime, and experimental lanes."""
 
+from pathlib import Path
+
 from fastapi.testclient import TestClient
 
 import api.main as api_main
 from api.main import app
 
 client = TestClient(app)
+
+
+# ------------------------------
+# Runtime provider configuration docs
+# ------------------------------
+
+def test_docker_compose_passes_xai_provider_environment():
+    compose = Path("docker-compose.yml").read_text()
+
+    assert "XAI_API_KEY: ${XAI_API_KEY:-}" in compose
+    assert "XAI_MODEL: ${XAI_MODEL:-}" in compose
+    assert "OPENAI_API_KEY: ${OPENAI_API_KEY:-}" not in compose
+    assert "OPENAI_MODEL: ${OPENAI_MODEL:-}" not in compose
+
+
+def test_readme_documents_xai_provider_completion_guidance():
+    readme = Path("README.md").read_text(encoding="utf-8-sig")
+    normalized_readme = " ".join(readme.split())
+
+    assert "Provider-backed `/por/complete`" in readme
+    assert "requires `XAI_API_KEY`" in readme
+    assert "Docker Compose passes `XAI_API_KEY` and `XAI_MODEL`" in readme
+    assert "demo/canonical_runtime_demo.py" in readme
+    assert "do not require provider API keys" in normalized_readme
 
 
 # ------------------------------
@@ -87,6 +113,43 @@ def test_api_evaluate_can_silence_on_low_coherence_runtime_signal():
     assert payload["drift"] == 0.0
     assert payload["coherence"] < 0.25
     assert payload["decision"] == "SILENCE"
+
+
+def test_api_complete_uses_runtime_xai_model_default(monkeypatch):
+    monkeypatch.setenv("XAI_MODEL", "runtime-env-model")
+    captured = {}
+
+    def fake_generate_candidate(*args, **kwargs):
+        captured["model"] = kwargs["model"]
+        return "first candidate"
+
+    def fake_score_candidate_runtime(prompt, candidate, threshold, candidate_samples=None):
+        return {
+            "drift": 0.10,
+            "coherence": 0.95,
+            "instability_score": 0.075,
+            "threshold": threshold,
+            "decision": "PROCEED",
+            "release_output": candidate,
+            "silence_token": None,
+            "notes": ["runtime_env_model"],
+        }
+
+    monkeypatch.setattr(api_main, "generate_candidate", fake_generate_candidate)
+    monkeypatch.setattr(api_main, "score_candidate_runtime", fake_score_candidate_runtime)
+
+    response = client.post(
+        "/por/complete",
+        json={
+            "prompt": "Say hello",
+            "threshold": 0.39,
+            "drift_samples": 1,
+        },
+    )
+
+    assert response.status_code == 200
+    assert captured["model"] == "runtime-env-model"
+    assert response.json()["model"] == "runtime-env-model"
 
 
 # ---------------------------------
