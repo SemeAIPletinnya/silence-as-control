@@ -65,9 +65,10 @@ For Docker Compose, use the repo-local template after copying it to `.env`:
 docker compose --env-file .env up --build
 ```
 
-The compose file passes `XAI_API_KEY` and `XAI_MODEL` into the container for the
-provider-backed completion path. No provider key is needed for `/health`,
-`/por/evaluate`, or the canonical runtime demo.
+Docker Compose maps `XAI_*`, `POR_RUNTIME_GATE_THRESHOLD`, and
+`POR_TELEMETRY_*` into the API container when using `--env-file .env`. No
+provider key is needed for `/health`, `/por/evaluate`, or the canonical runtime
+demo.
 
 ## Scope boundaries
 

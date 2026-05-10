@@ -6,3 +6,6 @@ services:
     environment:
       XAI_API_KEY: ${XAI_API_KEY:-}
       XAI_MODEL: ${XAI_MODEL:-}
+      POR_RUNTIME_GATE_THRESHOLD: ${POR_RUNTIME_GATE_THRESHOLD:-0.39}
+      POR_TELEMETRY_ENABLED: ${POR_TELEMETRY_ENABLED:-0}
+      POR_TELEMETRY_LOG_PATH: ${POR_TELEMETRY_LOG_PATH:-runtime_logs/por_runtime_events.jsonl}
