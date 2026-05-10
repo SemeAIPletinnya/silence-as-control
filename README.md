@@ -21,17 +21,45 @@ python -m pip install -r requirements.txt
 python -m pip install -e .
 ```
 
-### API key guidance
-- The deterministic core, local tests, and `demo/canonical_runtime_demo.py` do not
-  require provider API keys.
-- Provider-backed `/por/complete` currently uses the xAI-compatible runtime
-  wrapper and requires `XAI_API_KEY`; `XAI_MODEL` can override the default
-  provider model.
-- Docker Compose passes `XAI_API_KEY` and `XAI_MODEL` through to the container
-  for provider-backed completion.
-- OpenAI-backed demos or live benchmark scripts outside the Docker runtime path
-  should read credentials from environment variables such as `OPENAI_API_KEY`.
-- Do not commit API keys, prompt logs containing secrets, or provider tokens.
+## Configuration paths
+
+### No-key deterministic path
+
+These do not require provider API keys and work without any provider/API key:
+- `python demo/canonical_runtime_demo.py`
+- `GET /health`
+- `POST /por/evaluate`
+- telemetry smoke walkthrough using `/por/evaluate`
+- tests
+
+### Provider-backed completion path
+
+Provider-backed `/por/complete` requires provider configuration when it needs
+to generate candidate output and requires `XAI_API_KEY`. Configure:
+
+- `XAI_API_KEY`
+- `XAI_MODEL` (default example: `grok-4`)
+
+Use `.env.example` as the local template. For PowerShell/Windows:
+
+```powershell
+copy .env.example .env
+```
+
+For Bash/macOS/Linux:
+
+```bash
+cp .env.example .env
+```
+
+Docker Compose passes `XAI_API_KEY` and `XAI_MODEL` through to the container
+for provider-backed completion. For Docker Compose with the local template:
+
+```bash
+docker compose --env-file .env up --build
+```
+
+Do not commit API keys, prompt logs containing secrets, or provider tokens.
 
 
 ## Runtime Quickstart
@@ -53,13 +81,13 @@ http://127.0.0.1:8000/docs
 
 Run with Docker Compose:
 ```bash
-docker compose up --build
+docker compose --env-file .env up --build
 ```
 
 For provider-backed `/por/complete` through Docker Compose, set `XAI_API_KEY`
-before starting the service. Set `XAI_MODEL` only when overriding the default
-provider model. The deterministic health check, `/por/evaluate`, and canonical
-runtime demo do not require provider credentials.
+in `.env` before starting the service. Set `XAI_MODEL` only when overriding the
+default provider model. The deterministic health check, `/por/evaluate`, and
+canonical runtime demo do not require provider credentials.
 
 Docker smoke check from another terminal:
 ```bash
