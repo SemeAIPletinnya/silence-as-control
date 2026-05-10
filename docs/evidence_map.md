@@ -23,6 +23,27 @@ These define the primitive thresholded release behavior (`PROCEED` / `SILENCE`).
 
 These define deployment-facing surfaces around, but not replacing, the primitive contract.
 
+## Runtime observability / local telemetry
+
+Runtime release-control decisions can be locally observed and summarized when telemetry is explicitly enabled.
+
+Artifacts:
+
+- `src/silence_as_control/telemetry.py`
+- `scripts/runtime_observability_report.py`
+- `docs/runtime_observability.md`
+- `tests/test_telemetry.py`
+- `tests/test_runtime_observability_report.py`
+
+Interpretation boundaries:
+
+- Telemetry is disabled by default.
+- Telemetry is local JSONL only.
+- Telemetry records compact decision metadata and numeric signals.
+- Telemetry does not log full prompt/candidate text by default.
+- This is not production monitoring.
+- This is not a universal AI safety claim.
+
 ## Benchmark / evaluation files
 
 - `eval_simpleqa_ollama.py`
@@ -80,6 +101,10 @@ Interpretation boundaries:
 - Claim: Threshold behavior is regime/scoped, not universal.
   - Evidence: threshold contract + run-specific artifacts.
   - Files: `docs/threshold_regime_contract.md`, `results/simpleqa_ollama_qwen3_4b_100_v2_retry/`, `results/simpleqa_ollama_qwen3_8b_100_v2/`.
+
+- Claim: Runtime release-control decisions can be locally observed and summarized.
+  - Evidence: opt-in JSONL telemetry writer, report script, smoke walkthrough, and tests.
+  - Files: `src/silence_as_control/telemetry.py`, `scripts/runtime_observability_report.py`, `docs/runtime_observability.md`, `tests/test_telemetry.py`, `tests/test_runtime_observability_report.py`.
 
 - Claim: Qwen3 4B reached zero accepted wrong at selected thresholds in this 100-example run.
   - Evidence: PR #131 artifacts and summary tables.
