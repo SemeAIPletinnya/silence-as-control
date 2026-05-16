@@ -345,6 +345,7 @@ For pilot or integration interest, see `docs/release_control_services.md`.
 - Repository root: `./`
 - README: `README.md`
 - Docs index: `docs/README.md`
+- [Roadmap to July 4–8, 2026](docs/roadmap_2026.md)
 - External CLI integration: `docs/external_integration.md`
 - Package migration plan: `docs/package_migration_plan.md`
 - Changelog: `CHANGELOG.md`
