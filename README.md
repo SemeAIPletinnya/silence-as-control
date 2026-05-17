@@ -1,4 +1,4 @@
-﻿# Silence-as-Control
+# Silence-as-Control
 
 **Silence-as-Control is a release-control layer for LLM reliability.**
 It separates **generation** from **release**: a model can generate a candidate, but the PoR gate decides whether that candidate is safe enough to release.
@@ -115,6 +115,13 @@ Run the canonical local runtime demo:
 ```bash
 python demo/canonical_runtime_demo.py
 ```
+
+
+## Agentic Release-Control Demo
+
+This deterministic demo shows how Silence-as-Control applies to agentic systems. The baseline agent releases candidate answers by default, while the SaC-governed path routes the same candidates through a runtime release gate. Same agent. Same tools. Different release authority.
+
+Start with the [agentic release-control demo README](examples/agent_release_control/README.md), then see the [agentic release-control architecture](docs/agentic_release_control.md).
 
 ## Runtime observability
 

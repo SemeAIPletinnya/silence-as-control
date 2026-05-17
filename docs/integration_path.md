@@ -39,3 +39,14 @@ Use that command first. It is the canonical local proof that your environment an
    ```powershell
    uvicorn api.main:app --reload
    ```
+
+## Agentic release-control layer
+
+SaC can also be integrated as:
+
+- a post-generation release gate;
+- a tool-output verification layer;
+- an agentic release-control layer.
+
+This keeps generation, tool orchestration, and release authority as separate runtime concerns.
+
