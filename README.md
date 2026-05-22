@@ -20,6 +20,7 @@ It does **not** improve model weights. It controls release behavior.
 - [Deterministic replay architecture](docs/deterministic_replay_architecture.md) — conceptual replay and inspection layer for sandbox evaluation flows.
 - [Decision provenance architecture](docs/decision_provenance_architecture.md) — conceptual traceability layer for sandbox release decisions.
 - [Connector sandbox boundary](docs/connector_sandbox_boundary.md) — conceptual governance boundary for external communication surfaces.
+- [Sandbox evaluation telemetry](docs/sandbox_evaluation_telemetry.md) — conceptual visibility layer for sandbox governance flows.
 
 ## Start here
 
