@@ -21,6 +21,7 @@ You are here: documentation for architecture boundaries and public-facing guidan
 - [Sandbox channel adapters](sandbox_channel_adapters.md) — conceptual intake connectors for sandbox evaluation flows.
 - [Intake payload schema](intake_payload_schema.md) — conceptual normalization format for sandbox intake evaluation flows.
 - [Deterministic replay architecture](deterministic_replay_architecture.md) — conceptual replay and inspection layer for sandbox evaluation flows.
+- [Decision provenance architecture](decision_provenance_architecture.md) — conceptual traceability layer for sandbox release decisions.
 - `applied_bridges.md` — bounded notes on compatible applied bridges such as `por-copilot-bridge`.
 
 For paper/preprint context, see `../paper/README.md`.

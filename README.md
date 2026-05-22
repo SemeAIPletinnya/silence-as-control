@@ -18,6 +18,7 @@ It does **not** improve model weights. It controls release behavior.
 - [Reverse integration sandbox](docs/reverse_integration_sandbox.md) — controlled intake/evaluation concept.
 - [Sandbox channel adapters](docs/sandbox_channel_adapters.md) — conceptual intake connectors for sandbox evaluation flows.
 - [Deterministic replay architecture](docs/deterministic_replay_architecture.md) — conceptual replay and inspection layer for sandbox evaluation flows.
+- [Decision provenance architecture](docs/decision_provenance_architecture.md) — conceptual traceability layer for sandbox release decisions.
 
 ## Start here
 
