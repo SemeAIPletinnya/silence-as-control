@@ -17,6 +17,7 @@ You are here: documentation for architecture boundaries and public-facing guidan
 - `action_risk_1000_dataset.md` — Run 06 1000-case synthetic dataset scope and schema.
 - `release_control_services.md` — pilot/integration overview for release-control use cases.
 - `agentic_release_control.md` — deterministic release-control architecture for agentic workflows.
+- [Runtime governance stack](runtime_governance_stack.md) — canonical map of the sandbox and release-control governance layers.
 - [Reverse integration sandbox](reverse_integration_sandbox.md) — controlled intake/evaluation concept for external candidate outputs.
 - [Sandbox channel adapters](sandbox_channel_adapters.md) — conceptual intake connectors for sandbox evaluation flows.
 - [Intake payload schema](intake_payload_schema.md) — conceptual normalization format for sandbox intake evaluation flows.
