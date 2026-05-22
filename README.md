@@ -19,6 +19,7 @@ It does **not** improve model weights. It controls release behavior.
 - [Sandbox channel adapters](docs/sandbox_channel_adapters.md) — conceptual intake connectors for sandbox evaluation flows.
 - [Deterministic replay architecture](docs/deterministic_replay_architecture.md) — conceptual replay and inspection layer for sandbox evaluation flows.
 - [Decision provenance architecture](docs/decision_provenance_architecture.md) — conceptual traceability layer for sandbox release decisions.
+- [Review-lane architecture](docs/review_lane_architecture.md) — conceptual governance-routing layer for sandbox evaluation outcomes.
 
 ## Start here
 
