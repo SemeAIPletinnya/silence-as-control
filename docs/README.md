@@ -19,6 +19,7 @@ You are here: documentation for architecture boundaries and public-facing guidan
 - `agentic_release_control.md` — deterministic release-control architecture for agentic workflows.
 - [Reverse integration sandbox](reverse_integration_sandbox.md) — controlled intake/evaluation concept for external candidate outputs.
 - [Sandbox channel adapters](sandbox_channel_adapters.md) — conceptual intake connectors for sandbox evaluation flows.
+- [Intake payload schema](intake_payload_schema.md) — conceptual normalization format for sandbox intake evaluation flows.
 - `applied_bridges.md` — bounded notes on compatible applied bridges such as `por-copilot-bridge`.
 
 For paper/preprint context, see `../paper/README.md`.
