@@ -22,10 +22,11 @@ You are here: documentation for architecture boundaries and public-facing guidan
 - [Intake payload schema](intake_payload_schema.md) — conceptual normalization format for sandbox intake evaluation flows.
 - [Deterministic replay architecture](deterministic_replay_architecture.md) — conceptual replay and inspection layer for sandbox evaluation flows.
 - [Decision provenance architecture](decision_provenance_architecture.md) — conceptual traceability layer for sandbox release decisions.
-- [Evaluation trace architecture](evaluation_trace_architecture.md) — conceptual inspection and traceability layer for sandbox evaluation flows.
-- [Review lane architecture](review_lane_architecture.md) — conceptual governance routing layer for sandbox evaluation flows.
 - [Sandbox evaluation telemetry](sandbox_evaluation_telemetry.md) — conceptual visibility layer for sandbox governance flows.
 - [Policy surface architecture](policy_surface_architecture.md) — conceptual policy-aware interpretation layer for sandbox governance flows.
+- [Evidence retention architecture](evidence_retention_architecture.md) — conceptual evidence-continuity layer for sandbox governance flows.
+- [Evaluation trace architecture](evaluation_trace_architecture.md) — conceptual inspection and traceability layer for sandbox evaluation flows.
+- [Review lane architecture](review_lane_architecture.md) — conceptual governance routing layer for sandbox evaluation flows.
 - [Connector sandbox boundary](connector_sandbox_boundary.md) — conceptual governance boundary for external communication surfaces.
 - `applied_bridges.md` — bounded notes on compatible applied bridges such as `por-copilot-bridge`.
 
