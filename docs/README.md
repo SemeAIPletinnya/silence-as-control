@@ -23,6 +23,7 @@ You are here: documentation for architecture boundaries and public-facing guidan
 - [Deterministic replay architecture](deterministic_replay_architecture.md) — conceptual replay and inspection layer for sandbox evaluation flows.
 - [Decision provenance architecture](decision_provenance_architecture.md) — conceptual traceability layer for sandbox release decisions.
 - [Evaluation trace architecture](evaluation_trace_architecture.md) — conceptual inspection and traceability layer for sandbox evaluation flows.
+- [Connector sandbox boundary](connector_sandbox_boundary.md) — conceptual governance boundary for external communication surfaces.
 - `applied_bridges.md` — bounded notes on compatible applied bridges such as `por-copilot-bridge`.
 
 For paper/preprint context, see `../paper/README.md`.
