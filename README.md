@@ -9,6 +9,12 @@ It does **not** improve model weights. It controls release behavior.
 
 **Same model. Different decision.**
 
+## Fast orientation
+
+- [Plain-English pitch](docs/plain_english_pitch.md) — understand the idea simply.
+- [Project navigation map](docs/project_navigation.md) — choose the right entry point.
+- [First-run checklist](docs/first_run_checklist.md) — verify the no-key local path.
+- [Evidence map](docs/evidence_map.md) — connect claims to artifacts.
 
 ## Start here
 
