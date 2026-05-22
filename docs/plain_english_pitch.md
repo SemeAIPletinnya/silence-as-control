@@ -66,10 +66,10 @@ Silence-as-Control is not:
 
 ## Minimal example
 
-Baseline:
+Baseline:<br>
 `generate -> release`
 
-Silence-as-Control:
+Silence-as-Control:<br>
 `generate -> evaluate stability/risk/evidence -> PROCEED / NEEDS_REVIEW / SILENCE`
 
 ## Where to start
