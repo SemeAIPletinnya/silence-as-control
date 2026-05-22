@@ -19,6 +19,7 @@ You are here: documentation for architecture boundaries and public-facing guidan
 - `agentic_release_control.md` — deterministic release-control architecture for agentic workflows.
 - [Runtime governance stack](runtime_governance_stack.md) — canonical map of the sandbox and release-control governance layers.
 - [Governance stack walkthrough](governance_stack_walkthrough.md) — guided walkthrough of the runtime governance stack.
+- [Runtime governance visual map](runtime_governance_visual_map.md) — visual-oriented map of governance and release-control layers.
 - [Reverse integration sandbox](reverse_integration_sandbox.md) — controlled intake/evaluation concept for external candidate outputs.
 - [Sandbox channel adapters](sandbox_channel_adapters.md) — conceptual intake connectors for sandbox evaluation flows.
 - [Intake payload schema](intake_payload_schema.md) — conceptual normalization format for sandbox intake evaluation flows.

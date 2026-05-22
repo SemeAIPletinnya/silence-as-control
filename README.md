@@ -15,6 +15,7 @@ It does **not** improve model weights. It controls release behavior.
 - [Project navigation map](docs/project_navigation.md) — choose the right entry point.
 - [Runtime governance stack](docs/runtime_governance_stack.md) — canonical map of sandbox and release-control governance layers.
 - [Governance stack walkthrough](docs/governance_stack_walkthrough.md) — guided architecture walkthrough of governance layers.
+- [Runtime governance visual map](docs/runtime_governance_visual_map.md) — visual-oriented governance architecture reference.
 - [First-run checklist](docs/first_run_checklist.md) — verify the no-key local path.
 - [Evidence map](docs/evidence_map.md) — connect claims to artifacts.
 - [Reverse integration sandbox](docs/reverse_integration_sandbox.md) — controlled intake/evaluation concept.
