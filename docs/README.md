@@ -2,6 +2,7 @@
 
 You are here: documentation for architecture boundaries and public-facing guidance.
 
+- [Project navigation map](project_navigation.md) — where to start depending on what you need.
 - `architecture.md` — core vs runtime vs experimental split.
 - `runtime_extensions.md` — optional runtime deployment helpers.
 - `experimental_features.md` — optional non-core MAYBE_SHORT_REGEN behavior.
