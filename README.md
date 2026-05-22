@@ -16,6 +16,7 @@ It does **not** improve model weights. It controls release behavior.
 - [First-run checklist](docs/first_run_checklist.md) — verify the no-key local path.
 - [Evidence map](docs/evidence_map.md) — connect claims to artifacts.
 - [Reverse integration sandbox](docs/reverse_integration_sandbox.md) — controlled intake/evaluation concept.
+- [Sandbox channel adapters](docs/sandbox_channel_adapters.md) — conceptual intake connectors for sandbox evaluation flows.
 
 ## Start here
 
