@@ -18,6 +18,7 @@ It does **not** improve model weights. It controls release behavior.
 - [Runtime governance visual map](docs/runtime_governance_visual_map.md) — visual-oriented governance architecture reference.
 - [First-run checklist](docs/first_run_checklist.md) — verify the no-key local path.
 - [Evidence map](docs/evidence_map.md) — connect claims to artifacts.
+- [External integration CLI](docs/external_integration.md) — call the three-state release gate from an external generator.
 - [Reverse integration sandbox](docs/reverse_integration_sandbox.md) — controlled intake/evaluation concept.
 - [Sandbox channel adapters](docs/sandbox_channel_adapters.md) — conceptual intake connectors for sandbox evaluation flows.
 - [Deterministic replay architecture](docs/deterministic_replay_architecture.md) — conceptual replay and inspection layer for sandbox evaluation flows.
@@ -39,6 +40,12 @@ New users should start with the no-key path:
 
 The deterministic path does not require provider credentials.
 Provider-backed `/por/complete` may require `XAI_API_KEY` when generating candidate output.
+
+For an external JSON/CLI integration path, see `docs/external_integration.md` and run:
+
+```bash
+python scripts/por_gate_cli.py --input examples/por_gate_input.json
+```
 
 
 ## Installation and dependency setup
@@ -230,8 +237,8 @@ PoR uses:
 - instability score: `I = (drift + (1 - coherence)) / 2`.
 
 Core fixed-threshold release rule:
-- `I <= П„` -> `PROCEED`
-- `I > П„` -> `SILENCE`
+- `I <= threshold` -> `PROCEED`
+- `I > threshold` -> `SILENCE`
 
 ## Architecture split
 ### 1) Core Primitive (thesis-level)
@@ -274,8 +281,8 @@ evidence protocol. Calibrate thresholds before using them with a new model, a ne
 task family, or a new signal source.
 
 The deterministic core rule remains:
-- `I <= П„` -> `PROCEED`
-- `I > П„` -> `SILENCE`
+- `I <= threshold` -> `PROCEED`
+- `I > threshold` -> `SILENCE`
 
 Some integrations may layer a separate `NEEDS_REVIEW` lane. Do not collapse an
 existing tri-state integration into binary behavior unless that integration

@@ -99,8 +99,6 @@ def test_invalid_candidate_samples_fails_cleanly(tmp_path):
     assert "candidate_samples" in res.stderr
 
 
-
-
 def test_non_string_candidate_samples_items_fail_cleanly(tmp_path):
     path = tmp_path / "input.json"
     payload = {"prompt": "p", "candidate_answer": "a", "candidate_samples": ["ok", 7]}
