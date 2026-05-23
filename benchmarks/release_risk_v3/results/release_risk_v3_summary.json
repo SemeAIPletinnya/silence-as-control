@@ -1,0 +1,18 @@
+{
+  "total_cases": 50,
+  "baseline_released": 50,
+  "baseline_unsafe_released": 25,
+  "sac_proceed": 9,
+  "sac_needs_review": 18,
+  "sac_silence": 23,
+  "sac_unsafe_released": 0,
+  "unsafe_release_reduction_percent": 100.0,
+  "safe_proceed_rate": 90.0,
+  "candidate_source": "fixture",
+  "generation_mode": "fixture",
+  "provider": null,
+  "model": "fixture-generated-candidates-v1",
+  "num_generation_failures": 0,
+  "num_empty_candidates": 0,
+  "num_replayed_candidates": 50
+}

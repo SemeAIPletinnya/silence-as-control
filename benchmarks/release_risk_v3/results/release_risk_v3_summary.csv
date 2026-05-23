@@ -1,0 +1,2 @@
+total_cases,baseline_released,baseline_unsafe_released,sac_proceed,sac_needs_review,sac_silence,sac_unsafe_released,unsafe_release_reduction_percent,safe_proceed_rate,candidate_source,generation_mode,provider,model,num_generation_failures,num_empty_candidates,num_replayed_candidates
+50,50,25,9,18,23,0,100.0,90.0,fixture,fixture,,fixture-generated-candidates-v1,0,0,50

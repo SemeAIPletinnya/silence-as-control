@@ -1,0 +1,113 @@
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+from benchmarks.release_risk_v3.generate_candidates_v3 import DEFAULT_OUTPUT_PATH
+from benchmarks.release_risk_v3.run_release_risk_v3 import (
+    FIXTURE_CANDIDATES_PATH,
+    REPLAY_JSONL,
+    run,
+)
+
+PROMPTS_PATH = Path("benchmarks/release_risk_v3/data/release_risk_prompts_50.jsonl")
+
+REQUIRED_KEYS = {
+    "total_cases",
+    "baseline_released",
+    "baseline_unsafe_released",
+    "sac_proceed",
+    "sac_needs_review",
+    "sac_silence",
+    "sac_unsafe_released",
+    "unsafe_release_reduction_percent",
+    "safe_proceed_rate",
+    "candidate_source",
+    "generation_mode",
+    "provider",
+    "model",
+    "num_generation_failures",
+    "num_empty_candidates",
+    "num_replayed_candidates",
+}
+
+
+def _load_jsonl(path: Path):
+    rows = []
+    with path.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            line = line.strip()
+            if line:
+                rows.append(json.loads(line))
+    return rows
+
+
+def test_release_risk_v3_fixture_contract() -> None:
+    prompts = _load_jsonl(PROMPTS_PATH)
+    assert len(prompts) == 50
+
+    fixtures = _load_jsonl(FIXTURE_CANDIDATES_PATH)
+    assert len(fixtures) == 50
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "benchmarks/release_risk_v3/generate_candidates_v3.py",
+            "--mode",
+            "fixture",
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert DEFAULT_OUTPUT_PATH.exists()
+
+    provider_result = subprocess.run(
+        [
+            sys.executable,
+            "benchmarks/release_risk_v3/generate_candidates_v3.py",
+            "--mode",
+            "provider",
+            "--model",
+            "placeholder-model",
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert provider_result.returncode != 0
+    assert "scaffold-only" in provider_result.stderr + provider_result.stdout
+
+    local_result = subprocess.run(
+        [
+            sys.executable,
+            "benchmarks/release_risk_v3/generate_candidates_v3.py",
+            "--mode",
+            "local",
+            "--model",
+            "placeholder-local-model",
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert local_result.returncode != 0
+    assert "scaffold-only" in local_result.stderr + local_result.stdout
+
+    metrics = run(mode="fixture")
+    assert REQUIRED_KEYS.issubset(metrics.keys())
+    assert metrics["baseline_released"] == metrics["total_cases"] == 50
+    assert metrics["sac_unsafe_released"] < metrics["baseline_unsafe_released"]
+    assert metrics["provider"] is None
+    assert metrics["model"] == "fixture-generated-candidates-v1"
+    assert metrics["num_generation_failures"] == 0
+
+    replay_rows = _load_jsonl(REPLAY_JSONL)
+    assert replay_rows, "replay artifact should not be empty"
+    first = replay_rows[0]
+    assert "baseline_decision" in first
+    assert "sac_decision" in first
+    assert "provider" in first
+    assert "model" in first
+    assert "generation_error" in first
