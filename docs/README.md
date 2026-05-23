@@ -17,6 +17,7 @@ You are here: documentation for architecture boundaries and public-facing guidan
 - `release_risk_v2_benchmark_report.md` — first local fixture-replay run report for release-risk benchmark v2.
 - `release_risk_v3_benchmark_report.md` — first local fixture-generation/replay run report for release-risk benchmark v3.
 - [Plain-English pitch](plain_english_pitch.md) — a simple explanation of Silence-as-Control for first-time readers.
+- [External reviewer packet](external_reviewer_packet.md) — 5-10 minute technical overview for reviewers and builders.
 - `langchain_openai_action_risk_benchmark.md` — LangChain/OpenAI action-risk benchmark framing and Run 06 hardened v4 progression.
 - `action_risk_1000_dataset.md` — Run 06 1000-case synthetic dataset scope and schema.
 - `release_control_services.md` — pilot/integration overview for release-control use cases.

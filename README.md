@@ -12,6 +12,7 @@ It does **not** improve model weights. It controls release behavior.
 ## Fast orientation
 
 - [Plain-English pitch](docs/plain_english_pitch.md) — understand the idea simply.
+- [External reviewer packet](docs/external_reviewer_packet.md) — 5-10 minute technical overview for reviewers and builders.
 - [Project navigation map](docs/project_navigation.md) — choose the right entry point.
 - [Runtime governance stack](docs/runtime_governance_stack.md) — canonical map of sandbox and release-control governance layers.
 - [Governance stack walkthrough](docs/governance_stack_walkthrough.md) — guided architecture walkthrough of governance layers.
