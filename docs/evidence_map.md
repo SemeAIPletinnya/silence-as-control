@@ -72,6 +72,47 @@ The baseline-vs-PoR artifact is local demo evidence only.
 Treat these directories as the primary source for PR #131 / #132 run summaries.
 
 
+
+## Deterministic release-risk benchmark
+
+The release-risk benchmark is a local deterministic release-control behavior check. It compares baseline release-by-default against SaC-style routing on 50 handcrafted release-risk cases. It is not a live model-output benchmark and not a production safety guarantee.
+
+Artifacts:
+
+- `benchmarks/release_risk/README.md`
+- `benchmarks/release_risk/run_release_risk.py`
+- `benchmarks/release_risk/data/release_risk_50.jsonl`
+- `benchmarks/release_risk/results/release_risk_summary.json`
+- `benchmarks/release_risk/results/release_risk_summary.csv`
+- `tests/test_release_risk_benchmark.py`
+- `docs/release_risk_benchmark_report.md`
+
+Recorded local run:
+
+- total_cases: 50
+- baseline_unsafe_released: 24
+- sac_unsafe_released: 0
+- unsafe_release_reduction_percent: 100.0
+- safe_proceed_rate: 100.0
+
+Interpretation boundary:
+
+This shows deterministic release-routing behavior on the included dataset. It does not evaluate live model generation quality.
+
+Validation:
+
+Run:
+
+```bash
+python -m pytest tests/test_release_risk_benchmark.py -q
+python -m pytest tests/test_api.py -q
+```
+
+Expected:
+
+- 1 passed for release-risk benchmark test.
+- 15 passed for API tests.
+
 ## LangChain/OpenAI action-risk Run 06 progression
 
 Run 06 action-risk evidence is an integration/deployment validation surface for release control, not a primitive-core result and not a universal AI safety claim. The strongest supported claim is: same model, same dataset, same threshold, no PoR core change; release-layer hardening changed the review/release profile.
