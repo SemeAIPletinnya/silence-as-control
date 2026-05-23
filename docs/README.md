@@ -9,6 +9,7 @@ You are here: documentation for architecture boundaries and public-facing guidan
 - `api_walkthrough.md` — broader API walkthrough.
 - `runtime_observability.md` — local telemetry smoke walkthrough and report shape.
 - `first_run_checklist.md` — no-key first-run verification path.
+- [Direct reproduction guide](direct_reproduction_guide.md) — local commands to verify the no-key release-control path.
 - `provider_configuration.md` — no-key vs provider-backed runtime configuration.
 - `threshold_regime_contract.md` — scoped threshold interpretation contract for SimpleQA/Ollama evidence.
 - `evidence_map.md` — claim-to-artifact navigation for core/runtime/benchmark surfaces.
