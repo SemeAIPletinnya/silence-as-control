@@ -1,57 +1,76 @@
-# External PoR gate integration (minimal CLI)
+# External integration CLI
 
-This interface is a **release-control integration point**, not a generation-improvement mechanism.
-It evaluates a candidate answer against the existing PoR gate logic and returns a release decision.
+## Purpose
 
-The first CLI version supports mode `v1` only. v2-family modes require additional external signals and will be added after the external contract is stable.
+Silence-as-Control can be called after an external system generates a candidate output.
+The external generator remains unchanged.
+The gate decides whether the candidate should be released.
 
-## CLI usage
+## Command
 
 ```bash
-python scripts/por_gate_cli.py \
-  --input examples/por_gate_input.json \
-  --output /tmp/por_gate_output.json
+python scripts/por_gate_cli.py --input examples/por_gate_input.json --output outputs/por_gate_decision.json
 ```
 
-Optional overrides:
+## Stdout mode
 
-- `--threshold 0.39` (overrides JSON threshold)
-- `--mode v1` (overrides JSON mode)
+```bash
+python scripts/por_gate_cli.py --input examples/por_gate_input.json
+```
 
-## Required input fields
+## Input fields
 
-Input JSON must include:
+- `prompt`
+- `candidate_answer`
+- optional `candidate_samples`
+- optional `threshold`
+- optional `mode`
+- optional `metadata`
 
-- `prompt` (string)
-- `candidate_answer` (string)
+## Output fields
 
-`candidate_samples` is recommended for drift estimation; if missing or empty, the CLI safely falls back to `[candidate_answer]`.
-
-## Optional metadata
-
-`metadata` is optional and audit-facing. Common fields include:
-
-- `model`
-- `source`
-- generation settings like `temperature`, `top_p`, `top_k`
-
-Only `model` and `source` are forwarded into the output audit block by this minimal interface.
+- `decision`
+- `released_output`
+- `silence`
+- `needs_review`
+- `threshold`
+- `mode`
+- `signals.drift`
+- `signals.coherence`
+- `signals.instability`
+- `signals.review_flags`
+- `audit.reason`
+- `audit.core_decision`
+- `audit.policy_decision`
+- `audit.model`
+- `audit.source`
 
 ## Decision semantics
 
-- `PROCEED`: candidate is releasable under the configured threshold.
-- `SILENCE`: candidate is withheld by release control.
+- `PROCEED`:
+  Candidate is released.
+- `NEEDS_REVIEW`:
+  Candidate is stable enough at the PoR core layer, but release-policy flags require review.
+- `SILENCE`:
+  Candidate exceeded instability threshold and is not released.
 
-Output includes:
+## Architecture boundary
 
-- `decision`
-- `released_output` (string for `PROCEED`, `null` for `SILENCE`)
-- `silence` boolean
-- `signals` (`drift`, `coherence`, `instability`)
-- `audit` metadata
+- PoR core primitive:
+  `PROCEED` / `SILENCE`
+- Release policy layer:
+  `PROCEED` / `NEEDS_REVIEW` / `SILENCE`
 
-## Threshold and scope
+## Claims boundary
 
-Thresholds are **scoped configuration values** and should be calibrated per model/dataset/pipeline/mode.
+- This is not a new model.
+- This is not a training method.
+- This is not a universal truth detector.
+- This does not guarantee safety.
+- It is a scoped post-generation release-control interface.
 
-This interface does **not** make universal safety claims.
+## Relation to por-copilot-bridge
+
+`por-copilot-bridge` is an applied bridge for coding-agent outputs.
+It is compatible by state/schema and architecture.
+It is not a direct dependency of silence-as-control.
