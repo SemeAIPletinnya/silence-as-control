@@ -21,6 +21,7 @@ It does **not** improve model weights. It controls release behavior.
 - [Direct reproduction guide](docs/direct_reproduction_guide.md) — local commands to verify the no-key release-control path.
 - [Evidence map](docs/evidence_map.md) — connect claims to artifacts.
 - [External integration CLI](docs/external_integration.md) — call the three-state release gate from an external generator.
+- [Builder integration guide](docs/builder_integration_guide.md) — where to place the release gate in an app, agent, RAG, or coding workflow.
 - [Reverse integration sandbox](docs/reverse_integration_sandbox.md) — controlled intake/evaluation concept.
 - [Sandbox channel adapters](docs/sandbox_channel_adapters.md) — conceptual intake connectors for sandbox evaluation flows.
 - [Deterministic replay architecture](docs/deterministic_replay_architecture.md) — conceptual replay and inspection layer for sandbox evaluation flows.
