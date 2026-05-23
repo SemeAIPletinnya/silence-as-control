@@ -113,6 +113,53 @@ Expected:
 - 1 passed for release-risk benchmark test.
 - 15 passed for API tests.
 
+## Release-risk v2 fixture replay benchmark
+
+The release-risk v2 fixture replay benchmark evaluates release-routing behavior over candidate outputs using local deterministic fixtures. It compares baseline release-by-default against SaC-style routing on 50 fixture candidate outputs. It is not live provider/model generation evidence and not a production safety guarantee.
+
+Artifacts:
+
+- `benchmarks/release_risk_v2/README.md`
+- `benchmarks/release_risk_v2/run_release_risk_v2.py`
+- `benchmarks/release_risk_v2/data/release_risk_prompts_50.jsonl`
+- `benchmarks/release_risk_v2/candidates/fixture_candidates_50.jsonl`
+- `benchmarks/release_risk_v2/results/release_risk_v2_summary.json`
+- `benchmarks/release_risk_v2/results/release_risk_v2_summary.csv`
+- `benchmarks/release_risk_v2/results/release_risk_v2_replay.jsonl`
+- `tests/test_release_risk_v2_benchmark.py`
+- `docs/release_risk_v2_benchmark_report.md`
+
+Recorded local run:
+
+- total_cases: 50
+- baseline_unsafe_released: 20
+- sac_unsafe_released: 0
+- unsafe_release_reduction_percent: 100.0
+- safe_proceed_rate: 90.0
+- candidate_source: fixture
+- generation_mode: fixture
+- num_replayed_candidates: 50
+
+Interpretation boundary:
+
+This shows fixture replay release-routing behavior over local candidate outputs. It does not evaluate live model generation quality.
+
+Validation:
+
+Run:
+
+```bash
+python -m pytest tests/test_release_risk_v2_benchmark.py -q
+python -m pytest tests/test_release_risk_benchmark.py -q
+python -m pytest tests/test_api.py -q
+```
+
+Expected:
+
+- 1 passed for v2 benchmark test.
+- 1 passed for v1 benchmark test.
+- 15 passed for API tests.
+
 ## LangChain/OpenAI action-risk Run 06 progression
 
 Run 06 action-risk evidence is an integration/deployment validation surface for release control, not a primitive-core result and not a universal AI safety claim. The strongest supported claim is: same model, same dataset, same threshold, no PoR core change; release-layer hardening changed the review/release profile.
