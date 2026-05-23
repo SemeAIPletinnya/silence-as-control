@@ -12,6 +12,7 @@ You are here: documentation for architecture boundaries and public-facing guidan
 - `provider_configuration.md` — no-key vs provider-backed runtime configuration.
 - `threshold_regime_contract.md` — scoped threshold interpretation contract for SimpleQA/Ollama evidence.
 - `evidence_map.md` — claim-to-artifact navigation for core/runtime/benchmark surfaces.
+- `release_risk_benchmark_index.md` — recommended entry point for v1/v2/v3 release-risk benchmark evidence, artifact lineage, commands, and interpretation boundaries.
 - `release_risk_benchmark_report.md` — first deterministic local release-risk benchmark run report.
 - `release_risk_v2_benchmark_report.md` — first local fixture-replay run report for release-risk benchmark v2.
 - `release_risk_v3_benchmark_report.md` — first local fixture-generation/replay run report for release-risk benchmark v3.

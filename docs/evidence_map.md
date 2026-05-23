@@ -73,9 +73,12 @@ Treat these directories as the primary source for PR #131 / #132 run summaries.
 
 
 
-## Deterministic release-risk benchmark
+## Release-risk v1 deterministic benchmark
 
-The release-risk benchmark is a local deterministic release-control behavior check. It compares baseline release-by-default against SaC-style routing on 50 handcrafted release-risk cases. It is not a live model-output benchmark and not a production safety guarantee.
+Scope:
+
+- Local deterministic release-control behavior check over 50 handcrafted release-risk cases.
+- Baseline release-by-default versus SaC-style routing (`PROCEED` / `NEEDS_REVIEW` / `SILENCE`).
 
 Artifacts:
 
@@ -97,25 +100,23 @@ Recorded local run:
 
 Interpretation boundary:
 
-This shows deterministic release-routing behavior on the included dataset. It does not evaluate live model generation quality.
+- Deterministic local release-routing evidence over included handcrafted cases.
+- Not live provider/model generation evidence.
+- Not production safety evidence.
 
 Validation:
-
-Run:
 
 ```bash
 python -m pytest tests/test_release_risk_benchmark.py -q
 python -m pytest tests/test_api.py -q
 ```
 
-Expected:
-
-- 1 passed for release-risk benchmark test.
-- 15 passed for API tests.
-
 ## Release-risk v2 fixture replay benchmark
 
-The release-risk v2 fixture replay benchmark evaluates release-routing behavior over candidate outputs using local deterministic fixtures. It compares baseline release-by-default against SaC-style routing on 50 fixture candidate outputs. It is not live provider/model generation evidence and not a production safety guarantee.
+Scope:
+
+- Local deterministic fixture candidate-output replay over 50 prompts/candidates.
+- Baseline release-by-default versus SaC-style routing.
 
 Artifacts:
 
@@ -142,11 +143,11 @@ Recorded local run:
 
 Interpretation boundary:
 
-This shows fixture replay release-routing behavior over local candidate outputs. It does not evaluate live model generation quality.
+- Deterministic fixture replay release-routing evidence.
+- Not live provider/model generation evidence.
+- Not production safety evidence.
 
 Validation:
-
-Run:
 
 ```bash
 python -m pytest tests/test_release_risk_v2_benchmark.py -q
@@ -154,15 +155,13 @@ python -m pytest tests/test_release_risk_benchmark.py -q
 python -m pytest tests/test_api.py -q
 ```
 
-Expected:
-
-- 1 passed for v2 benchmark test.
-- 1 passed for v1 benchmark test.
-- 15 passed for API tests.
-
 ## Release-risk v3 fixture generation/replay benchmark
 
-The release-risk v3 fixture generation/replay benchmark validates generated-candidate schema handling, fixture generation, and replay routing over locally generated fixture candidates. It compares baseline release-by-default against SaC-style routing. It is not live provider/model generation evidence and not a production safety guarantee.
+Scope:
+
+- Generated-candidate schema validation.
+- Fixture generation path and replay routing validation.
+- Provider/local mode separation at interface level, while using fixture evidence.
 
 Artifacts:
 
@@ -181,7 +180,11 @@ Artifacts:
 Recorded local run:
 
 - total_cases: 50
+- baseline_released: 50
 - baseline_unsafe_released: 25
+- sac_proceed: 9
+- sac_needs_review: 22
+- sac_silence: 19
 - sac_unsafe_released: 0
 - unsafe_release_reduction_percent: 100.0
 - safe_proceed_rate: 90.0
@@ -189,15 +192,18 @@ Recorded local run:
 - generation_mode: fixture
 - provider: null
 - model: fixture-generated-candidates-v1
+- num_generation_failures: 0
+- num_empty_candidates: 0
 - num_replayed_candidates: 50
 
 Interpretation boundary:
 
-This validates deterministic fixture generation/replay routing behavior over locally generated fixture candidates. It does not evaluate live provider/model generation quality.
+- Deterministic fixture generation/replay release-routing evidence.
+- Not live provider/model generation evidence.
+- No API keys required for fixture mode.
+- Not production safety evidence.
 
 Validation:
-
-Run:
 
 ```bash
 python -m pytest tests/test_release_risk_v3_benchmark.py -q
@@ -205,13 +211,6 @@ python -m pytest tests/test_release_risk_v2_benchmark.py -q
 python -m pytest tests/test_release_risk_benchmark.py -q
 python -m pytest tests/test_api.py -q
 ```
-
-Expected:
-
-- v3 benchmark test: 1 passed
-- v2 benchmark test: 1 passed
-- v1 benchmark test: 1 passed
-- API tests: 15 passed
 
 ## LangChain/OpenAI action-risk Run 06 progression
 
