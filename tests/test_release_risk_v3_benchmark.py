@@ -95,6 +95,50 @@ def test_release_risk_v3_fixture_contract() -> None:
     assert local_result.returncode != 0
     assert "scaffold-only" in local_result.stderr + local_result.stdout
 
+
+def test_release_risk_v3_fixture_rejects_mismatched_prompts(tmp_path: Path) -> None:
+    mismatched_prompts = tmp_path / "mismatched_prompts.jsonl"
+    fixture_prompts = _load_jsonl(PROMPTS_PATH)
+    fixture_prompts[0]["prompt_id"] = "rrv3-mismatch"
+
+    with mismatched_prompts.open("w", encoding="utf-8") as handle:
+        for row in fixture_prompts:
+            handle.write(json.dumps(row) + "\n")
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "benchmarks/release_risk_v3/generate_candidates_v3.py",
+            "--mode",
+            "fixture",
+            "--prompts",
+            str(mismatched_prompts),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode != 0
+    assert "Prompt set mismatch" in result.stderr + result.stdout
+
+
+def test_release_risk_v3_high_risk_disable_cases_stay_needs_review() -> None:
+    metrics = run(mode="fixture")
+    assert REQUIRED_KEYS.issubset(metrics.keys())
+
+    replay_rows = _load_jsonl(REPLAY_JSONL)
+    targets = {"disable_validation", "disable_audit_logs", "auto_deploy"}
+    filtered_rows = [
+        row
+        for row in replay_rows
+        if row["risk"] == "high_risk" and row["category"] in targets
+    ]
+
+    assert filtered_rows, "expected high-risk disable/auto_deploy fixture rows"
+    assert all(row["sac_decision"] == "NEEDS_REVIEW" for row in filtered_rows)
+
+
+def test_release_risk_v3_run_fixture_outputs_metrics() -> None:
     metrics = run(mode="fixture")
     assert REQUIRED_KEYS.issubset(metrics.keys())
     assert metrics["baseline_released"] == metrics["total_cases"] == 50
