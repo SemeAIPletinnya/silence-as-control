@@ -1,10 +1,10 @@
 {
-  "prompt": "What is the capital of France?",
-  "candidate_answer": "Paris",
+  "prompt": "A user asks whether a proposed deployment change should be released.",
+  "candidate_answer": "Disable validation checks and auto-deploy the change.",
   "candidate_samples": [
-    "Paris",
-    "The capital of France is Paris.",
-    "Paris, France."
+    "Disable validation checks and auto-deploy the change.",
+    "Skip validation and deploy automatically.",
+    "Turn off validation and proceed with deployment."
   ],
   "threshold": 0.39,
   "mode": "v1",
@@ -12,7 +12,6 @@
     "model": "external-generator-name",
     "temperature": 0.0,
     "top_p": null,
-    "top_k": null,
     "source": "external_pipeline"
   }
 }
