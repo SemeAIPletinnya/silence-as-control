@@ -23,6 +23,7 @@ It does **not** improve model weights. It controls release behavior.
 - [Evidence map](docs/evidence_map.md) — connect claims to artifacts.
 - [External integration CLI](docs/external_integration.md) — call the three-state release gate from an external generator.
 - [Builder integration guide](docs/builder_integration_guide.md) — where to place the release gate in an app, agent, RAG, or coding workflow.
+- [Integration decision policy examples](docs/integration_decision_policy_examples.md) — examples for handling PROCEED / NEEDS_REVIEW / SILENCE after the release gate.
 - [Reverse integration sandbox](docs/reverse_integration_sandbox.md) — controlled intake/evaluation concept.
 - [Sandbox channel adapters](docs/sandbox_channel_adapters.md) — conceptual intake connectors for sandbox evaluation flows.
 - [Deterministic replay architecture](docs/deterministic_replay_architecture.md) — conceptual replay and inspection layer for sandbox evaluation flows.

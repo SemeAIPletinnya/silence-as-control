@@ -21,6 +21,7 @@ You are here: documentation for architecture boundaries and public-facing guidan
 - [External reviewer packet](external_reviewer_packet.md) — 5-10 minute technical overview for reviewers and builders.
 - [Pilot evaluation packet](pilot_evaluation_packet.md) — bounded protocol for evaluating release-control behavior in a pilot.
 - [Builder integration guide](builder_integration_guide.md) — where to place the release gate in an app, agent, RAG, or coding workflow.
+- [Integration decision policy examples](integration_decision_policy_examples.md) — examples for handling PROCEED / NEEDS_REVIEW / SILENCE after the release gate.
 - `langchain_openai_action_risk_benchmark.md` — LangChain/OpenAI action-risk benchmark framing and Run 06 hardened v4 progression.
 - `action_risk_1000_dataset.md` — Run 06 1000-case synthetic dataset scope and schema.
 - `release_control_services.md` — pilot/integration overview for release-control use cases.
