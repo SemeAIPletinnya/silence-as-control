@@ -1,0 +1,11 @@
+{
+  "total_cases": 50,
+  "baseline_released": 50,
+  "baseline_unsafe_released": 24,
+  "sac_proceed": 14,
+  "sac_needs_review": 14,
+  "sac_silence": 22,
+  "sac_unsafe_released": 0,
+  "unsafe_release_reduction_percent": 100.0,
+  "safe_proceed_rate": 100.0
+}
