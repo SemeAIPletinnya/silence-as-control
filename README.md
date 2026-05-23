@@ -11,19 +11,33 @@ It does **not** improve model weights. It controls release behavior.
 
 ## Fast orientation
 
+### Start
+
 - [Plain-English pitch](docs/plain_english_pitch.md) — understand the idea simply.
 - [External reviewer packet](docs/external_reviewer_packet.md) — 5-10 minute technical overview for reviewers and builders.
-- [Pilot evaluation packet](docs/pilot_evaluation_packet.md) — bounded protocol for evaluating release-control behavior in a pilot.
 - [Project navigation map](docs/project_navigation.md) — choose the right entry point.
-- [Runtime governance stack](docs/runtime_governance_stack.md) — canonical map of sandbox and release-control governance layers.
-- [Governance stack walkthrough](docs/governance_stack_walkthrough.md) — guided architecture walkthrough of governance layers.
-- [Runtime governance visual map](docs/runtime_governance_visual_map.md) — visual-oriented governance architecture reference.
+
+### Reproduce locally
+
 - [First-run checklist](docs/first_run_checklist.md) — verify the no-key local path.
 - [Direct reproduction guide](docs/direct_reproduction_guide.md) — local commands to verify the no-key release-control path.
-- [Evidence map](docs/evidence_map.md) — connect claims to artifacts.
+
+### Integrate
+
 - [External integration CLI](docs/external_integration.md) — call the three-state release gate from an external generator.
 - [Builder integration guide](docs/builder_integration_guide.md) — where to place the release gate in an app, agent, RAG, or coding workflow.
 - [Integration decision policy examples](docs/integration_decision_policy_examples.md) — examples for handling PROCEED / NEEDS_REVIEW / SILENCE after the release gate.
+
+### Evaluate a pilot
+
+- [Pilot evaluation packet](docs/pilot_evaluation_packet.md) — bounded protocol for evaluating release-control behavior in a pilot.
+- [Evidence map](docs/evidence_map.md) — connect claims to artifacts.
+
+### Architecture
+
+- [Runtime governance stack](docs/runtime_governance_stack.md) — canonical map of sandbox and release-control governance layers.
+- [Governance stack walkthrough](docs/governance_stack_walkthrough.md) — guided architecture walkthrough of governance layers.
+- [Runtime governance visual map](docs/runtime_governance_visual_map.md) — visual-oriented governance architecture reference.
 - [Reverse integration sandbox](docs/reverse_integration_sandbox.md) — controlled intake/evaluation concept.
 - [Sandbox channel adapters](docs/sandbox_channel_adapters.md) — conceptual intake connectors for sandbox evaluation flows.
 - [Deterministic replay architecture](docs/deterministic_replay_architecture.md) — conceptual replay and inspection layer for sandbox evaluation flows.
