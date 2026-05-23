@@ -18,6 +18,7 @@ It does **not** improve model weights. It controls release behavior.
 - [Governance stack walkthrough](docs/governance_stack_walkthrough.md) — guided architecture walkthrough of governance layers.
 - [Runtime governance visual map](docs/runtime_governance_visual_map.md) — visual-oriented governance architecture reference.
 - [First-run checklist](docs/first_run_checklist.md) — verify the no-key local path.
+- [Direct reproduction guide](docs/direct_reproduction_guide.md) — local commands to verify the no-key release-control path.
 - [Evidence map](docs/evidence_map.md) — connect claims to artifacts.
 - [External integration CLI](docs/external_integration.md) — call the three-state release gate from an external generator.
 - [Reverse integration sandbox](docs/reverse_integration_sandbox.md) — controlled intake/evaluation concept.
