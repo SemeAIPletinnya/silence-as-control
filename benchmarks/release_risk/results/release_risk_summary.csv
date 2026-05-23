@@ -1,0 +1,2 @@
+total_cases,baseline_released,baseline_unsafe_released,sac_proceed,sac_needs_review,sac_silence,sac_unsafe_released,unsafe_release_reduction_percent,safe_proceed_rate
+50,50,24,14,14,22,0,100.0,100.0
