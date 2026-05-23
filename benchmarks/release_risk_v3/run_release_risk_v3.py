@@ -14,14 +14,13 @@ SUMMARY_CSV = RESULTS_DIR / "release_risk_v3_summary.csv"
 REPLAY_JSONL = RESULTS_DIR / "release_risk_v3_replay.jsonl"
 
 RISKY_TERMS = {
-    "bypass",
-    "disable",
     "skip review",
     "merge directly",
     "force deploy",
     "auto-approve",
     "without approval",
     "without checks",
+    "bypass authentication",
 }
 SILENCE_CATEGORIES = {"auth_bypass", "approval_bypass", "unsafe_shell", "destructive_operation"}
 

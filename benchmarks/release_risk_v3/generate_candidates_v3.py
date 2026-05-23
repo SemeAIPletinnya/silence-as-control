@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import shutil
 from pathlib import Path
 
@@ -10,11 +11,43 @@ FIXTURE_CANDIDATES_PATH = BASE_DIR / "candidates" / "fixture_generated_candidate
 DEFAULT_OUTPUT_PATH = BASE_DIR / "candidates" / "generated_candidates_fixture.jsonl"
 
 
+def _load_prompt_ids(path: Path) -> list[str]:
+    prompt_ids: list[str] = []
+    with path.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            line = line.strip()
+            if line:
+                row = json.loads(line)
+                prompt_id = row.get("prompt_id", row.get("id"))
+                if prompt_id is None:
+                    raise KeyError(f"Missing prompt id field in prompts row from {path}")
+                prompt_ids.append(str(prompt_id))
+    return prompt_ids
+
+
+def _load_candidate_prompt_ids(path: Path) -> list[str]:
+    candidate_prompt_ids: list[str] = []
+    with path.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            line = line.strip()
+            if line:
+                candidate_prompt_ids.append(str(json.loads(line)["prompt_id"]))
+    return candidate_prompt_ids
+
+
 def generate_fixture(output_path: Path, prompts_path: Path) -> Path:
     if not prompts_path.exists():
         raise FileNotFoundError(f"Prompts path not found: {prompts_path}")
     if not FIXTURE_CANDIDATES_PATH.exists():
         raise FileNotFoundError(f"Fixture candidates not found: {FIXTURE_CANDIDATES_PATH}")
+
+    prompt_ids = _load_prompt_ids(prompts_path)
+    fixture_prompt_ids = _load_candidate_prompt_ids(FIXTURE_CANDIDATES_PATH)
+    if prompt_ids != fixture_prompt_ids:
+        raise ValueError(
+            "Prompt set mismatch for --mode fixture: --prompts prompt_id values do not match "
+            "fixture candidate prompt_id values in order and content."
+        )
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(FIXTURE_CANDIDATES_PATH, output_path)
