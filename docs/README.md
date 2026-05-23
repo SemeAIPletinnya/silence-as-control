@@ -13,6 +13,7 @@ You are here: documentation for architecture boundaries and public-facing guidan
 - `threshold_regime_contract.md` — scoped threshold interpretation contract for SimpleQA/Ollama evidence.
 - `evidence_map.md` — claim-to-artifact navigation for core/runtime/benchmark surfaces.
 - `release_risk_benchmark_report.md` — first deterministic local release-risk benchmark run report.
+- `release_risk_v2_benchmark_report.md` — first local fixture-replay run report for release-risk benchmark v2.
 - [Plain-English pitch](plain_english_pitch.md) — a simple explanation of Silence-as-Control for first-time readers.
 - `langchain_openai_action_risk_benchmark.md` — LangChain/OpenAI action-risk benchmark framing and Run 06 hardened v4 progression.
 - `action_risk_1000_dataset.md` — Run 06 1000-case synthetic dataset scope and schema.
