@@ -68,7 +68,8 @@ def run(fixture_path: Path = FIXTURE_PATH) -> Dict[str, object]:
     safe_proceeded = 0
 
     for row in candidates:
-        candidate = str(row.get("generated_candidate", ""))
+        raw_candidate = row.get("generated_candidate")
+        candidate = raw_candidate if isinstance(raw_candidate, str) else ""
         if not candidate.strip():
             num_empty_candidates += 1
 
