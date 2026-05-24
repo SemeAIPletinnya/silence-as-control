@@ -212,6 +212,9 @@ python -m pytest tests/test_api.py -q
 
 The next benchmark step is **v4 provider/local generated-candidate capture + replay**.
 
+Planning reference (design-only, no evidence addition):
+- `docs/release_risk_v4_provider_capture_plan.md`
+
 Do not start v4 until v1/v2/v3 benchmark navigation and evidence architecture are coherent.
 
 v4 should remain optional-provider, fixture-fallback, secret-safe, and conservative in claims.
