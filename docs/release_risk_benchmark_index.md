@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This page is the recommended entry point for the release-risk benchmark evidence chain across v1, v2, and v3.
+This page is the recommended entry point for the release-risk benchmark evidence chain across v1, v2, v3, and v4.
 
 Core thesis:
 
@@ -20,7 +20,7 @@ For project identity and framing, see project memory/tracking surfaces in `docs/
 - **v1** -> deterministic handcrafted release-risk routing
 - **v2** -> fixture candidate-output replay
 - **v3** -> fixture generation/replay scaffold
-- **v4** -> future provider/local generated-candidate capture + replay (**not yet implemented**)
+- **v4** -> deterministic no-key capture + replay foundation with future optional provider/local capture
 
 ## v1: deterministic release-risk benchmark
 
@@ -151,11 +151,53 @@ python -m pytest tests/test_release_risk_v3_benchmark.py -q
 - No API keys are required for fixture mode.
 - Not production safety evidence.
 
+## v4: deterministic no-key capture + replay foundation
+
+**Scope**
+
+- Deterministic no-key generated-candidate capture.
+- Replay over caller-provided generated-candidate JSONL.
+- Caller-controlled replay artifact isolation via `--results-dir`.
+- Validation of the capture-to-replay evidence path.
+
+**Main artifacts**
+
+- `benchmarks/release_risk_v4_capture_candidates.py`
+- `benchmarks/release_risk_v4_fixture_replay.py`
+- `docs/release_risk_v4_capture_to_replay.md`
+- `docs/release_risk_v4_provider_capture_plan.md`
+- `tests/test_release_risk_v4_capture_candidates.py`
+- `tests/test_release_risk_v4_fixture_replay.py`
+
+**Commands**
+
+```bash
+python benchmarks/release_risk_v4_capture_candidates.py --mode fixture --output outputs/release_risk_v4_fixture_capture.jsonl
+python benchmarks/release_risk_v4_fixture_replay.py --input outputs/release_risk_v4_fixture_capture.jsonl --results-dir outputs/release_risk_v4_replay_results
+```
+
+**Expected proof signal**
+
+```text
+generation_mode: fixture_capture
+model: fixture-v4-capture-synthetic-1
+```
+
+**Interpretation boundary**
+
+- Deterministic fixture capture/replay evidence only.
+- No provider/OpenAI calls are required.
+- No API keys are required.
+- This is not provider-backed evidence.
+- This is not production safety evidence.
+- Optional provider/local capture remains future work.
+
 ## Artifact lineage
 
 - `#224 -> #225 -> #226`: v1 deterministic benchmark
 - `#227 -> #228 -> #229 -> #230`: v2 fixture replay benchmark
 - `#231 -> #232 -> #233 -> #234 -> #235`: v3 fixture generation/replay benchmark
+- `#253 -> #254 -> #255 -> #256 -> #258 -> #260 -> #261`: v4 no-key capture/replay foundation
 
 ## Common interpretation boundaries
 
@@ -202,6 +244,15 @@ python benchmarks/release_risk_v3/run_release_risk_v3.py --mode fixture
 python -m pytest tests/test_release_risk_v3_benchmark.py -q
 ```
 
+**v4**
+
+```bash
+python benchmarks/release_risk_v4_capture_candidates.py --mode fixture --output outputs/release_risk_v4_fixture_capture.jsonl
+python benchmarks/release_risk_v4_fixture_replay.py --input outputs/release_risk_v4_fixture_capture.jsonl --results-dir outputs/release_risk_v4_replay_results
+python -m pytest tests/test_release_risk_v4_capture_candidates.py -q
+python -m pytest tests/test_release_risk_v4_fixture_replay.py -q
+```
+
 **Shared**
 
 ```bash
@@ -210,11 +261,9 @@ python -m pytest tests/test_api.py -q
 
 ## Next step
 
-The next benchmark step is **v4 provider/local generated-candidate capture + replay**.
+The next v4 step is optional provider/local generated-candidate capture as a separate opt-in evidence track.
 
-Planning reference (design-only, no evidence addition):
+Planning reference:
 - `docs/release_risk_v4_provider_capture_plan.md`
 
-Do not start v4 until v1/v2/v3 benchmark navigation and evidence architecture are coherent.
-
-v4 should remain optional-provider, fixture-fallback, secret-safe, and conservative in claims.
+The deterministic no-key replay path should remain the default reproducibility lane for external reviewers.
