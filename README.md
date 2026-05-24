@@ -407,6 +407,18 @@ For pilot or integration interest, see `docs/release_control_services.md`.
 - **Runtime extensions**: practical deployment helpers, optional deployment scaffolding.
 - **Experimental features**: MAYBE_SHORT_REGEN, optional and non-core.
 
+## Support
+
+Silence-as-Control is an independent open-source research and infrastructure project.
+
+If this work is useful to you, you can support continued development here:
+
+- [Support / donations](DONATIONS.md)
+
+TRC20 / USDT-compatible address:
+
+`TJmrrUrpsRpG3u9H4FE9oVyCRPYQYEpG27`
+
 ## Contributing
 
 Contributions should preserve the architecture split: primitive core, runtime
