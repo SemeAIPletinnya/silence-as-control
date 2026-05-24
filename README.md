@@ -31,6 +31,7 @@ It does **not** improve model weights. It controls release behavior.
 ### Evaluate a pilot
 
 - [Pilot evaluation packet](docs/pilot_evaluation_packet.md) — bounded protocol for evaluating release-control behavior in a pilot.
+- [Pilot evaluation template](docs/pilot_evaluation_template.md) — copyable table/log shape for first pilot evaluations.
 - [Evidence map](docs/evidence_map.md) — connect claims to artifacts.
 
 ### Architecture

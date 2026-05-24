@@ -20,6 +20,7 @@ You are here: documentation for architecture boundaries and public-facing guidan
 - [Plain-English pitch](plain_english_pitch.md) — a simple explanation of Silence-as-Control for first-time readers.
 - [External reviewer packet](external_reviewer_packet.md) — 5-10 minute technical overview for reviewers and builders.
 - [Pilot evaluation packet](pilot_evaluation_packet.md) — bounded protocol for evaluating release-control behavior in a pilot.
+- [Pilot evaluation template](pilot_evaluation_template.md) — copyable table/log shape for first pilot evaluations.
 - [Builder integration guide](builder_integration_guide.md) — where to place the release gate in an app, agent, RAG, or coding workflow.
 - [Integration decision policy examples](integration_decision_policy_examples.md) — examples for handling PROCEED / NEEDS_REVIEW / SILENCE after the release gate.
 - `langchain_openai_action_risk_benchmark.md` — LangChain/OpenAI action-risk benchmark framing and Run 06 hardened v4 progression.
