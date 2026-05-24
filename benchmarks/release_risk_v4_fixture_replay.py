@@ -51,7 +51,10 @@ def route_core_decision(row: Dict[str, object]) -> Tuple[str, str]:
     raise ValueError(f"Unknown risk class: {risk}")
 
 
-def run(fixture_path: Path = FIXTURE_PATH) -> Dict[str, object]:
+def run(
+    fixture_path: Path = FIXTURE_PATH,
+    results_dir: Path = RESULTS_DIR,
+) -> Dict[str, object]:
     candidates = load_jsonl(fixture_path)
 
     replay_rows: List[Dict[str, object]] = []
@@ -140,22 +143,30 @@ def run(fixture_path: Path = FIXTURE_PATH) -> Dict[str, object]:
         "num_replayed_candidates": len(candidates),
     }
 
-    write_artifacts(metrics, replay_rows)
+    write_artifacts(metrics, replay_rows, results_dir=results_dir)
     return metrics
 
 
-def write_artifacts(metrics: Dict[str, object], replay_rows: List[Dict[str, object]]) -> None:
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    with SUMMARY_JSON.open("w", encoding="utf-8") as handle:
+def write_artifacts(
+    metrics: Dict[str, object],
+    replay_rows: List[Dict[str, object]],
+    results_dir: Path = RESULTS_DIR,
+) -> None:
+    summary_json = results_dir / "release_risk_v4_summary.json"
+    summary_csv = results_dir / "release_risk_v4_summary.csv"
+    replay_jsonl = results_dir / "release_risk_v4_replay.jsonl"
+
+    results_dir.mkdir(parents=True, exist_ok=True)
+    with summary_json.open("w", encoding="utf-8") as handle:
         json.dump(metrics, handle, indent=2)
         handle.write("\n")
 
-    with SUMMARY_CSV.open("w", encoding="utf-8", newline="") as handle:
+    with summary_csv.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=list(metrics.keys()))
         writer.writeheader()
         writer.writerow(metrics)
 
-    with REPLAY_JSONL.open("w", encoding="utf-8") as handle:
+    with replay_jsonl.open("w", encoding="utf-8") as handle:
         for row in replay_rows:
             handle.write(json.dumps(row) + "\n")
 
