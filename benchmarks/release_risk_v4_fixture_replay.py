@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import csv
 import json
 from pathlib import Path
@@ -171,9 +172,19 @@ def write_artifacts(
             handle.write(json.dumps(row) + "\n")
 
 
-if __name__ == "__main__":
-    metrics = run()
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Replay release-risk v4 fixture candidates.")
+    parser.add_argument("--input", type=Path, default=FIXTURE_PATH, help="Path to generated-candidate JSONL input.")
+    parser.add_argument("--results-dir", type=Path, default=RESULTS_DIR, help="Directory for replay artifacts.")
+    args = parser.parse_args(argv)
+
+    metrics = run(fixture_path=args.input, results_dir=args.results_dir)
     print("Release-Risk v4 Fixture Replay Summary")
     print("-" * 39)
     for key, value in metrics.items():
         print(f"{key}: {value}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
