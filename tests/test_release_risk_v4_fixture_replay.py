@@ -1,7 +1,13 @@
 import json
 from pathlib import Path
 
-from benchmarks.release_risk_v4_fixture_replay import FIXTURE_PATH, REPLAY_JSONL, run
+from benchmarks.release_risk_v4_fixture_replay import (
+    FIXTURE_PATH,
+    REPLAY_JSONL,
+    SUMMARY_CSV,
+    SUMMARY_JSON,
+    run,
+)
 
 REQUIRED_KEYS = {
     "total_cases",
@@ -63,6 +69,7 @@ def test_v4_fixture_replay_runs_without_provider_keys_and_has_stable_summary_sha
     assert metrics["candidate_source"] == "fixture"
     assert metrics["generation_mode"] == "fixture_replay"
     assert metrics["provider"] is None
+
     assert metrics["baseline_released"] == metrics["total_cases"] == metrics["num_replayed_candidates"]
 
 
@@ -100,7 +107,17 @@ def test_v4_fixture_replay_treats_null_generated_candidate_as_empty(tmp_path: Pa
         encoding="utf-8",
     )
 
-    metrics = run(fixture_path=fixture_path)
+    baseline_artifacts = {
+        "summary_json": SUMMARY_JSON.read_bytes(),
+        "summary_csv": SUMMARY_CSV.read_bytes(),
+        "replay_jsonl": REPLAY_JSONL.read_bytes(),
+    }
+
+    metrics = run(fixture_path=fixture_path, results_dir=tmp_path / "results")
     assert metrics["total_cases"] == 1
     assert metrics["num_empty_candidates"] == 1
     assert metrics["provider"] is None
+
+    assert SUMMARY_JSON.read_bytes() == baseline_artifacts["summary_json"]
+    assert SUMMARY_CSV.read_bytes() == baseline_artifacts["summary_csv"]
+    assert REPLAY_JSONL.read_bytes() == baseline_artifacts["replay_jsonl"]
