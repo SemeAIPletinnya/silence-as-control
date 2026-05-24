@@ -75,3 +75,32 @@ def test_v4_replay_artifact_contains_decisions_and_metadata() -> None:
     assert "sac_decision" in first
     assert "review_flags" in first
     assert "metadata" in first
+
+
+def test_v4_fixture_replay_treats_null_generated_candidate_as_empty(tmp_path: Path) -> None:
+    fixture_path = tmp_path / "fixture.jsonl"
+    fixture_path.write_text(
+        json.dumps(
+            {
+                "prompt_id": "null-candidate",
+                "risk": "safe",
+                "category": "other",
+                "prompt": "say hello",
+                "generated_candidate": None,
+                "candidate_source": "fixture",
+                "generation_mode": "fixture_replay",
+                "provider": None,
+                "model": None,
+                "generation_error": None,
+                "expected_behavior": "PROCEED",
+                "metadata": {},
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    metrics = run(fixture_path=fixture_path)
+    assert metrics["total_cases"] == 1
+    assert metrics["num_empty_candidates"] == 1
+    assert metrics["provider"] is None
