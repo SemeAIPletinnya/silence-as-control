@@ -19,7 +19,9 @@ docs/
   ├─ architecture.md                 ← core/runtime/experimental split
   ├─ agentic_release_control.md      ← agentic release-control layer
   ├─ evidence_map.md                 ← claims → artifacts
+  ├─ evidence_graph.md               ← compact claim topology
   ├─ chronology.md                   ← project evolution timeline
+  ├─ runtime_evidence_linkage.md     ← runtime/replay evidence links
   ├─ runtime_observability.md        ← telemetry verification
   ├─ provider_configuration.md       ← API/provider setup
   ├─ release_control_services.md     ← pilot/integration interest
@@ -46,6 +48,15 @@ issues/
 | See milestone planning | [Roadmap 2026](roadmap_2026.md) |
 | Recover current project memory | [Issue #202](https://github.com/SemeAIPletinnya/silence-as-control/issues/202) |
 | Track roadmap/progress/dependencies | [Issue #203](https://github.com/SemeAIPletinnya/silence-as-control/issues/203) |
+
+## Crystallization / provenance / evidence topology
+
+- [Project chronology](chronology.md)
+- [Core primitives](core_primitives.md)
+- [Evidence graph](evidence_graph.md)
+- [Project crystallization status](project_crystallization_status.md)
+- [Runtime evidence linkage](runtime_evidence_linkage.md)
+- [Twitter/X archive summary](twitter_archive_summary.md)
 
 ## Boundary rules
 

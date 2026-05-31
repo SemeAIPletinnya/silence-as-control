@@ -48,11 +48,13 @@ Interpretation boundaries:
 
 ## Benchmark / evaluation files
 
-- `eval_simpleqa_ollama.py`
-- `benchmark/eval_100_milestone.py`
-- `benchmark/eval_100_messy.py`
+- `benchmarks/simpleqa/run_simpleqa_por.py`
+- `benchmarks/simpleqa/README.md`
+- `data/simpleqa_clean_100.jsonl`
+- `data/simpleqa_messy_100.jsonl`
+- `reports/simpleqa_ollama_calibration_summary.md`
 
-These files produce evaluation outputs used for threshold-behavior inspection.
+These tracked benchmark and dataset files support threshold-behavior inspection. For the compact claim-to-artifact topology, see `docs/evidence_graph.md`.
 
 ## Demo evidence note
 

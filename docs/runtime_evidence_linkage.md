@@ -43,6 +43,14 @@ unsafe or ambiguous candidate
 → release-risk evidence
 ```
 
+Linked surfaces:
+
+- `docs/release_risk_benchmark_index.md`
+- `docs/release_risk_v4_capture_to_replay.md`
+- `benchmarks/release_risk_v4_fixture_replay.py`
+- `benchmarks/release_risk_v4/results/release_risk_v4_summary.json`
+- `benchmarks/release_risk_v4/results/release_risk_v4_replay.jsonl`
+
 ### Local runtime
 
 ```text
@@ -52,6 +60,12 @@ candidate generation
 → replay log
 → evidence map
 ```
+
+Linked surfaces:
+
+- `docs/runtime_observability.md`
+- `scripts/runtime_observability_report.py`
+- `tests/test_runtime_observability_report.py`
 
 ## Evidence rules
 
@@ -63,8 +77,6 @@ candidate generation
 
 ## Pending links
 
-- release-risk v4 replay outputs
-- local runtime logs
 - hosted deployment traces
-- curated Twitter/X chronology references
-- issue #202 / #203 progress anchors
+- optional provider-backed replay artifacts
+- future memory-admission prototype evidence
