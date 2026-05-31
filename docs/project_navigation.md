@@ -19,6 +19,7 @@ docs/
   ├─ architecture.md                 ← core/runtime/experimental split
   ├─ agentic_release_control.md      ← agentic release-control layer
   ├─ evidence_map.md                 ← claims → artifacts
+  ├─ chronology.md                   ← project evolution timeline
   ├─ runtime_observability.md        ← telemetry verification
   ├─ provider_configuration.md       ← API/provider setup
   ├─ release_control_services.md     ← pilot/integration interest
@@ -38,6 +39,7 @@ issues/
 | Understand the architecture split | [Architecture](architecture.md) |
 | Understand agentic release-control | [Agentic release-control](agentic_release_control.md) |
 | Check claims and artifacts | [Evidence map](evidence_map.md) |
+| Follow project chronology | [Project chronology](chronology.md) |
 | Inspect runtime telemetry | [Runtime observability](runtime_observability.md) |
 | Configure provider-backed completion | [Provider configuration](provider_configuration.md) |
 | Understand pilot/integration fit | [Release-control services](release_control_services.md) |
@@ -51,6 +53,7 @@ issues/
 - Plain-English pitch explains the idea simply.
 - First-run checklist verifies the no-key path.
 - Evidence map connects claims to artifacts.
+- Project chronology tracks evolution over time without replacing evidence docs.
 - Roadmap docs and issue #203 track development direction.
 - Issue #202 preserves current project state.
 - Pilot/integration docs should stay separate from research/evidence docs.
