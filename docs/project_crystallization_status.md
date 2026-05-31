@@ -34,6 +34,14 @@ The project is currently converting long-running conceptual, repository, and pub
   - maps claims to artifacts and evidence gaps
   - prevents unsupported claim expansion
 
+- `docs/twitter_archive_summary.md`
+  - provides a curated archive/provenance summary
+  - keeps archive continuity separate from correctness claims
+
+- `docs/runtime_evidence_linkage.md`
+  - links runtime/replay artifacts into the evidence layer
+  - preserves conservative evidence boundaries
+
 ## Stable primitives
 
 ```text
@@ -45,9 +53,9 @@ syntax != operational correctness
 
 ## Near-term next steps
 
-- Add curated Twitter/X archive evidence summary.
-- Link runtime/replay artifacts to the evidence map.
-- Add release-risk examples where they support operational claims.
+- Extend the curated Twitter/X archive evidence summary only with sanitized, compact references.
+- Maintain runtime/replay artifact links as evidence surfaces evolve.
+- Add future release-risk examples only where they support operational claims.
 - Define a small memory-admission prototype direction.
 - Keep issue #202 and issue #203 aligned with crystallization progress.
 
@@ -67,7 +75,9 @@ chronology scaffold: done
 navigation link: done
 core primitives: done
 evidence map scaffold: done
-curated archive evidence: pending
-runtime/replay evidence linkage: pending
+curated archive evidence summary: scaffolded
+provenance/evidence graph layer: scaffolded
+runtime/replay evidence linkage: linked
 memory-admission prototype: pending
+future hosted/runtime traces: pending
 ```

@@ -13,6 +13,7 @@ You are here: documentation for architecture boundaries and public-facing guidan
 - `provider_configuration.md` — no-key vs provider-backed runtime configuration.
 - `threshold_regime_contract.md` — scoped threshold interpretation contract for SimpleQA/Ollama evidence.
 - `evidence_map.md` — claim-to-artifact navigation for core/runtime/benchmark surfaces.
+- `evidence_graph.md` — compact claim-to-artifact topology companion.
 - `release_risk_benchmark_index.md` — recommended entry point for v1/v2/v3 release-risk benchmark evidence, artifact lineage, commands, and interpretation boundaries.
 - `release_risk_benchmark_report.md` — first deterministic local release-risk benchmark run report.
 - `release_risk_v2_benchmark_report.md` — first local fixture-replay run report for release-risk benchmark v2.
@@ -43,5 +44,14 @@ You are here: documentation for architecture boundaries and public-facing guidan
 - [Review lane architecture](review_lane_architecture.md) — conceptual governance routing layer for sandbox evaluation flows.
 - [Connector sandbox boundary](connector_sandbox_boundary.md) — conceptual governance boundary for external communication surfaces.
 - `applied_bridges.md` — bounded notes on compatible applied bridges such as `por-copilot-bridge`.
+
+## Crystallization / provenance index
+
+- [Project chronology](chronology.md)
+- [Core primitives](core_primitives.md)
+- [Evidence graph](evidence_graph.md)
+- [Project crystallization status](project_crystallization_status.md)
+- [Runtime evidence linkage](runtime_evidence_linkage.md)
+- [Twitter/X archive summary](twitter_archive_summary.md)
 
 For paper/preprint context, see `../paper/README.md`.
