@@ -36,6 +36,13 @@ Assumptions:
 
 Windows note: if pytest temp-folder permissions or file locks cause failures, use a unique `--basetemp` path (shown below).
 
+Repository-local fallback command:
+
+```powershell
+New-Item -ItemType Directory .pytest_tmp_runs -Force
+python -m pytest --basetemp=.pytest_tmp_runs/manual
+```
+
 ## 3. Fresh checkout setup
 
 Windows PowerShell:
