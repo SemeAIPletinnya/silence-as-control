@@ -58,3 +58,9 @@ issues/
 - Issue #202 preserves current project state.
 - Pilot/integration docs should stay separate from research/evidence docs.
 - Do not duplicate large explanations across files.
+
+## Archive / Provenance Layer
+
+- `docs/twitter_archive_summary.md`
+  - Curated chronology/provenance summary derived from the long-term Twitter/X archive.
+  - Used as a continuity and terminology-evolution reference layer.
