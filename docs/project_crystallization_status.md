@@ -30,7 +30,7 @@ The project is currently converting long-running conceptual, repository, and pub
   - defines the smallest stable primitives
   - anchors authority-separation language
 
-- `docs/evidence_graph.md`
+- `docs/evidence_map.md`
   - maps claims to artifacts and evidence gaps
   - prevents unsupported claim expansion
 
@@ -46,7 +46,7 @@ syntax != operational correctness
 ## Near-term next steps
 
 - Add curated Twitter/X archive evidence summary.
-- Link runtime/replay artifacts to the evidence graph.
+- Link runtime/replay artifacts to the evidence map.
 - Add release-risk examples where they support operational claims.
 - Define a small memory-admission prototype direction.
 - Keep issue #202 and issue #203 aligned with crystallization progress.
@@ -66,7 +66,7 @@ syntax != operational correctness
 chronology scaffold: done
 navigation link: done
 core primitives: done
-evidence graph scaffold: done
+evidence map scaffold: done
 curated archive evidence: pending
 runtime/replay evidence linkage: pending
 memory-admission prototype: pending
