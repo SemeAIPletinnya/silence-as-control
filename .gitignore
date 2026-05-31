@@ -10,3 +10,6 @@ logs/
 .DS_Store
 .env
 runtime_logs/
+
+.pytest_tmp_runs/
+.pytest_tmp_run/

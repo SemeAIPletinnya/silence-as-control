@@ -25,5 +25,6 @@ package-dir = {"" = "src"}
 where = ["src"]
 
 [tool.pytest.ini_options]
+addopts = ["-p", "_pytest_windows_tmp"]
 pythonpath = ["src", "."]
 testpaths = ["tests"]

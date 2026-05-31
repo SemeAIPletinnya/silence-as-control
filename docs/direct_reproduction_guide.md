@@ -149,7 +149,7 @@ The current path is scoped to stable, no-key verification.
 
 ## 10. Troubleshooting
 
-- If pytest temp permissions fail on Windows, run pytest with a unique `--basetemp` path.
+- On Windows, the test suite automatically uses a unique per-run pytest temp root to avoid shared temp-directory cleanup races. If Python 3.14 / pytest 8.3.5 still reports temp cleanup permissions, run `python -m pytest --basetemp=.pytest_tmp_runs/manual`.
 - If provider-backed `/por/complete` fails, check provider configuration; it is not required for this guide.
 - If an output path does not exist, the CLI should create parent directories for `--output`.
 - If imports fail, run `python -m pip install -e .`.
