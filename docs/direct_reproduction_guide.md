@@ -38,7 +38,8 @@ Windows note: if pytest temp-folder permissions or file locks cause failures, us
 
 Repository-local fallback command:
 
-```bash
+```powershell
+New-Item -ItemType Directory .pytest_tmp_runs -Force
 python -m pytest --basetemp=.pytest_tmp_runs/manual
 ```
 
