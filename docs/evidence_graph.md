@@ -5,6 +5,21 @@ This document maps project claims to the smallest available artifacts that suppo
 The goal is not to collect every possible reference.
 The goal is to keep the project evidence layer inspectable, minimal, and reproducible.
 
+## Relationship to evidence_map.md
+
+`docs/evidence_map.md` is the broader evidence orientation document.
+
+This file is a compact companion graph for tracing:
+
+```text
+claim
+→ artifact
+→ status
+→ evidence gap
+```
+
+It should not replace the evidence map or duplicate large evidence explanations.
+
 ## Evidence model
 
 Each entry should follow this shape:
