@@ -359,6 +359,19 @@ def test_api_complete_returns_500_on_internal_failure(monkeypatch):
     assert response.json()["detail"] == "por_complete_failed"
 
 
+def test_api_root_endpoint():
+    response = client.get("/")
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "project": "Silence-as-Control",
+        "status": "running",
+        "thesis": "generation != release authority",
+        "docs": "/docs",
+        "health": "/health",
+    }
+
+
 def test_api_health_endpoint():
     response = client.get("/health")
 
