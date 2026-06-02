@@ -115,3 +115,15 @@ def test_core_release_decision_exact_threshold_equality_proceeds():
 
     assert fixed_threshold_release_decision(0.42, 0.42) == "PROCEED"
     assert fixed_threshold_release_decision(0.4200001, 0.42) == "SILENCE"
+
+
+def test_runtime_bounded_release_decision_uses_fixed_review_band():
+    assert por_runtime.bounded_runtime_release_decision(0.35, 0.39) == "PROCEED"
+    assert por_runtime.bounded_runtime_release_decision(0.39, 0.39) == "NEEDS_REVIEW"
+    assert por_runtime.bounded_runtime_release_decision(0.42, 0.39) == "SILENCE"
+
+
+def test_runtime_bounded_release_decision_clips_band_edges():
+    assert por_runtime.bounded_runtime_release_decision(0.0, 0.01) == "NEEDS_REVIEW"
+    assert por_runtime.bounded_runtime_release_decision(0.99, 1.0) == "NEEDS_REVIEW"
+    assert por_runtime.bounded_runtime_release_decision(1.0, 1.0) == "SILENCE"

@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 import logging
 import os
-from typing import Any, Mapping, TypedDict
+from typing import Any, Literal, Mapping, TypedDict
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
@@ -24,13 +24,15 @@ from silence_as_control.types import DecisionResult
 from api.core_primitive import (
     CORE_FIXED_THRESHOLD,
     compute_instability_score,
-    fixed_threshold_release_decision,
 )
 from api.experimental_recovery import (
     get_experimental_margin,
     maybe_short_regen,
 )
 from api.por_runtime import (
+    RUNTIME_REVIEW_MARGIN,
+    RuntimeDecision,
+    bounded_runtime_release_decision,
     compute_adaptive_threshold,
     estimate_coherence,
     estimate_drift,
@@ -93,12 +95,15 @@ class EvaluateRequest(BaseModel):
     recent_coherences: list[float] = Field(default_factory=list)
 
 
+RuntimeResponseDecision = Literal["PROCEED", "NEEDS_REVIEW", "SILENCE"]
+
+
 class EvaluateResponse(BaseModel):
     drift: float
     coherence: float
     instability_score: float
     threshold: float
-    decision: str
+    decision: RuntimeResponseDecision
     release_output: str | None = None
     silence_token: str | None = None
     notes: list[str]
@@ -126,7 +131,7 @@ class CompleteResponse(BaseModel):
     coherence: float
     instability_score: float
     threshold: float
-    decision: str
+    decision: RuntimeResponseDecision
     release_output: str | None = None
     silence_token: str | None = None
     notes: list[str]
@@ -150,7 +155,7 @@ class RuntimeScore(TypedDict):
     coherence: float
     instability_score: float
     threshold: float
-    decision: str
+    decision: RuntimeDecision
     release_output: str | None
     silence_token: str | None
     notes: list[str]
@@ -220,15 +225,18 @@ def score_candidate_runtime(
     threshold: float,
     candidate_samples: list[str] | None = None,
 ) -> RuntimeScore:
-    """[RUNTIME] Score one candidate and apply the core release decision."""
+    """[RUNTIME] Score one candidate and apply the runtime release decision."""
     samples = candidate_samples or [candidate]
     drift, drift_notes = estimate_drift(samples)
     coherence, coherence_notes = estimate_coherence(prompt, candidate)
     instability = compute_instability_score(drift=drift, coherence=coherence)
     json_check = check_json_validity(prompt, candidate)
 
-    decision = fixed_threshold_release_decision(instability, threshold)
+    decision = bounded_runtime_release_decision(instability, threshold)
     notes = drift_notes + coherence_notes + json_check["notes"]
+
+    if decision == "NEEDS_REVIEW":
+        notes.append(f"runtime_review_band:margin={RUNTIME_REVIEW_MARGIN:.2f}")
 
     if json_check["expects_json"] and json_check["is_valid_json"] is False:
         decision = "SILENCE"

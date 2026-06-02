@@ -105,6 +105,27 @@ def test_api_evaluate_stays_fixed_when_adaptive_disabled():
     assert payload["threshold"] == 0.39
 
 
+def test_api_evaluate_can_return_needs_review_in_runtime_review_band():
+    response = client.post(
+        "/por/evaluate",
+        json={
+            "prompt": "Summarize the incident risk in one sentence.",
+            "candidate": (
+                "The situation might be stable, but details are incomplete and "
+                "the release risk remains uncertain."
+            ),
+            "threshold": 0.36,
+            "use_adaptive_threshold": False,
+        },
+    )
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["decision"] == "NEEDS_REVIEW"
+    assert "release_output" not in payload
+    assert "silence_token" not in payload
+    assert any("runtime_review_band" in note for note in payload["notes"])
+
+
 def test_api_evaluate_can_silence_on_low_coherence_runtime_signal():
     response = client.post(
         "/por/evaluate",

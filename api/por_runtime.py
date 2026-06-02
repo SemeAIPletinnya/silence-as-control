@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass
+from typing import Literal
 
 from silence_as_control.config import (
     ADAPTIVE_THRESHOLD_ALPHA_DEFAULT,
@@ -39,6 +40,8 @@ MAX_EMBEDDING_CHARS_ENV_VAR = "MAX_EMBEDDING_CHARS"
 DEFAULT_MAX_EMBEDDING_CHARS = MAX_EMBEDDING_CHARS_DEFAULT
 EmbeddingFn = Callable[[str], list[float]]
 CUSTOM_EMBEDDING_FN: EmbeddingFn | None = None
+RuntimeDecision = Literal["PROCEED", "NEEDS_REVIEW", "SILENCE"]
+RUNTIME_REVIEW_MARGIN = 0.03
 
 
 @dataclass(frozen=True)
@@ -52,6 +55,30 @@ class AdaptiveThresholdConfig:
 
 def _clip(value: float, low: float = 0.0, high: float = 1.0) -> float:
     return max(low, min(value, high))
+
+
+def bounded_runtime_release_decision(
+    instability_score: float,
+    threshold: float,
+    review_margin: float = RUNTIME_REVIEW_MARGIN,
+) -> RuntimeDecision:
+    """[RUNTIME] Return a three-lane release decision around a threshold.
+
+    The core primitive remains binary. Runtime scoring uses this bounded, fixed
+    review band so borderline instability is held for human or downstream
+    review instead of being released or hard-silenced.
+    """
+    normalized_instability = _clip(instability_score)
+    normalized_threshold = _clip(threshold)
+    normalized_margin = max(0.0, review_margin)
+    lower_bound = _clip(round(normalized_threshold - normalized_margin, 10))
+    upper_bound = _clip(round(normalized_threshold + normalized_margin, 10))
+
+    if normalized_instability < lower_bound:
+        return "PROCEED"
+    if normalized_instability < upper_bound:
+        return "NEEDS_REVIEW"
+    return "SILENCE"
 
 
 def _stable_token_index(token: str, dim: int) -> int:

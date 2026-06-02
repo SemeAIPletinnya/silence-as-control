@@ -23,7 +23,7 @@ def test_integration_por_evaluate_deterministic_payload():
     assert response.status_code == 200
     payload = response.json()
     assert payload["threshold"] == 0.39
-    assert payload["decision"] in {"PROCEED", "SILENCE"}
+    assert payload["decision"] in {"PROCEED", "NEEDS_REVIEW", "SILENCE"}
     assert 0.0 <= payload["instability_score"] <= 1.0
 
 
