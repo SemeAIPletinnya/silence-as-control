@@ -40,6 +40,20 @@ This is a runtime-governance demonstration, not a production-readiness claim.
 See the [runtime decision contract](docs/runtime_decision_contract.md) and
 [API walkthrough](docs/api_walkthrough.md).
 
+### Runtime decision examples
+
+`PROCEED`
+
+![Runtime proceed example](docs/assets/runtime-surface-proceed.png)
+
+`NEEDS_REVIEW`
+
+![Runtime needs review example](docs/assets/runtime-surface-needs-review.png)
+
+`SILENCE` with runtime policy override
+
+![Runtime silence override example](docs/assets/runtime-surface-silence-policy-override.png)
+
 ## Integrator quick path
 
 ```text
