@@ -269,6 +269,18 @@ def resolve_experimental_short_regen_flag(req: CompleteRequest) -> bool:
     return req.enable_short_regen
 
 
+@app.get("/")
+def root() -> dict[str, str]:
+    """Minimal deployment landing endpoint for root URL checks."""
+    return {
+        "project": "Silence-as-Control",
+        "status": "running",
+        "thesis": "generation != release authority",
+        "docs": "/docs",
+        "health": "/health",
+    }
+
+
 @app.get("/health")
 def health() -> dict[str, str]:
     """Health endpoint for API runtime checks."""
