@@ -40,6 +40,28 @@ This is a runtime-governance demonstration, not a production-readiness claim.
 See the [runtime decision contract](docs/runtime_decision_contract.md) and
 [API walkthrough](docs/api_walkthrough.md).
 
+## Integrator quick path
+
+```text
+external generator / agent / app
+→ candidate output
+→ POST /por/evaluate
+→ runtime decision
+→ downstream policy
+```
+
+An external system generates a candidate output, then SaC evaluates that
+candidate before release. By default, downstream policy should treat only
+`PROCEED` as release-authorized. Route `NEEDS_REVIEW` to human or policy
+review. Treat `SILENCE` as a decision to withhold the candidate and use a
+fallback, clarification, or escalation path.
+
+The API is black-box compatible: integrators can evaluate candidate outputs
+without access to model logits or logprobs. See the
+[runtime decision contract](docs/runtime_decision_contract.md),
+[API walkthrough](docs/api_walkthrough.md), and
+[builder integration guide](docs/builder_integration_guide.md).
+
 ## Fast orientation
 
 ### Start
