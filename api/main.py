@@ -574,6 +574,49 @@ def root() -> HTMLResponse:
       color: #e8eef5;
       overflow-wrap: anywhere;
     }
+    .runtime-trace {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      border: 1px solid #203247;
+      border-radius: 0.7rem;
+      background: linear-gradient(180deg, #0b1119 0%, #08101a 100%);
+      box-shadow: inset 0 1px 0 rgba(159, 208, 255, 0.05);
+    }
+    .runtime-trace h3 {
+      margin: 0 0 0.55rem;
+      color: #c6d2df;
+      font-size: 0.95rem;
+      font-weight: 900;
+    }
+    .trace-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+      gap: 0.45rem;
+    }
+    .trace-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.75rem;
+      border: 1px solid #1c2a3a;
+      border-radius: 0.5rem;
+      padding: 0.45rem 0.55rem;
+      background: #090e15;
+    }
+    .trace-label {
+      color: #8fa4ba;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .trace-value {
+      color: #dcecff;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 0.82rem;
+      overflow-wrap: anywhere;
+      text-align: right;
+    }
     .release-output {
       margin-top: 0.75rem;
       padding-top: 0.75rem;
@@ -732,6 +775,70 @@ def root() -> HTMLResponse:
       return item;
     }
 
+    const REVIEW_MARGIN = 0.03;
+
+    function numericTraceValue(value) {
+      if (value === undefined || value === null || Number.isNaN(Number(value))) return "—";
+      return Number(value).toFixed(4);
+    }
+
+    function traceRow(label, value) {
+      const row = document.createElement("div");
+      row.className = "trace-row";
+
+      const labelElement = document.createElement("span");
+      labelElement.className = "trace-label";
+      labelElement.textContent = label;
+
+      const valueElement = document.createElement("span");
+      valueElement.className = "trace-value";
+      valueElement.textContent = formatValue(value);
+
+      row.append(labelElement, valueElement);
+      return row;
+    }
+
+    function decisionBand(decision, policyOverride) {
+      if (policyOverride) return "policy override → SILENCE";
+      if (decision === "PROCEED") return "below review band";
+      if (decision === "NEEDS_REVIEW") return "bounded review band";
+      if (decision === "SILENCE") return "above review band";
+      return "—";
+    }
+
+    function renderRuntimeTrace(data) {
+      const threshold = Number(data.threshold);
+      const lowerBound = Number.isNaN(threshold) ? null : Math.max(threshold - REVIEW_MARGIN, 0.0);
+      const upperBound = Number.isNaN(threshold) ? null : Math.min(threshold + REVIEW_MARGIN, 1.0);
+      const notes = Array.isArray(data.notes) ? data.notes : [];
+      const policyOverride = notes.includes("forced_silence_invalid_json");
+      const releaseAuthorized = data.decision === "PROCEED";
+      const silenceActive = data.decision === "SILENCE";
+
+      const panel = document.createElement("div");
+      panel.className = "runtime-trace";
+
+      const title = document.createElement("h3");
+      title.textContent = "Runtime trace";
+
+      const grid = document.createElement("div");
+      grid.className = "trace-grid";
+      grid.append(
+        traceRow("instability score", numericTraceValue(data.instability_score)),
+        traceRow("threshold", numericTraceValue(data.threshold)),
+        traceRow("review margin", REVIEW_MARGIN.toFixed(2)),
+        traceRow("lower bound", numericTraceValue(lowerBound)),
+        traceRow("upper bound", numericTraceValue(upperBound)),
+        traceRow("decision band", decisionBand(data.decision, policyOverride)),
+        traceRow("release_authorized", String(releaseAuthorized)),
+        traceRow("silence_active", String(silenceActive)),
+        traceRow("policy_override", String(policyOverride)),
+      );
+
+      panel.append(title, grid);
+      return panel;
+    }
+
     function renderSummary(data) {
       summary.replaceChildren();
 
@@ -762,7 +869,7 @@ def root() -> HTMLResponse:
         metric("Instability score", data.instability_score),
       );
 
-      summary.append(header, grid);
+      summary.append(header, grid, renderRuntimeTrace(data));
 
       if (data.release_output) {
         const release = document.createElement("div");

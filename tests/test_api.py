@@ -400,6 +400,10 @@ def test_api_root_endpoint():
     assert "Unsafe example" in response.text
     assert "Decision" in response.text
     assert "Coherence" in response.text
+    assert "Runtime trace" in response.text
+    assert "release_authorized" in response.text
+    assert "silence_active" in response.text
+    assert "policy_override" in response.text
     assert "Raw JSON" in response.text
 
 
