@@ -386,8 +386,95 @@ def root() -> HTMLResponse:
       color: #08111c;
       font-weight: 800;
     }
+    .result-summary {
+      display: none;
+      margin-top: 1rem;
+      padding: 0.85rem;
+      border: 1px solid #263544;
+      border-radius: 0.75rem;
+      background: #0b0f14;
+    }
+    .result-summary.visible {
+      display: block;
+    }
+    .result-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .result-title {
+      color: #e8eef5;
+      font-weight: 800;
+    }
+    .badge {
+      border: 1px solid #6b7f94;
+      border-radius: 999px;
+      padding: 0.25rem 0.65rem;
+      background: #1f2a36;
+      color: #d9e3ee;
+      font-size: 0.85rem;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+    }
+    .badge-proceed {
+      border-color: #45c77a;
+      background: #12351f;
+      color: #9ff0bc;
+    }
+    .badge-needs-review {
+      border-color: #f2c94c;
+      background: #3a2f10;
+      color: #ffe58a;
+    }
+    .badge-silence {
+      border-color: #ff6b6b;
+      background: #3b161a;
+      color: #ffb4b4;
+    }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+      gap: 0.65rem;
+    }
+    .metric {
+      border: 1px solid #263544;
+      border-radius: 0.65rem;
+      padding: 0.65rem;
+    }
+    .metric-label {
+      display: block;
+      color: #9fb0c3;
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .metric-value {
+      display: block;
+      margin-top: 0.25rem;
+      color: #e8eef5;
+      overflow-wrap: anywhere;
+    }
+    .release-output {
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid #263544;
+    }
+    .release-output p {
+      margin: 0.35rem 0 0;
+      color: #e8eef5;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .raw-json-heading {
+      margin: 1rem 0 0.35rem;
+      color: #c6d2df;
+      font-weight: 800;
+    }
     pre {
-      margin: 1rem 0 0;
+      margin: 0;
       padding: 0.85rem;
       overflow: auto;
       border: 1px solid #263544;
@@ -425,18 +512,100 @@ def root() -> HTMLResponse:
 
         <button type="submit">Evaluate</button>
       </form>
+      <div id="result-summary" class="result-summary" aria-live="polite"></div>
+      <div class="raw-json-heading">Raw JSON</div>
       <pre id="evaluate-result" aria-live="polite">Result JSON will appear here.</pre>
     </section>
   </main>
   <script>
     const form = document.getElementById("evaluate-form");
     const result = document.getElementById("evaluate-result");
+    const summary = document.getElementById("result-summary");
     const promptInput = document.getElementById("prompt");
     const candidateInput = document.getElementById("candidate");
     const thresholdInput = document.getElementById("threshold");
 
+    function formatValue(value) {
+      return value === undefined || value === null || value === "" ? "—" : String(value);
+    }
+
+    function badgeClass(decision) {
+      if (decision === "PROCEED") return "badge badge-proceed";
+      if (decision === "NEEDS_REVIEW") return "badge badge-needs-review";
+      if (decision === "SILENCE") return "badge badge-silence";
+      return "badge";
+    }
+
+    function metric(label, value) {
+      const item = document.createElement("div");
+      item.className = "metric";
+
+      const labelElement = document.createElement("span");
+      labelElement.className = "metric-label";
+      labelElement.textContent = label;
+
+      const valueElement = document.createElement("span");
+      valueElement.className = "metric-value";
+      valueElement.textContent = formatValue(value);
+
+      item.append(labelElement, valueElement);
+      return item;
+    }
+
+    function renderSummary(data) {
+      summary.replaceChildren();
+
+      if (!data || data.decision === undefined || data.decision === null) {
+        summary.classList.remove("visible");
+        return;
+      }
+
+      const header = document.createElement("div");
+      header.className = "result-header";
+
+      const title = document.createElement("span");
+      title.className = "result-title";
+      title.textContent = "Decision";
+
+      const badge = document.createElement("span");
+      badge.className = badgeClass(data.decision);
+      badge.textContent = formatValue(data.decision);
+
+      header.append(title, badge);
+
+      const grid = document.createElement("div");
+      grid.className = "metric-grid";
+      grid.append(
+        metric("Coherence", data.coherence),
+        metric("Drift", data.drift),
+        metric("Threshold", data.threshold),
+        metric("Instability score", data.instability_score),
+      );
+
+      summary.append(header, grid);
+
+      if (data.release_output) {
+        const release = document.createElement("div");
+        release.className = "release-output";
+
+        const releaseLabel = document.createElement("span");
+        releaseLabel.className = "metric-label";
+        releaseLabel.textContent = "Release output";
+
+        const releaseText = document.createElement("p");
+        releaseText.textContent = data.release_output;
+
+        release.append(releaseLabel, releaseText);
+        summary.append(release);
+      }
+
+      summary.classList.add("visible");
+    }
+
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
+      summary.classList.remove("visible");
+      summary.replaceChildren();
       result.textContent = "Evaluating...";
 
       const payload = {
@@ -452,8 +621,11 @@ def root() -> HTMLResponse:
           body: JSON.stringify(payload),
         });
         const data = await response.json();
+        renderSummary(data);
         result.textContent = JSON.stringify(data, null, 2);
       } catch (error) {
+        summary.classList.remove("visible");
+        summary.replaceChildren();
         result.textContent = `Evaluation failed: ${error}`;
       }
     });

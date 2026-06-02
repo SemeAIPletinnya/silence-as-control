@@ -368,6 +368,9 @@ def test_api_root_endpoint():
     assert "generation != release authority" in response.text
     assert "/por/evaluate" in response.text
     assert "Evaluate" in response.text
+    assert "Decision" in response.text
+    assert "Coherence" in response.text
+    assert "Raw JSON" in response.text
 
 
 def test_api_health_endpoint():
