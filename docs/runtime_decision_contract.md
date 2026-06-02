@@ -28,24 +28,54 @@ The runtime computes an `instability` score and compares it with a resolved `thr
 
 Current margin: `0.03`.
 
-Decision bands:
+Before comparison, runtime clamps the review-band edges into `[0.0, 1.0]`:
 
 ```text
-instability < threshold - margin
+lower_bound = max(threshold - margin, 0.0)
+upper_bound = min(threshold + margin, 1.0)
+```
+
+Decision bands then use those bounded edges:
+
+```text
+instability < lower_bound
   => PROCEED
 
-threshold - margin <= instability < threshold + margin
+lower_bound <= instability < upper_bound
   => NEEDS_REVIEW
 
-instability >= threshold + margin
+instability >= upper_bound
   => SILENCE
 ```
 
 With the current margin, a threshold of `0.39` yields:
 
+- `lower_bound = 0.36`
+- `upper_bound = 0.42`
 - `instability < 0.36` => `PROCEED`
 - `0.36 <= instability < 0.42` => `NEEDS_REVIEW`
 - `instability >= 0.42` => `SILENCE`
+
+With the current margin, a threshold of `1.0` yields clipped review-band edges:
+
+- `lower_bound = 0.97`
+- `upper_bound = 1.0`
+- `instability < 0.97` => `PROCEED`
+- `0.97 <= instability < 1.0` => `NEEDS_REVIEW`
+- `instability >= 1.0` => `SILENCE`
+
+## Runtime policy overrides
+
+Certain runtime/API policies may override the nominal instability-band result. These policies preserve runtime safety requirements that are stricter than pure instability-band routing.
+
+For example, if the prompt expects JSON and runtime JSON validation fails, `/por/evaluate` forces `SILENCE` even if the instability score falls inside the nominal `PROCEED` or `NEEDS_REVIEW` band.
+
+In that case:
+
+- `release_output` is withheld
+- `silence_token` is returned
+
+This preserves structured-output safety above pure instability-band routing.
 
 ## Black-box compatibility
 
