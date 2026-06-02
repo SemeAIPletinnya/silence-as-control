@@ -367,6 +367,11 @@ def test_api_root_endpoint():
     assert "Silence-as-Control" in response.text
     assert "generation != release authority" in response.text
     assert "/por/evaluate" in response.text
+    assert "Runtime flow" in response.text
+    assert "candidate generation" in response.text
+    assert "release gate" in response.text
+    assert "NEEDS_REVIEW" in response.text
+    assert "SILENCE" in response.text
     assert "Evaluate" in response.text
     assert "Decision" in response.text
     assert "Coherence" in response.text
