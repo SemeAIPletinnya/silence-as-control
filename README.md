@@ -9,6 +9,37 @@ It does **not** improve model weights. It controls release behavior.
 
 **Same model. Different decision.**
 
+## Live runtime surface
+
+Silence-as-Control now includes a live FastAPI runtime surface for `/por/evaluate`.
+The demo shows the core thesis in executable form: generation creates a candidate;
+runtime evaluation decides release authority.
+
+```text
+candidate generation
+→ runtime evaluation
+→ release gate
+→ PROCEED / NEEDS_REVIEW / SILENCE
+```
+
+The core primitive remains binary. The runtime/API layer adds a bounded review
+band around the threshold and exposes tri-state runtime mediation:
+
+- `PROCEED`: release output is returned.
+- `NEEDS_REVIEW`: release output is withheld for review.
+- `SILENCE`: release output is withheld and a silence token is returned.
+
+The live landing page surfaces the runtime flow, preset scenarios, a decision
+badge, metrics, runtime trace, and raw JSON evidence. Runtime trace observability
+includes instability score, threshold, review margin, lower/upper review-band
+bounds, decision band, release authorization state, silence state, and policy
+override visibility.
+
+This is a runtime-governance demonstration, not a production-readiness claim.
+
+See the [runtime decision contract](docs/runtime_decision_contract.md) and
+[API walkthrough](docs/api_walkthrough.md).
+
 ## Fast orientation
 
 ### Start
