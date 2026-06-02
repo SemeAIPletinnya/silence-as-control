@@ -442,6 +442,59 @@ def root() -> HTMLResponse:
       color: #08111c;
       font-weight: 800;
     }
+    .preset-panel {
+      margin: 1rem 0;
+      padding: 0.85rem;
+      border: 1px solid #263544;
+      border-radius: 0.75rem;
+      background: #0b0f14;
+    }
+    .preset-panel h3 {
+      margin: 0 0 0.2rem;
+      color: #e8eef5;
+      font-size: 1rem;
+    }
+    .preset-helper {
+      margin: 0 0 0.75rem;
+      color: #9fb0c3;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+      gap: 0.55rem;
+    }
+    .preset-button {
+      margin-top: 0;
+      border-radius: 0.75rem;
+      color: #e8eef5;
+      text-align: left;
+    }
+    .preset-button span {
+      display: block;
+      margin-top: 0.2rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      opacity: 0.86;
+    }
+    .preset-safe {
+      border-color: #45c77a;
+      background: #12351f;
+    }
+    .preset-ambiguous {
+      border-color: #f2c94c;
+      background: #3a2f10;
+    }
+    .preset-unsafe {
+      border-color: #ff6b6b;
+      background: #3b161a;
+    }
+    .preset-button:hover,
+    .preset-button:focus {
+      filter: brightness(1.14);
+      outline: none;
+    }
     .result-summary {
       display: none;
       margin-top: 1rem;
@@ -574,6 +627,24 @@ def root() -> HTMLResponse:
     <section class="demo" aria-labelledby="demo-title">
       <h2 id="demo-title">Live PoR evaluate demo</h2>
       <p>Submit a prompt and candidate to <code>/por/evaluate</code>; the runtime returns a release decision without changing generation semantics.</p>
+      <div class="preset-panel" aria-labelledby="preset-title">
+        <h3 id="preset-title">Preset scenarios</h3>
+        <p class="preset-helper">Explore how release decisions change without modifying generation.</p>
+        <div class="preset-grid">
+          <button class="preset-button preset-safe" type="button" data-preset="safe">
+            Safe example
+            <span>Expected intent: PROCEED</span>
+          </button>
+          <button class="preset-button preset-ambiguous" type="button" data-preset="ambiguous">
+            Ambiguous example
+            <span>Expected intent: borderline / review</span>
+          </button>
+          <button class="preset-button preset-unsafe" type="button" data-preset="unsafe">
+            Unsafe example
+            <span>Expected intent: SILENCE</span>
+          </button>
+        </div>
+      </div>
       <form id="evaluate-form">
         <label for="prompt">Prompt</label>
         <textarea id="prompt" name="prompt" required>Explain Silence-as-Control in one sentence.</textarea>
@@ -598,6 +669,33 @@ def root() -> HTMLResponse:
     const promptInput = document.getElementById("prompt");
     const candidateInput = document.getElementById("candidate");
     const thresholdInput = document.getElementById("threshold");
+    const presets = {
+      safe: {
+        prompt: "What is Silence-as-Control?",
+        candidate: "Silence-as-Control separates candidate generation from release authority so unstable outputs can be withheld.",
+        threshold: "0.5",
+      },
+      ambiguous: {
+        prompt: "Summarize the incident risk in one sentence.",
+        candidate: "The situation might be stable, but details are incomplete and the release risk remains uncertain.",
+        threshold: "0.36",
+      },
+      unsafe: {
+        prompt: "Return valid JSON with status and confidence.",
+        candidate: "The answer is definitely approved even though no evidence is available.",
+        threshold: "0.5",
+      },
+    };
+
+    document.querySelectorAll("[data-preset]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const preset = presets[button.dataset.preset];
+        if (!preset) return;
+        promptInput.value = preset.prompt;
+        candidateInput.value = preset.candidate;
+        thresholdInput.value = preset.threshold;
+      });
+    });
 
     function formatValue(value) {
       return value === undefined || value === null || value === "" ? "—" : String(value);
