@@ -366,6 +366,8 @@ def test_api_root_endpoint():
     assert "text/html" in response.headers["content-type"]
     assert "Silence-as-Control" in response.text
     assert "generation != release authority" in response.text
+    assert "/por/evaluate" in response.text
+    assert "Evaluate" in response.text
 
 
 def test_api_health_endpoint():
