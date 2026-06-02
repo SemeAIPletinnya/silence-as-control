@@ -14,6 +14,7 @@ import os
 from typing import Any, Mapping, TypedDict
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 
 from silence_as_control.config import get_legacy_generate_coherence
@@ -269,16 +270,87 @@ def resolve_experimental_short_regen_flag(req: CompleteRequest) -> bool:
     return req.enable_short_regen
 
 
-@app.get("/")
-def root() -> dict[str, str]:
-    """Minimal deployment landing endpoint for root URL checks."""
-    return {
-        "project": "Silence-as-Control",
-        "status": "running",
-        "thesis": "generation != release authority",
-        "docs": "/docs",
-        "health": "/health",
+@app.get("/", response_class=HTMLResponse)
+def root() -> HTMLResponse:
+    """Minimal public landing page for the runtime surface."""
+    return HTMLResponse(
+        """<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Silence-as-Control</title>
+  <style>
+    :root { color-scheme: dark; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #0b0f14;
+      color: #e8eef5;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
+    main {
+      max-width: 42rem;
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+    h1 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(2.25rem, 6vw, 4rem);
+      letter-spacing: -0.04em;
+    }
+    .subtitle {
+      margin: 0 0 2rem;
+      color: #9fb0c3;
+      font-size: 1.1rem;
+    }
+    .thesis {
+      margin: 0 0 1rem;
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+    .note {
+      margin: 0 auto 2rem;
+      color: #c6d2df;
+      line-height: 1.6;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+    a {
+      color: #9fd0ff;
+      border: 1px solid #263544;
+      border-radius: 999px;
+      padding: 0.65rem 0.95rem;
+      text-decoration: none;
+    }
+    a:hover,
+    a:focus {
+      border-color: #9fd0ff;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Silence-as-Control</h1>
+    <p class="subtitle">Runtime release-control primitive for AI systems</p>
+    <p class="thesis">generation != release authority</p>
+    <p class="note">When coherence cannot be guaranteed, intentional silence is preferred over unsafe release.</p>
+    <nav aria-label="Runtime links">
+      <a href="/docs">Docs</a>
+      <a href="/health">Health</a>
+      <a href="https://github.com/SemeAIPletinnya/silence-as-control">GitHub</a>
+    </nav>
+  </main>
+</body>
+</html>"""
+    )
 
 
 @app.get("/health")

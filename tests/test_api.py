@@ -363,13 +363,9 @@ def test_api_root_endpoint():
     response = client.get("/")
 
     assert response.status_code == 200
-    assert response.json() == {
-        "project": "Silence-as-Control",
-        "status": "running",
-        "thesis": "generation != release authority",
-        "docs": "/docs",
-        "health": "/health",
-    }
+    assert "text/html" in response.headers["content-type"]
+    assert "Silence-as-Control" in response.text
+    assert "generation != release authority" in response.text
 
 
 def test_api_health_endpoint():
