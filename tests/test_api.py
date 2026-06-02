@@ -373,6 +373,10 @@ def test_api_root_endpoint():
     assert "NEEDS_REVIEW" in response.text
     assert "SILENCE" in response.text
     assert "Evaluate" in response.text
+    assert "Preset scenarios" in response.text
+    assert "Safe example" in response.text
+    assert "Ambiguous example" in response.text
+    assert "Unsafe example" in response.text
     assert "Decision" in response.text
     assert "Coherence" in response.text
     assert "Raw JSON" in response.text
