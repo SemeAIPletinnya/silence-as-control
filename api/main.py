@@ -292,8 +292,9 @@ def root() -> HTMLResponse:
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     main {
-      max-width: 42rem;
+      width: min(100%, 46rem);
       padding: 3rem 1.5rem;
+      box-sizing: border-box;
       text-align: center;
     }
     h1 {
@@ -321,6 +322,7 @@ def root() -> HTMLResponse:
       flex-wrap: wrap;
       justify-content: center;
       gap: 0.75rem;
+      margin-bottom: 2rem;
     }
     a {
       color: #9fd0ff;
@@ -333,6 +335,66 @@ def root() -> HTMLResponse:
     a:focus {
       border-color: #9fd0ff;
       outline: none;
+    }
+    .demo {
+      border: 1px solid #263544;
+      border-radius: 1rem;
+      padding: 1rem;
+      text-align: left;
+      background: #101722;
+    }
+    .demo h2 {
+      margin: 0 0 0.25rem;
+      font-size: 1.15rem;
+    }
+    .demo p {
+      margin: 0 0 1rem;
+      color: #9fb0c3;
+      line-height: 1.5;
+    }
+    label {
+      display: block;
+      margin: 0.85rem 0 0.35rem;
+      color: #c6d2df;
+      font-weight: 700;
+    }
+    textarea,
+    input,
+    button {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #314458;
+      border-radius: 0.65rem;
+      background: #0b0f14;
+      color: #e8eef5;
+      font: inherit;
+    }
+    textarea {
+      min-height: 5rem;
+      padding: 0.7rem;
+      resize: vertical;
+    }
+    input {
+      padding: 0.65rem;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      background: #9fd0ff;
+      border-color: #9fd0ff;
+      color: #08111c;
+      font-weight: 800;
+    }
+    pre {
+      margin: 1rem 0 0;
+      padding: 0.85rem;
+      overflow: auto;
+      border: 1px solid #263544;
+      border-radius: 0.75rem;
+      background: #0b0f14;
+      color: #c6d2df;
+      white-space: pre-wrap;
     }
   </style>
 </head>
@@ -347,11 +409,58 @@ def root() -> HTMLResponse:
       <a href="/health">Health</a>
       <a href="https://github.com/SemeAIPletinnya/silence-as-control">GitHub</a>
     </nav>
+
+    <section class="demo" aria-labelledby="demo-title">
+      <h2 id="demo-title">Live PoR evaluate demo</h2>
+      <p>Submit a prompt and candidate to <code>/por/evaluate</code>; the runtime returns a release decision without changing generation semantics.</p>
+      <form id="evaluate-form">
+        <label for="prompt">Prompt</label>
+        <textarea id="prompt" name="prompt" required>Explain Silence-as-Control in one sentence.</textarea>
+
+        <label for="candidate">Candidate</label>
+        <textarea id="candidate" name="candidate" required>Silence-as-Control separates generation from release by gating candidate outputs.</textarea>
+
+        <label for="threshold">Threshold</label>
+        <input id="threshold" name="threshold" type="number" min="0" max="1" step="0.01" value="0.5" required>
+
+        <button type="submit">Evaluate</button>
+      </form>
+      <pre id="evaluate-result" aria-live="polite">Result JSON will appear here.</pre>
+    </section>
   </main>
+  <script>
+    const form = document.getElementById("evaluate-form");
+    const result = document.getElementById("evaluate-result");
+    const promptInput = document.getElementById("prompt");
+    const candidateInput = document.getElementById("candidate");
+    const thresholdInput = document.getElementById("threshold");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      result.textContent = "Evaluating...";
+
+      const payload = {
+        prompt: promptInput.value,
+        candidate: candidateInput.value,
+        threshold: Number(thresholdInput.value),
+      };
+
+      try {
+        const response = await fetch("/por/evaluate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json();
+        result.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        result.textContent = `Evaluation failed: ${error}`;
+      }
+    });
+  </script>
 </body>
 </html>"""
     )
-
 
 @app.get("/health")
 def health() -> dict[str, str]:
