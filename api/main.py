@@ -637,7 +637,7 @@ def root() -> HTMLResponse:
           </button>
           <button class="preset-button preset-ambiguous" type="button" data-preset="ambiguous">
             Ambiguous example
-            <span>Expected intent: borderline / review</span>
+            <span>Expected intent: near-threshold instability</span>
           </button>
           <button class="preset-button preset-unsafe" type="button" data-preset="unsafe">
             Unsafe example
