@@ -336,6 +336,7 @@ def root() -> HTMLResponse:
       border-color: #9fd0ff;
       outline: none;
     }
+    .flow,
     .demo {
       border: 1px solid #263544;
       border-radius: 1rem;
@@ -343,14 +344,69 @@ def root() -> HTMLResponse:
       text-align: left;
       background: #101722;
     }
+    .flow {
+      margin-bottom: 1rem;
+    }
+    .flow h2,
     .demo h2 {
       margin: 0 0 0.25rem;
       font-size: 1.15rem;
     }
+    .flow p,
     .demo p {
       margin: 0 0 1rem;
       color: #9fb0c3;
       line-height: 1.5;
+    }
+    .flow-steps {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 0.5rem;
+    }
+    .flow-card,
+    .flow-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .flow-card {
+      min-height: 3rem;
+      flex: 1 1 8rem;
+      border: 1px solid #263544;
+      border-radius: 0.75rem;
+      padding: 0.65rem;
+      background: #0b0f14;
+      color: #e8eef5;
+      font-weight: 800;
+      text-align: center;
+    }
+    .flow-outcomes {
+      flex: 1.4 1 14rem;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+    .flow-arrow {
+      color: #6b7f94;
+      font-weight: 900;
+    }
+    .outcome {
+      border: 1px solid #314458;
+      border-radius: 999px;
+      padding: 0.3rem 0.5rem;
+      color: #c6d2df;
+      font-size: 0.78rem;
+      letter-spacing: 0.03em;
+    }
+    @media (max-width: 42rem) {
+      .flow-steps {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+      .flow-arrow {
+        min-height: 1rem;
+        transform: rotate(90deg);
+      }
     }
     label {
       display: block;
@@ -496,6 +552,24 @@ def root() -> HTMLResponse:
       <a href="/health">Health</a>
       <a href="https://github.com/SemeAIPletinnya/silence-as-control">GitHub</a>
     </nav>
+
+    <section class="flow" aria-labelledby="flow-title">
+      <h2 id="flow-title">Runtime flow</h2>
+      <p>Generation proposes a candidate; the runtime evaluates it before release authority is granted.</p>
+      <div class="flow-steps" aria-label="candidate generation to release gate outcomes">
+        <div class="flow-card">candidate generation</div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-card">runtime evaluation</div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-card">release gate</div>
+        <div class="flow-arrow" aria-hidden="true">→</div>
+        <div class="flow-card flow-outcomes" aria-label="release decisions">
+          <span class="outcome">PROCEED</span>
+          <span class="outcome">NEEDS_REVIEW</span>
+          <span class="outcome">SILENCE</span>
+        </div>
+      </div>
+    </section>
 
     <section class="demo" aria-labelledby="demo-title">
       <h2 id="demo-title">Live PoR evaluate demo</h2>
