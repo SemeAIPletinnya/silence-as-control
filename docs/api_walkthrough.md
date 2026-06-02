@@ -60,7 +60,8 @@ Representative response shape:
 
 Notes:
 - Exact numeric values and notes depend on the input text.
-- If decision becomes `SILENCE`, output fields are gated and a silence token is returned.
+- Runtime decisions use tri-state mediation: `PROCEED`, `NEEDS_REVIEW`, or `SILENCE`.
+- For the full `/por/evaluate` runtime decision contract, including review-band semantics, see [Runtime Decision Contract](runtime_decision_contract.md).
 
 ## Mental model
 
