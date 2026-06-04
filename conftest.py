@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -20,7 +20,7 @@ def _basetemp_was_requested(config) -> bool:  # noqa: ANN001
 def _repo_local_basetemp() -> Path:
     """Return a unique, repo-local pytest basetemp path for this run."""
 
-    timestamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%S%fZ")
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     _PYTEST_TMP_RUNS.mkdir(parents=True, exist_ok=True)
     return _PYTEST_TMP_RUNS / f"run-{timestamp}-{os.getpid()}"
 
