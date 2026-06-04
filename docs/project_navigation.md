@@ -22,6 +22,10 @@ docs/
   ├─ evidence_graph.md               ← compact claim topology
   ├─ chronology.md                   ← project evolution timeline
   ├─ runtime_evidence_linkage.md     ← runtime/replay evidence links
+  ├─ release_risk_benchmark_index.md ← release-risk benchmark lineage
+  ├─ release_risk_v4_capture_to_replay.md ← v4 no-key capture/replay path
+  ├─ external_reviewer_packet.md     ← external technical review packet
+  ├─ builder_integration_guide.md    ← app/agent/workflow integration guide
   ├─ runtime_observability.md        ← telemetry verification
   ├─ provider_configuration.md       ← API/provider setup
   ├─ release_control_services.md     ← pilot/integration interest
@@ -41,6 +45,10 @@ issues/
 | Understand the architecture split | [Architecture](architecture.md) |
 | Understand agentic release-control | [Agentic release-control](agentic_release_control.md) |
 | Check claims and artifacts | [Evidence map](evidence_map.md) |
+| Follow release-risk benchmark lineage | [Release-risk benchmark index](release_risk_benchmark_index.md) |
+| Reproduce the v4 no-key capture/replay path | [Release-risk v4 capture-to-replay](release_risk_v4_capture_to_replay.md) |
+| Review as an external technical reader | [External reviewer packet](external_reviewer_packet.md) |
+| Integrate the release gate into an app/agent/workflow | [Builder integration guide](builder_integration_guide.md) |
 | Follow project chronology | [Project chronology](chronology.md) |
 | Inspect runtime telemetry | [Runtime observability](runtime_observability.md) |
 | Configure provider-backed completion | [Provider configuration](provider_configuration.md) |
