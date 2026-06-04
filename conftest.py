@@ -3,35 +3,32 @@
 from __future__ import annotations
 
 import os
-import tempfile
-import uuid
+from datetime import UTC, datetime
 from pathlib import Path
 
 
-def _unique_basetemp(temp_root: Path) -> Path:
-    """Return a unique per-run pytest basetemp path below ``temp_root``."""
-
-    return temp_root / f"run-{os.getpid()}-{uuid.uuid4().hex}"
+_REPO_ROOT = Path(__file__).resolve().parent
+_PYTEST_TMP_RUNS = _REPO_ROOT / ".pytest_tmp_runs"
 
 
-def _windows_basetemp() -> Path:
-    """Choose the Windows pytest basetemp path, falling back outside the repo."""
+def _basetemp_was_requested(config) -> bool:  # noqa: ANN001
+    """Return whether pytest already has an explicit basetemp configured."""
 
-    repo_temp_root = Path(__file__).resolve().parent / ".pytest_tmp_runs"
+    return bool(config.option.basetemp)
 
-    try:
-        repo_temp_root.mkdir(parents=True, exist_ok=True)
-        return _unique_basetemp(repo_temp_root)
-    except OSError:
-        fallback_root = Path(tempfile.gettempdir()) / "silence-as-control-pytest"
-        fallback_root.mkdir(parents=True, exist_ok=True)
-        return _unique_basetemp(fallback_root)
+
+def _repo_local_basetemp() -> Path:
+    """Return a unique, repo-local pytest basetemp path for this run."""
+
+    timestamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%S%fZ")
+    _PYTEST_TMP_RUNS.mkdir(parents=True, exist_ok=True)
+    return _PYTEST_TMP_RUNS / f"run-{timestamp}-{os.getpid()}"
 
 
 def pytest_configure(config):  # noqa: ANN001
-    """Use an isolated Windows pytest temp directory unless one was requested."""
+    """Use an isolated repo-local pytest basetemp unless one was requested."""
 
-    if os.name != "nt" or config.option.basetemp:
+    if _basetemp_was_requested(config):
         return
 
-    config.option.basetemp = str(_windows_basetemp())
+    config.option.basetemp = str(_repo_local_basetemp())
