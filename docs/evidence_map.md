@@ -214,6 +214,36 @@ python -m pytest tests/test_release_risk_benchmark.py -q
 python -m pytest tests/test_api.py -q
 ```
 
+
+## Release-risk v4 deterministic capture/replay evidence
+
+Scope:
+
+- Deterministic no-key fixture capture and replay.
+
+Artifacts:
+
+- `benchmarks/release_risk_v4_capture_candidates.py`
+- `benchmarks/release_risk_v4_fixture_replay.py`
+- `docs/release_risk_v4_capture_to_replay.md`
+- `docs/release_risk_benchmark_index.md`
+- `tests/test_release_risk_v4_capture_candidates.py`
+- `tests/test_release_risk_v4_fixture_replay.py`
+
+Proof signals:
+
+- `generation_mode`: `fixture_capture`
+- `model`: `fixture-v4-capture-synthetic-1`
+- `provider`: `None`
+
+Interpretation boundaries:
+
+- Deterministic fixture capture/replay evidence only.
+- No API keys required.
+- Not provider-backed evidence.
+- Not production safety evidence.
+- Optional provider/local capture remains future work.
+
 ## LangChain/OpenAI action-risk Run 06 progression
 
 Run 06 action-risk evidence is an integration/deployment validation surface for release control, not a primitive-core result and not a universal AI safety claim. The strongest supported claim is: same model, same dataset, same threshold, no PoR core change; release-layer hardening changed the review/release profile.

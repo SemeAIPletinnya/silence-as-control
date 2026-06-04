@@ -42,6 +42,10 @@ The project is currently converting long-running conceptual, repository, and pub
   - links runtime/replay artifacts into the evidence layer
   - preserves conservative evidence boundaries
 
+- v0.7 deterministic no-key capture/replay evidence path
+  - links candidate capture, fixture replay, replay summaries, and evidence navigation
+  - keeps provider-backed replay artifacts marked as pending/future
+
 ## Stable primitives
 
 ```text
@@ -78,6 +82,8 @@ evidence map scaffold: done
 curated archive evidence summary: scaffolded
 provenance/evidence graph layer: scaffolded
 runtime/replay evidence linkage: linked
+deterministic v0.7 no-key capture/replay evidence path: linked
+provider-backed replay artifacts: pending/future
 memory-admission prototype: pending
 future hosted/runtime traces: pending
 ```

@@ -34,6 +34,8 @@ candidate capture
 → evidence map
 ```
 
+The v4 capture-to-replay flow is the current deterministic no-key reviewer path. Provider/local capture remains optional future work; runtime behavior should stay separate from model quality claims.
+
 ### Release-risk examples
 
 ```text
