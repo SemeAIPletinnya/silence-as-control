@@ -37,7 +37,7 @@ Assumptions:
 Windows note: if pytest fails before repository code runs with `PermissionError` in `...\pytest-of-User`, treat it as an environment-level pytest temp-directory issue. Use a unique `--basetemp` path:
 
 ```powershell
-$bt = "C:\Users\User\pytest-sac-" + (Get-Date -Format "yyyyMMdd-HHmmss")
+$bt = Join-Path $env:TEMP ("pytest-sac-" + (Get-Date -Format "yyyyMMdd-HHmmss"))
 python -m pytest -q --basetemp="$bt"
 ```
 
