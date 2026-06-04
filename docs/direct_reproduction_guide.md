@@ -34,13 +34,11 @@ Assumptions:
 - Works on Windows PowerShell, macOS, or Linux shell.
 - Provider keys are not required for this reproduction path.
 
-Windows note: if pytest temp-folder permissions or file locks cause failures, use a unique `--basetemp` path (shown below).
-
-Repository-local fallback command:
+Windows note: if pytest fails before repository code runs with `PermissionError` in `...\pytest-of-User`, treat it as an environment-level pytest temp-directory issue. Use a unique `--basetemp` path:
 
 ```powershell
-New-Item -ItemType Directory .pytest_tmp_runs -Force
-python -m pytest --basetemp=.pytest_tmp_runs/manual
+$bt = Join-Path $env:TEMP ("pytest-sac-" + (Get-Date -Format "yyyyMMdd-HHmmss"))
+python -m pytest -q --basetemp="$bt"
 ```
 
 ## 3. Fresh checkout setup
