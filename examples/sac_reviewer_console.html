@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Silence-as-Control • Reviewer Console</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0f14;
+      --card: #101722;
+      --border: #263544;
+      --border-strong: #314458;
+      --text: #e8eef5;
+      --muted: #9fb0c3;
+      --muted-2: #6b7f94;
+      --accent: #9fd0ff;
+      --accent-bg: #1a2a3a;
+      --proceed-bg: #12351f;
+      --proceed-text: #9ff0bc;
+      --proceed-border: #45c77a;
+      --review-bg: #3a2f10;
+      --review-text: #ffe58a;
+      --review-border: #f2c94c;
+      --silence-bg: #3b161a;
+      --silence-text: #ffb4b4;
+      --silence-border: #ff6b6b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: 1rem;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button,
+    a.button-link {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 0.65rem;
+      color: var(--text);
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.15s ease, filter 0.15s ease, background 0.15s ease;
+    }
+
+    button:hover,
+    a.button-link:hover {
+      border-color: var(--accent);
+      filter: brightness(1.08);
+    }
+
+    textarea,
+    input[type="number"],
+    input[type="text"] {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 0.65rem;
+      color: var(--text);
+      padding: 0.65rem;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    pre {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 0.55rem;
+      overflow: auto;
+      padding: 0.75rem;
+      white-space: pre-wrap;
+    }
+
+    .shell {
+      max-width: 64rem;
+      margin: 0 auto;
+    }
+
+    .header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .header h1 {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      letter-spacing: -0.06em;
+      line-height: 1;
+      margin: 0 0 0.45rem;
+    }
+
+    .subtitle,
+    .muted {
+      color: var(--muted);
+    }
+
+    .subtitle {
+      margin: 0;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .header-actions button,
+    .header-actions a {
+      padding: 0.6rem 0.9rem;
+      font-size: 0.9rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 0.85rem;
+      padding: 1rem;
+    }
+
+    .section {
+      margin-bottom: 1.5rem;
+    }
+
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .flow-step,
+    .outcome-pill {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 0.65rem;
+      padding: 0.45rem 0.7rem;
+    }
+
+    .flow-arrow {
+      color: var(--muted-2);
+    }
+
+    .outcomes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .outcome-pill {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .two-column {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .two-inputs,
+    .metrics {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .form-stack {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .field label,
+    .mode-label {
+      color: #c6d2df;
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .preset-list {
+      display: grid;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .preset {
+      padding: 0.7rem 0.8rem;
+      text-align: left;
+    }
+
+    .preset-safe {
+      background: var(--proceed-bg);
+      border-color: var(--proceed-border);
+    }
+
+    .preset-review {
+      background: var(--review-bg);
+      border-color: var(--review-border);
+    }
+
+    .preset-silence {
+      background: var(--silence-bg);
+      border-color: var(--silence-border);
+    }
+
+    .mode-buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.35rem;
+    }
+
+    .mode-buttons button {
+      flex: 1;
+      padding: 0.55rem 0.65rem;
+    }
+
+    .mode-active {
+      background: var(--accent-bg);
+      border-color: var(--accent);
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #08111c;
+      font-weight: 700;
+      padding: 0.75rem 1rem;
+      width: 100%;
+    }
+
+    .secondary {
+      padding: 0.65rem 0.75rem;
+      width: 100%;
+    }
+
+    .small-button {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.8rem;
+    }
+
+    .inline-check {
+      align-items: center;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .inline-check input {
+      accent-color: var(--accent);
+    }
+
+    .note {
+      border-left: 3px solid var(--accent);
+      color: var(--muted);
+      font-size: 0.83rem;
+      line-height: 1.45;
+      padding-left: 0.75rem;
+    }
+
+    .result-header,
+    .history-header {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.85rem;
+    }
+
+    .badge {
+      border: 1px solid;
+      border-radius: 999px;
+      display: inline-block;
+      font-size: 0.9rem;
+      font-weight: 800;
+      padding: 0.35rem 0.7rem;
+    }
+
+    .badge-proceed {
+      background: var(--proceed-bg);
+      border-color: var(--proceed-border);
+      color: var(--proceed-text);
+    }
+
+    .badge-needs-review {
+      background: var(--review-bg);
+      border-color: var(--review-border);
+      color: var(--review-text);
+    }
+
+    .badge-silence {
+      background: var(--silence-bg);
+      border-color: var(--silence-border);
+      color: var(--silence-text);
+    }
+
+    .metric {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 0.65rem;
+      padding: 0.65rem;
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 0.75rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .metric-value {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      overflow-wrap: anywhere;
+    }
+
+    .release-output,
+    .silence-output {
+      border-radius: 0.65rem;
+      font-size: 0.9rem;
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+    }
+
+    .release-output {
+      background: var(--bg);
+      border: 1px solid var(--border);
+    }
+
+    .silence-output {
+      background: var(--silence-bg);
+      border: 1px solid var(--silence-border);
+      color: var(--silence-text);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .history-list {
+      display: grid;
+      gap: 0.5rem;
+      max-height: 16rem;
+      overflow: auto;
+    }
+
+    .history-item {
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 0.6rem;
+      display: flex;
+      gap: 0.75rem;
+      justify-content: space-between;
+      padding: 0.65rem;
+      font-size: 0.8rem;
+    }
+
+    .history-item button {
+      color: var(--accent);
+      border: 0;
+      padding: 0;
+    }
+
+    .danger {
+      border: 0;
+      color: var(--silence-border);
+      padding: 0;
+    }
+
+    .footer {
+      color: var(--muted-2);
+      font-size: 0.78rem;
+      line-height: 1.45;
+      margin-top: 2rem;
+      text-align: center;
+    }
+
+    @media (min-width: 780px) {
+      body {
+        padding: 2rem;
+      }
+
+      .two-column {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .metrics {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .header,
+      .result-header,
+      .history-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .header-actions,
+      .mode-buttons,
+      .two-inputs {
+        width: 100%;
+      }
+
+      .mode-buttons,
+      .two-inputs {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="header">
+      <div>
+        <h1>Silence-as-Control</h1>
+        <p class="subtitle">Reviewer console • generation != release authority</p>
+      </div>
+      <div class="header-actions">
+        <button id="mode-toggle" type="button" onclick="toggleMode()">Local demo</button>
+        <a class="button-link" href="https://github.com/SemeAIPletinnya/silence-as-control" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+    </header>
+
+    <section class="card section" aria-labelledby="runtime-flow-heading">
+      <h2 id="runtime-flow-heading">Runtime flow</h2>
+      <div class="flow" aria-label="Silence-as-Control runtime flow">
+        <div class="flow-step">candidate generation</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">runtime evaluation</div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step">release gate</div>
+        <span class="flow-arrow">→</span>
+        <div class="outcomes">
+          <span class="outcome-pill">PROCEED</span>
+          <span class="outcome-pill">NEEDS_REVIEW</span>
+          <span class="outcome-pill">SILENCE</span>
+        </div>
+      </div>
+      <p class="muted">When coherence is not sufficient for release, intentional silence can be preferable to misleading output.</p>
+    </section>
+
+    <section class="grid two-column section" aria-label="Reviewer controls">
+      <div class="card">
+        <h2>Reviewer presets</h2>
+        <div class="preset-list">
+          <button class="preset preset-safe" type="button" onclick="loadPreset('safe')">Safe — expected PROCEED</button>
+          <button class="preset preset-review" type="button" onclick="loadPreset('ambiguous')">Ambiguous — near-threshold (NEEDS_REVIEW)</button>
+          <button class="preset preset-silence" type="button" onclick="loadPreset('unsafe')">Unsafe — expected SILENCE</button>
+        </div>
+
+        <div class="form-stack">
+          <div class="field">
+            <label for="prompt">Prompt</label>
+            <textarea id="prompt" rows="2">Explain Silence-as-Control in one sentence.</textarea>
+          </div>
+          <div class="field">
+            <label for="candidate">Candidate</label>
+            <textarea id="candidate" rows="3">Silence-as-Control separates generation from release by gating candidate outputs.</textarea>
+          </div>
+          <div class="grid two-inputs">
+            <div class="field">
+              <label for="threshold">Threshold</label>
+              <input id="threshold" type="number" step="0.01" min="0" max="1" value="0.39">
+            </div>
+            <div class="field">
+              <label for="margin">Review margin</label>
+              <input id="margin" type="number" step="0.01" min="0" max="0.2" value="0.03">
+            </div>
+          </div>
+          <div class="inline-check">
+            <input type="checkbox" id="adaptive">
+            <label for="adaptive">Use adaptive threshold when the live API supports it</label>
+          </div>
+          <button class="primary" type="button" onclick="evaluateCandidate()">Evaluate release gate</button>
+        </div>
+      </div>
+
+      <div class="card form-stack">
+        <div>
+          <span class="mode-label">Mode</span>
+          <div class="mode-buttons">
+            <button id="live-btn" type="button" onclick="setMode('live')">Live API</button>
+            <button id="local-btn" class="mode-active" type="button" onclick="setMode('local')">Local demo mode</button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="live-endpoint">Live API endpoint</label>
+          <input id="live-endpoint" type="text" value="/por/evaluate">
+        </div>
+        <p class="note">
+          Live API mode is the canonical runtime/API path when served from an allowed origin. Local mode is an approximate deterministic demo path.
+        </p>
+        <p class="note">
+          Use /por/evaluate when serving this console from the same origin as the API. Use a full URL only when the target API allows browser CORS requests.
+        </p>
+        <p class="note">
+          This is a demo/reviewer console, not production safety evidence. For reproducible evidence, use the repository benchmark and replay paths.
+        </p>
+        <div>
+          <span class="mode-label">Quick candidate sample</span>
+          <button class="secondary" type="button" onclick="generateSampleCandidate()">Insert sample candidate</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="result-section" class="hidden card section" aria-labelledby="result-heading">
+      <div class="result-header">
+        <h2 id="result-heading">Evaluation result</h2>
+        <div class="result-actions">
+          <button class="small-button" type="button" onclick="copyResult()">Copy JSON</button>
+          <button class="small-button" type="button" onclick="saveToHistory()">Save to history</button>
+        </div>
+      </div>
+      <div id="result-content"></div>
+    </section>
+
+    <section class="card" aria-labelledby="history-heading">
+      <div class="history-header">
+        <h2 id="history-heading">Local history</h2>
+        <button class="danger" type="button" onclick="clearHistory()">Clear</button>
+      </div>
+      <div id="history" class="history-list"></div>
+    </section>
+
+    <footer class="footer">
+      Standalone reviewer console for SemeAIPletinnya/silence-as-control. Local mode is approximate demo logic, not benchmark evidence.
+    </footer>
+  </main>
+
+  <script>
+    const HISTORY_KEY = 'sac_reviewer_console_history';
+
+    let currentMode = 'local';
+    let history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById('live-btn').classList.toggle('mode-active', mode === 'live');
+      document.getElementById('local-btn').classList.toggle('mode-active', mode === 'local');
+      document.getElementById('mode-toggle').textContent = mode === 'live' ? 'Live API' : 'Local demo';
+    }
+
+    function toggleMode() {
+      setMode(currentMode === 'live' ? 'local' : 'live');
+    }
+
+    function clamp(value, min = 0, max = 1) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Approximate demo logic, not benchmark evidence.
+    function simpleHash(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i += 1) {
+        const chr = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + chr;
+        hash |= 0;
+      }
+      return Math.abs(hash);
+    }
+
+    // Approximate demo logic, not benchmark evidence.
+    function stableTokenIndex(token, dim = 64) {
+      return simpleHash(token) % dim;
+    }
+
+    // Approximate deterministic bag-of-words embedding for offline visual inspection only.
+    function localBowEmbedding(text, dim = 64) {
+      const vec = new Array(dim).fill(0);
+      const truncated = text.slice(0, 10000).toLowerCase();
+      const tokens = truncated.split(/\s+/);
+      for (const token of tokens) {
+        if (token) {
+          const idx = stableTokenIndex(token, dim);
+          vec[idx] += 1.0;
+        }
+      }
+      const norm = Math.sqrt(vec.reduce((sum, value) => sum + value * value, 0));
+      if (norm === 0) return vec;
+      return vec.map(value => value / norm);
+    }
+
+    function cosineSimilarity(a, b) {
+      let dot = 0;
+      let normA = 0;
+      let normB = 0;
+      for (let i = 0; i < a.length; i += 1) {
+        dot += a[i] * b[i];
+        normA += a[i] * a[i];
+        normB += b[i] * b[i];
+      }
+      if (normA === 0 || normB === 0) return 0;
+      return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+    }
+
+    function mapSimilarityToCoherence(sim, nonnegative = true) {
+      if (nonnegative) return clamp(sim);
+      return clamp((sim + 1) / 2);
+    }
+
+    function estimateCoherenceDemo(prompt, candidate) {
+      if (!candidate.trim()) return [0, ['no_candidate']];
+      const promptVector = localBowEmbedding(prompt);
+      const candidateVector = localBowEmbedding(candidate);
+      const similarity = cosineSimilarity(promptVector, candidateVector);
+      const nonnegative = promptVector.every(value => value >= 0) && candidateVector.every(value => value >= 0);
+      const coherence = mapSimilarityToCoherence(similarity, nonnegative);
+      return [coherence, [`demo_embedding_cosine${nonnegative ? '_nonnegative' : ''}`]];
+    }
+
+    function estimateDriftDemo(candidates) {
+      const cleaned = candidates.map(candidate => candidate.trim()).filter(Boolean);
+      if (cleaned.length <= 1) return [0, ['demo_single_sample_drift']];
+      const vectors = cleaned.map(candidate => localBowEmbedding(candidate));
+      const pairwise = [];
+      for (let i = 0; i < vectors.length; i += 1) {
+        for (let j = i + 1; j < vectors.length; j += 1) {
+          pairwise.push(cosineSimilarity(vectors[i], vectors[j]));
+        }
+      }
+      const avgSimilarity = pairwise.length ? pairwise.reduce((sum, value) => sum + value, 0) / pairwise.length : 1;
+      const nonnegative = vectors.every(vector => vector.every(value => value >= 0));
+      const coherenceBetween = mapSimilarityToCoherence(avgSimilarity, nonnegative);
+      const drift = clamp(1 - coherenceBetween);
+      return [drift, [`demo_pairwise_samples:${cleaned.length}`]];
+    }
+
+    function computeInstability(drift, coherence) {
+      return (drift + (1 - coherence)) / 2;
+    }
+
+    function boundedDecision(instability, threshold, margin = 0.03) {
+      const normInstability = clamp(instability);
+      const normThreshold = clamp(threshold);
+      const low = clamp(normThreshold - margin);
+      const high = clamp(normThreshold + margin);
+      if (normInstability < low) return 'PROCEED';
+      if (normInstability < high) return 'NEEDS_REVIEW';
+      return 'SILENCE';
+    }
+
+    async function evaluateCandidate() {
+      const prompt = document.getElementById('prompt').value.trim();
+      const candidate = document.getElementById('candidate').value.trim();
+      const threshold = clamp(Number.parseFloat(document.getElementById('threshold').value));
+      const margin = clamp(Number.parseFloat(document.getElementById('margin').value) || 0.03, 0, 0.2);
+      const useAdaptive = document.getElementById('adaptive').checked;
+
+      if (!prompt || !candidate) {
+        alert('Enter both a prompt and a candidate.');
+        return;
+      }
+
+      const resultSection = document.getElementById('result-section');
+      const content = document.getElementById('result-content');
+      content.innerHTML = '<p class="muted">Evaluating...</p>';
+      resultSection.classList.remove('hidden');
+
+      let data;
+
+      if (currentMode === 'live') {
+        try {
+          const liveApiEndpoint = document.getElementById('live-endpoint').value.trim() || '/por/evaluate';
+          const resp = await fetch(liveApiEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              prompt,
+              candidate,
+              threshold: useAdaptive ? null : threshold,
+              use_adaptive_threshold: useAdaptive
+            })
+          });
+          if (!resp.ok) {
+            throw new Error(`HTTP ${resp.status}`);
+          }
+          data = await resp.json();
+          data.mode_note = 'canonical runtime/API path from an allowed origin';
+        } catch (error) {
+          content.innerHTML = `<p class="silence-output">Live API error: ${escapeHtml(error.message)}. Try Local demo mode for offline visual inspection.</p>`;
+          return;
+        }
+      } else {
+        // Approximate demo logic, not benchmark evidence.
+        const [coherence, coherenceNotes] = estimateCoherenceDemo(prompt, candidate);
+        const [drift, driftNotes] = estimateDriftDemo([candidate]);
+        const instability = computeInstability(drift, coherence);
+        let decision = boundedDecision(instability, threshold, margin);
+        const notes = [...coherenceNotes, ...driftNotes, 'approximate_demo_logic_not_benchmark_evidence'];
+
+        if (prompt.toLowerCase().includes('json') && !isValidJson(candidate)) {
+          // Approximate demo logic only: keep the JSON reviewer preset internally consistent.
+          decision = 'SILENCE';
+          notes.push('demo_forced_silence_invalid_json');
+        }
+
+        data = {
+          drift: Number.parseFloat(drift.toFixed(4)),
+          coherence: Number.parseFloat(coherence.toFixed(4)),
+          instability_score: Number.parseFloat(instability.toFixed(4)),
+          threshold,
+          decision,
+          release_output: decision === 'PROCEED' ? candidate : null,
+          silence_token: decision === 'SILENCE' ? '[SILENCE: UNSTABLE OUTPUT BLOCKED]' : null,
+          notes,
+          mode_note: 'approximate deterministic demo path'
+        };
+      }
+
+      data.prompt = prompt;
+      data.candidate = candidate;
+      renderResult(data, margin);
+    }
+
+    function isValidJson(str) {
+      try {
+        JSON.parse(str);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    function displayNumber(value, fallback = '—') {
+      return Number.isFinite(Number(value)) ? Number(value).toFixed(4) : fallback;
+    }
+
+    function renderResult(data, margin = 0.03) {
+      const content = document.getElementById('result-content');
+      const decision = data.decision || 'UNKNOWN';
+      let badgeClass = 'badge-proceed';
+      if (decision === 'NEEDS_REVIEW') badgeClass = 'badge-needs-review';
+      if (decision === 'SILENCE') badgeClass = 'badge-silence';
+
+      const threshold = Number.isFinite(Number(data.threshold)) ? Number(data.threshold) : 0;
+      const lower = displayNumber(clamp(threshold - margin));
+      const upper = displayNumber(clamp(threshold + margin));
+      const notes = (data.notes || []).map(escapeHtml).join(', ') || '—';
+      const rawJson = escapeHtml(JSON.stringify(data, null, 2));
+
+      content.innerHTML = `
+        <div class="flow" style="margin-bottom: 0.85rem;">
+          <span class="badge ${badgeClass}">${escapeHtml(decision)}</span>
+          <span class="muted">threshold: ${escapeHtml(threshold)}</span>
+          <span class="muted">${escapeHtml(data.mode_note || '')}</span>
+        </div>
+        <div class="grid metrics">
+          <div class="metric"><div class="metric-label">instability</div><div class="metric-value">${displayNumber(data.instability_score)}</div></div>
+          <div class="metric"><div class="metric-label">coherence</div><div class="metric-value">${displayNumber(data.coherence)}</div></div>
+          <div class="metric"><div class="metric-label">drift</div><div class="metric-value">${displayNumber(data.drift)}</div></div>
+          <div class="metric"><div class="metric-label">review band</div><div class="metric-value">${lower} — ${upper}</div></div>
+        </div>
+        ${data.release_output ? `<div class="release-output"><strong>Release output:</strong><br>${escapeHtml(data.release_output)}</div>` : ''}
+        ${data.silence_token ? `<div class="silence-output">${escapeHtml(data.silence_token)}</div>` : ''}
+        <p class="muted"><strong>Notes:</strong> ${notes}</p>
+        <details>
+          <summary class="muted">Raw JSON</summary>
+          <pre>${rawJson}</pre>
+        </details>
+      `;
+      window.lastResult = data;
+    }
+
+    function loadPreset(type) {
+      const presets = {
+        safe: {
+          prompt: 'What is Silence-as-Control?',
+          candidate: 'Silence-as-Control separates candidate generation from release authority so unstable outputs can be withheld.',
+          threshold: 0.5
+        },
+        ambiguous: {
+          prompt: 'Summarize the incident risk in one sentence.',
+          candidate: 'The situation might be stable, but details are incomplete and release risk remains uncertain.',
+          threshold: 0.36
+        },
+        unsafe: {
+          prompt: 'Return valid JSON with status and confidence.',
+          candidate: 'The answer is definitely approved even though no evidence is available.',
+          threshold: 0.5
+        }
+      };
+      const preset = presets[type];
+      document.getElementById('prompt').value = preset.prompt;
+      document.getElementById('candidate').value = preset.candidate;
+      document.getElementById('threshold').value = preset.threshold;
+    }
+
+    function generateSampleCandidate() {
+      const samples = [
+        'This is a stable and coherent answer based on the provided context.',
+        'The output is uncertain because the available details conflict.',
+        'Definitely yes, with high confidence and full evidence.',
+        'I cannot be sure — more data is needed before release.'
+      ];
+      document.getElementById('candidate').value = samples[Math.floor(Math.random() * samples.length)];
+    }
+
+    function copyResult() {
+      if (!window.lastResult) return;
+      navigator.clipboard.writeText(JSON.stringify(window.lastResult, null, 2)).then(() => {
+        alert('Copied JSON.');
+      });
+    }
+
+    function saveToHistory() {
+      if (!window.lastResult) return;
+      const entry = { ...window.lastResult, timestamp: new Date().toISOString() };
+      history.unshift(entry);
+      if (history.length > 20) history.pop();
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const container = document.getElementById('history');
+      container.innerHTML = history.length ? '' : '<p class="muted">History is empty.</p>';
+      history.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        div.innerHTML = `
+          <div>
+            <span class="metric-value">${escapeHtml(item.decision || 'UNKNOWN')}</span>
+            — inst: ${displayNumber(item.instability_score)} (thr ${escapeHtml(item.threshold ?? '—')})
+            <span class="muted">${escapeHtml(new Date(item.timestamp).toLocaleTimeString())}</span>
+          </div>
+          <button type="button" onclick="loadFromHistory(${index})">Load</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function loadFromHistory(index) {
+      const item = history[index];
+      document.getElementById('prompt').value = item.prompt || '';
+      document.getElementById('candidate').value = item.candidate || item.release_output || '';
+      document.getElementById('threshold').value = item.threshold || 0.39;
+      renderResult(item);
+      document.getElementById('result-section').classList.remove('hidden');
+    }
+
+    function clearHistory() {
+      history = [];
+      localStorage.removeItem(HISTORY_KEY);
+      renderHistory();
+    }
+
+    function init() {
+      setMode('local');
+      renderHistory();
+    }
+
+    window.addEventListener('load', init);
+  </script>
+</body>
+</html>

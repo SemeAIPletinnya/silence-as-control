@@ -89,6 +89,10 @@ Deterministic paths do not require provider credentials.
 - [docs/applied_bridges.md](applied_bridges.md)
 - [README.md](../README.md)
 
+Reviewer/demo surface, not evidence:
+
+- [examples/sac_reviewer_console.html](../examples/sac_reviewer_console.html) — standalone browser reviewer console for local visual/offline inspection of the release gate. Live API mode defaults to same-origin `/por/evaluate`; full remote URLs require CORS-enabled API access.
+
 Evidence is scoped to specific tasks, thresholds, datasets, and signal regimes.
 Thresholds are not universal.
 Benchmark artifacts are evidence surfaces, not universal guarantees.
