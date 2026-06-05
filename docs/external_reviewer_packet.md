@@ -89,6 +89,10 @@ Deterministic paths do not require provider credentials.
 - [docs/applied_bridges.md](applied_bridges.md)
 - [README.md](../README.md)
 
+Reviewer/demo surface, not evidence:
+
+- [examples/sac_reviewer_console.html](../examples/sac_reviewer_console.html) — standalone browser reviewer console for visual inspection of the release gate.
+
 Evidence is scoped to specific tasks, thresholds, datasets, and signal regimes.
 Thresholds are not universal.
 Benchmark artifacts are evidence surfaces, not universal guarantees.
