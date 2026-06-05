@@ -1,127 +1,121 @@
 # Pilot evaluation packet
 
-**Pilot thesis:** Generation creates a candidate. Release is a separate runtime decision. A pilot evaluates release behavior, not model intelligence.
+## 1. Purpose
 
-This packet is for bounded evaluation of Silence-as-Control (SaC) / Proof-of-Resonance (PoR) release behavior. It is intentionally conservative and evidence-first.
+This packet describes a bounded pilot evaluation path for Silence-as-Control (SaC). It is intended for external technical readers, AI infrastructure teams, agent workflow teams, and builder teams that want to evaluate release-control behavior on candidate outputs.
 
-Core framing:
-- Generation creates a candidate.
-- Release is a separate runtime decision.
-- Same model. Different decision.
-- Either correct, or silent.
+The pilot compares release-by-default behavior against SaC-style release mediation. In release-by-default behavior, a generated candidate is treated as ready to leave the system unless a separate process stops it. In SaC-style release mediation, the generated candidate is evaluated by a release gate before it is allowed to proceed.
 
-## Who this pilot is for
+This document is not production deployment guidance. It is not a safety guarantee. It describes a conservative evaluation packet for bounded candidate outputs, with manual inspection and scoped evidence collection.
 
-Suitable pilot scopes:
+## 2. Core thesis
+
+**generation != release authority**
+
+Model generation creates a candidate. Release requires a separate runtime decision about whether that candidate should leave the system boundary, move to review, or be withheld. The pilot evaluates that decision boundary rather than treating generation as automatic permission to release.
+
+## 3. Suitable pilot domains
+
+Conservative pilot domains include:
+
 - coding-agent output review
-- config/deployment recommendations
-- internal RAG/copilot answers
-- workflow/action candidates
+- config-change recommendations
+- internal RAG/coprocessor answers
 - agent plans before execution
+- workflow/action candidates before release
 
-Not suitable for first pilots:
-- autonomous medical/legal/financial decisioning
-- high-stakes production release without human review
-- broad claims of hallucination elimination
-- production safety claims without deployment evidence
+Avoid using a first pilot for:
 
-## Minimal pilot flow
+- medical/legal/financial autonomous decisioning
+- fully automated high-stakes execution
+- public production claims without deployment evidence
+
+## 4. Required inputs
+
+A bounded pilot should define or collect:
+
+- prompt or task description
+- candidate output
+- optional candidate samples
+- optional threshold or policy setting
+- expected risk category if available
+- release-by-default baseline label if available
+
+These inputs should be preserved with the decision output so reviewers can inspect what was evaluated and compare the mediated decision against the baseline release behavior.
+
+## 5. Evaluation flow
 
 ```text
-existing generator
--> candidate output
--> SaC / PoR release gate
--> PROCEED / NEEDS_REVIEW / SILENCE
--> evaluator logs decision and outcome
+candidate output
+→ release-gate evaluation
+→ PROCEED / NEEDS_REVIEW / SILENCE
+→ inspect trace / notes / decision
+→ compare against release-by-default
 ```
 
-## What to measure
+The pilot should keep each candidate, decision, and reviewer note together. The comparison point is not whether the model became correct; it is whether the release boundary changed behavior in useful, inspectable ways relative to releasing the candidate by default.
 
-Track pilot-level metrics (not only anecdotal examples):
-- total candidates
-- accepted outputs
-- accepted wrong / unsafe outputs
-- NEEDS_REVIEW rate
-- SILENCE rate
-- false accept examples
-- false silence examples
-- reviewer burden
-- task categories where the gate helps
-- task categories where the gate hurts
+## 6. Success criteria
 
-## Data/evidence to preserve
+Use bounded success criteria such as:
 
-For each evaluated case, preserve a compact audit record with:
-- prompt/task
-- candidate output
-- candidate samples if available
-- model/source
-- threshold/mode
-- decision
-- core_decision
-- policy_decision
-- review_flags
-- evaluator/human label if available
-- notes on whether release would have been harmful, wrong, low-confidence, or merely policy-sensitive
+- unsafe or unstable outputs are not silently released
+- review-worthy outputs are routed to `NEEDS_REVIEW`
+- clearly acceptable outputs can still `PROCEED`
+- decisions are inspectable
+- evidence can be reproduced through documented paths
 
-## Suggested pilot sizes
+Do not treat a successful pilot as proof that the model is correct, that all failures are prevented, that safety is guaranteed, or that human review can be removed.
 
-Practical starting points (not universal requirements):
-- 25-50 tasks for first qualitative review
-- 100-300 tasks for early quantitative review
-- 1000+ only after taxonomy, labels, and review rules are stable
+## 7. Evidence to collect
 
-These ranges are meant to reduce over-claiming and encourage stable evaluation design before scaling volume.
+Collect enough evidence to support a narrow technical review:
 
-## Success criteria examples
+- number of candidate outputs
+- decision distribution
+- examples of `PROCEED` / `NEEDS_REVIEW` / `SILENCE`
+- false-positive review cases
+- false-negative release cases if found
+- notes/traces where available
+- comparison to release-by-default
 
-Treat success as scoped release-behavior improvement, for example:
-- fewer unsafe accepted outputs than baseline release-by-default
-- useful separation between PROCEED / NEEDS_REVIEW / SILENCE
-- actionable audit trail
-- clearer review routing
-- identifiable task categories where the gate is useful
+Evidence should remain tied to the pilot's workflow, candidate set, thresholds, and policy settings. It should not be generalized into provider-backed, universal-safety, or production-readiness claims without separate evidence.
 
-## Failure criteria examples
+## 8. Recommended first pilot size
 
-A pilot should be treated as unsuccessful or inconclusive when you observe:
-- too many false accepts
-- too many false silences
-- unclear reviewer burden
-- weak task taxonomy
-- missing labels/evidence
-- threshold not calibrated for the pilot context
-- NEEDS_REVIEW becoming a dumping ground without clear review policy
+A conservative first pilot should use:
 
-## Suggested evaluation table
+- 25 to 100 candidate outputs
+- one narrow workflow
+- no high-stakes autonomous actions
+- no production enforcement at first
+- manual review of results
 
-Use a lightweight table template for consistent case logging:
+The first goal is to understand release-control behavior and reviewer workload on a bounded set of candidates, not to replace an existing safety, evaluation, or approval process.
 
-| task_id | task_type | model/source | candidate_summary | gate_decision | review_flags | evaluator_label | release_outcome_note |
-|---|---|---|---|---|---|---|---|
-| T-001 |  |  |  | PROCEED / NEEDS_REVIEW / SILENCE |  |  |  |
-| T-002 |  |  |  | PROCEED / NEEDS_REVIEW / SILENCE |  |  |  |
+## 9. Relationship to existing artifacts
 
-## Boundaries / non-claims
+Use this packet alongside the existing documentation and reviewer surfaces:
 
-This packet is explicitly:
-- not a production safety guarantee
-- not model training
-- not a universal hallucination detector
-- not proof of correctness
-- not a replacement for human review in high-risk workflows
-- not implementation of #238
+- [Reviewer console guide](reviewer_console_guide.md)
+- [Standalone reviewer console](../examples/sac_reviewer_console.html)
+- [Evidence map](evidence_map.md)
+- [Runtime evidence linkage](runtime_evidence_linkage.md)
+- [Release-risk v4 capture-to-replay](release_risk_v4_capture_to_replay.md)
+- [External reviewer packet](external_reviewer_packet.md)
+- [Builder integration guide](builder_integration_guide.md)
+- [Release-control services](release_control_services.md)
 
-Additional boundary condition:
-- thresholds are scoped and must be calibrated per task/model/signal regime
+The reviewer console and builder guides can help teams inspect the release decision surface. Evidence and replay documents should be used to understand what has been demonstrated in repository-visible paths and what remains outside the current evidence boundary.
 
-## Suggested reading order
+## 10. What this does not claim
 
-1. [Repository README](../README.md)
-2. [External reviewer packet](external_reviewer_packet.md)
-3. [Direct reproduction guide](direct_reproduction_guide.md)
-4. [Builder integration guide](builder_integration_guide.md)
-5. [External integration CLI](external_integration.md)
-6. [Evidence map](evidence_map.md)
-7. [Release-control services](release_control_services.md)
-8. [Release-risk benchmark index](release_risk_benchmark_index.md)
+This packet does not claim that Silence-as-Control:
+
+- makes a model correct
+- trains a model
+- guarantees safety
+- replaces evaluation
+- removes human review in high-risk workflows
+- proves universal threshold transfer
+- proves production readiness

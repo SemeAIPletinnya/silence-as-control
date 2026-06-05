@@ -48,7 +48,7 @@ Silence-as-Control may be suitable to evaluate in systems where risky generated 
 
 ## Lightweight pilot/audit formats
 
-Pilot scope should be matched to the deployment risk, available telemetry, and review requirements. Three lightweight formats are:
+Pilot scope should be matched to the deployment risk, available telemetry, and review requirements. For a conservative bounded evaluation path, see the [pilot evaluation packet](pilot_evaluation_packet.md). Three lightweight formats are:
 
 ### Release-control audit
 
