@@ -27,6 +27,7 @@ docs/
   ├─ external_reviewer_packet.md     ← external technical review packet
   ├─ reviewer_console_guide.md       ← standalone reviewer console usage
   ├─ builder_integration_guide.md    ← app/agent/workflow integration guide
+  ├─ pilot_evaluation_packet.md      ← bounded pilot evaluation path
   ├─ runtime_observability.md        ← telemetry verification
   ├─ provider_configuration.md       ← API/provider setup
   ├─ release_control_services.md     ← pilot/integration interest
@@ -51,6 +52,7 @@ issues/
 | Review as an external technical reader | [External reviewer packet](external_reviewer_packet.md) |
 | Try the standalone reviewer console | [Reviewer console guide](reviewer_console_guide.md) and [../examples/sac_reviewer_console.html](../examples/sac_reviewer_console.html) |
 | Integrate the release gate into an app/agent/workflow | [Builder integration guide](builder_integration_guide.md) |
+| Evaluate a bounded pilot | [Pilot evaluation packet](pilot_evaluation_packet.md) |
 | Follow project chronology | [Project chronology](chronology.md) |
 | Inspect runtime telemetry | [Runtime observability](runtime_observability.md) |
 | Configure provider-backed completion | [Provider configuration](provider_configuration.md) |
