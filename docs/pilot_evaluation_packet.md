@@ -79,6 +79,8 @@ Collect enough evidence to support a narrow technical review:
 - notes/traces where available
 - comparison to release-by-default
 
+For a practical logging format, see [docs/pilot_case_log_template.md](pilot_case_log_template.md).
+
 Evidence should remain tied to the pilot's workflow, candidate set, thresholds, and policy settings. It should not be generalized into provider-backed, universal-safety, or production-readiness claims without separate evidence.
 
 ## 8. Recommended first pilot size
@@ -97,6 +99,7 @@ The first goal is to understand release-control behavior and reviewer workload o
 
 Use this packet alongside the existing documentation and reviewer surfaces:
 
+- [Pilot case log template](pilot_case_log_template.md)
 - [Reviewer console guide](reviewer_console_guide.md)
 - [Standalone reviewer console](../examples/sac_reviewer_console.html)
 - [Evidence map](evidence_map.md)

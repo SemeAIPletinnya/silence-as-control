@@ -87,6 +87,7 @@ Deterministic paths do not require provider credentials.
 - [docs/runtime_evidence_linkage.md](runtime_evidence_linkage.md)
 - [docs/external_integration.md](external_integration.md)
 - [docs/pilot_evaluation_packet.md](pilot_evaluation_packet.md)
+- [docs/pilot_case_log_template.md](pilot_case_log_template.md)
 - [docs/applied_bridges.md](applied_bridges.md)
 - [README.md](../README.md)
 
@@ -148,7 +149,7 @@ It uses compatible state/schema ideas: `PROCEED` / `NEEDS_REVIEW` / `SILENCE`.
 - Thresholds must be calibrated per task/model/signal regime.
 - `NEEDS_REVIEW` review flags are deterministic and intentionally scoped.
 - Provider-backed generation paths require separate configuration.
-- Real pilots should define their own release policy and failure criteria. For a conservative first-pass evaluation shape, see the [pilot evaluation packet](pilot_evaluation_packet.md).
+- Real pilots should define their own release policy and failure criteria. For a conservative first-pass evaluation shape, see the [pilot evaluation packet](pilot_evaluation_packet.md) and [pilot case log template](pilot_case_log_template.md).
 
 ## 9. Good first pilot use cases
 
