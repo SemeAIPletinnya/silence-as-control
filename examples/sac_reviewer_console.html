@@ -724,7 +724,7 @@
             body: JSON.stringify({
               prompt,
               candidate,
-              threshold: useAdaptive ? null : threshold,
+              threshold,
               use_adaptive_threshold: useAdaptive,
               recent_drifts: parseNumberList(document.getElementById('recent-drifts').value),
               recent_coherences: parseNumberList(document.getElementById('recent-coherences').value)
@@ -735,6 +735,7 @@
           }
           data = await resp.json();
           data.mode_note = 'canonical runtime/API path from an allowed origin';
+          data.review_band_display = 'server-side review margin';
         } catch (error) {
           content.innerHTML = `<p class="silence-output">Live API error: ${escapeHtml(error.message)}. Try Local demo mode for offline visual inspection.</p>`;
           return;
@@ -794,6 +795,7 @@
       const threshold = Number.isFinite(Number(data.threshold)) ? Number(data.threshold) : 0;
       const lower = displayNumber(clamp(threshold - margin));
       const upper = displayNumber(clamp(threshold + margin));
+      const reviewBand = data.review_band_display || `${lower} — ${upper}`;
       const notes = (data.notes || []).map(escapeHtml).join(', ') || '—';
       const rawJson = escapeHtml(JSON.stringify(data, null, 2));
 
@@ -807,7 +809,7 @@
           <div class="metric"><div class="metric-label">instability</div><div class="metric-value">${displayNumber(data.instability_score)}</div></div>
           <div class="metric"><div class="metric-label">coherence</div><div class="metric-value">${displayNumber(data.coherence)}</div></div>
           <div class="metric"><div class="metric-label">drift</div><div class="metric-value">${displayNumber(data.drift)}</div></div>
-          <div class="metric"><div class="metric-label">review band</div><div class="metric-value">${lower} — ${upper}</div></div>
+          <div class="metric"><div class="metric-label">review band</div><div class="metric-value">${escapeHtml(reviewBand)}</div></div>
         </div>
         ${data.release_output ? `<div class="release-output"><strong>Release output:</strong><br>${escapeHtml(data.release_output)}</div>` : ''}
         ${data.silence_token ? `<div class="silence-output">${escapeHtml(data.silence_token)}</div>` : ''}
