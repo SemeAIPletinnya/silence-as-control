@@ -691,7 +691,12 @@
           const resp = await fetch(LIVE_API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt, candidate, threshold: useAdaptive ? null : threshold })
+            body: JSON.stringify({
+              prompt,
+              candidate,
+              threshold: useAdaptive ? null : threshold,
+              use_adaptive_threshold: useAdaptive
+            })
           });
           if (!resp.ok) {
             throw new Error(`HTTP ${resp.status}`);
@@ -707,11 +712,13 @@
         const [coherence, coherenceNotes] = estimateCoherenceDemo(prompt, candidate);
         const [drift, driftNotes] = estimateDriftDemo([candidate]);
         const instability = computeInstability(drift, coherence);
-        const decision = boundedDecision(instability, threshold, margin);
+        let decision = boundedDecision(instability, threshold, margin);
         const notes = [...coherenceNotes, ...driftNotes, 'approximate_demo_logic_not_benchmark_evidence'];
 
         if (prompt.toLowerCase().includes('json') && !isValidJson(candidate)) {
-          notes.push('demo_invalid_json_hint');
+          // Approximate demo logic only: keep the JSON reviewer preset internally consistent.
+          decision = 'SILENCE';
+          notes.push('demo_forced_silence_invalid_json');
         }
 
         data = {
