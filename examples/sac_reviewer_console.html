@@ -441,7 +441,7 @@
         <p class="subtitle">Reviewer console • generation != release authority</p>
       </div>
       <div class="header-actions">
-        <button id="mode-toggle" type="button" onclick="toggleMode()">Live API</button>
+        <button id="mode-toggle" type="button" onclick="toggleMode()">Local demo</button>
         <a class="button-link" href="https://github.com/SemeAIPletinnya/silence-as-control" target="_blank" rel="noreferrer">GitHub</a>
       </div>
     </header>
@@ -504,12 +504,15 @@
         <div>
           <span class="mode-label">Mode</span>
           <div class="mode-buttons">
-            <button id="live-btn" class="mode-active" type="button" onclick="setMode('live')">Live API</button>
-            <button id="local-btn" type="button" onclick="setMode('local')">Local demo mode</button>
+            <button id="live-btn" type="button" onclick="setMode('live')">Live API</button>
+            <button id="local-btn" class="mode-active" type="button" onclick="setMode('local')">Local demo mode</button>
           </div>
         </div>
         <p class="note">
-          Live API mode is the canonical runtime/API path. Local mode is an approximate deterministic demo path.
+          Live API mode is the canonical runtime/API path when served from an allowed origin. Local mode is an approximate deterministic demo path.
+        </p>
+        <p class="note">
+          Live API mode requires same-origin deployment or a CORS-enabled API. If this file is opened directly, browser CORS policy may block the request.
         </p>
         <p class="note">
           This is a demo/reviewer console, not production safety evidence. For reproducible evidence, use the repository benchmark and replay paths.
@@ -549,7 +552,7 @@
     const LIVE_API_URL = 'https://silence-as-control.vibenest.net/por/evaluate';
     const HISTORY_KEY = 'sac_reviewer_console_history';
 
-    let currentMode = 'live';
+    let currentMode = 'local';
     let history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
 
     function setMode(mode) {
@@ -702,7 +705,7 @@
             throw new Error(`HTTP ${resp.status}`);
           }
           data = await resp.json();
-          data.mode_note = 'canonical runtime/API path';
+          data.mode_note = 'canonical runtime/API path from an allowed origin';
         } catch (error) {
           content.innerHTML = `<p class="silence-output">Live API error: ${escapeHtml(error.message)}. Try Local demo mode for offline visual inspection.</p>`;
           return;
@@ -872,7 +875,7 @@
     }
 
     function init() {
-      setMode('live');
+      setMode('local');
       renderHistory();
     }
 
