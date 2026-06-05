@@ -587,6 +587,12 @@
       return Math.max(min, Math.min(max, value));
     }
 
+    function parseBoundedNumber(value, fallback, min = 0, max = 1) {
+      const parsed = Number.parseFloat(value);
+      if (!Number.isFinite(parsed)) return fallback;
+      return clamp(parsed, min, max);
+    }
+
     function escapeHtml(value) {
       return String(value)
         .replace(/&/g, '&amp;')
@@ -699,8 +705,12 @@
     async function evaluateCandidate() {
       const prompt = document.getElementById('prompt').value.trim();
       const candidate = document.getElementById('candidate').value.trim();
-      const threshold = clamp(Number.parseFloat(document.getElementById('threshold').value));
-      const margin = clamp(Number.parseFloat(document.getElementById('margin').value) || 0.03, 0, 0.2);
+      const thresholdInput = document.getElementById('threshold');
+      const marginInput = document.getElementById('margin');
+      const threshold = parseBoundedNumber(thresholdInput.value, 0.39);
+      const margin = parseBoundedNumber(marginInput.value, 0.03, 0, 0.2);
+      thresholdInput.value = threshold;
+      marginInput.value = margin;
       const useAdaptive = document.getElementById('adaptive').checked;
 
       if (!prompt || !candidate) {
