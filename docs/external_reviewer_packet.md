@@ -91,6 +91,7 @@ Deterministic paths do not require provider credentials.
 
 Reviewer/demo surface, not evidence:
 
+- [docs/reviewer_console_guide.md](reviewer_console_guide.md) — usage guide for inspecting the standalone reviewer console without treating it as reproducible benchmark/replay evidence.
 - [examples/sac_reviewer_console.html](../examples/sac_reviewer_console.html) — standalone browser reviewer console for local visual/offline inspection of the release gate. Live API mode defaults to same-origin `/por/evaluate`; full remote URLs require CORS-enabled API access.
 
 Evidence is scoped to specific tasks, thresholds, datasets, and signal regimes.
