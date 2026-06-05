@@ -25,6 +25,7 @@ docs/
   ├─ release_risk_benchmark_index.md ← release-risk benchmark lineage
   ├─ release_risk_v4_capture_to_replay.md ← v4 no-key capture/replay path
   ├─ external_reviewer_packet.md     ← external technical review packet
+  ├─ reviewer_console_guide.md       ← standalone reviewer console usage
   ├─ builder_integration_guide.md    ← app/agent/workflow integration guide
   ├─ runtime_observability.md        ← telemetry verification
   ├─ provider_configuration.md       ← API/provider setup
@@ -48,7 +49,7 @@ issues/
 | Follow release-risk benchmark lineage | [Release-risk benchmark index](release_risk_benchmark_index.md) |
 | Reproduce the v4 no-key capture/replay path | [Release-risk v4 capture-to-replay](release_risk_v4_capture_to_replay.md) |
 | Review as an external technical reader | [External reviewer packet](external_reviewer_packet.md) |
-| Try the standalone reviewer console | [../examples/sac_reviewer_console.html](../examples/sac_reviewer_console.html) |
+| Try the standalone reviewer console | [Reviewer console guide](reviewer_console_guide.md) and [../examples/sac_reviewer_console.html](../examples/sac_reviewer_console.html) |
 | Integrate the release gate into an app/agent/workflow | [Builder integration guide](builder_integration_guide.md) |
 | Follow project chronology | [Project chronology](chronology.md) |
 | Inspect runtime telemetry | [Runtime observability](runtime_observability.md) |
