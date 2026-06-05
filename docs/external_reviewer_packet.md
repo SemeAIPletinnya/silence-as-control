@@ -60,12 +60,31 @@ Optional output path:
 python scripts/por_gate_cli.py --input examples/por_gate_input.json --output outputs/por_gate_decision.json
 ```
 
+v0.7 no-key capture/replay path:
+
+```bash
+python benchmarks/release_risk_v4_capture_candidates.py --mode fixture --output outputs/release_risk_v4_fixture_capture.jsonl
+python benchmarks/release_risk_v4_fixture_replay.py --input outputs/release_risk_v4_fixture_capture.jsonl --results-dir outputs/release_risk_v4_replay_results
+```
+
+Expected proof signal:
+
+```text
+generation_mode: fixture_capture
+model: fixture-v4-capture-synthetic-1
+provider: None
+```
+
+The v0.7 path is deterministic fixture capture/replay evidence only; optional provider/local capture remains future work.
+
 Deterministic paths do not require provider credentials.
 
 ## 5. What evidence to inspect
 
 - [docs/evidence_map.md](evidence_map.md)
 - [docs/release_risk_benchmark_index.md](release_risk_benchmark_index.md)
+- [docs/release_risk_v4_capture_to_replay.md](release_risk_v4_capture_to_replay.md)
+- [docs/runtime_evidence_linkage.md](runtime_evidence_linkage.md)
 - [docs/external_integration.md](external_integration.md)
 - [docs/applied_bridges.md](applied_bridges.md)
 - [README.md](../README.md)
@@ -155,7 +174,8 @@ Avoid:
 1. [README.md](../README.md)
 2. [docs/plain_english_pitch.md](plain_english_pitch.md)
 3. [docs/external_reviewer_packet.md](external_reviewer_packet.md)
-4. [docs/external_integration.md](external_integration.md)
-5. [docs/evidence_map.md](evidence_map.md)
-6. [docs/release_risk_benchmark_index.md](release_risk_benchmark_index.md)
-7. [docs/applied_bridges.md](applied_bridges.md)
+4. [docs/evidence_map.md](evidence_map.md)
+5. [docs/release_risk_benchmark_index.md](release_risk_benchmark_index.md)
+6. [docs/release_risk_v4_capture_to_replay.md](release_risk_v4_capture_to_replay.md)
+7. [docs/runtime_evidence_linkage.md](runtime_evidence_linkage.md)
+8. [docs/external_integration.md](external_integration.md)
