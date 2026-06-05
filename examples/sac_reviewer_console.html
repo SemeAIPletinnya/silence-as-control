@@ -64,7 +64,8 @@
     }
 
     textarea,
-    input[type="number"] {
+    input[type="number"],
+    input[type="text"] {
       width: 100%;
       background: var(--bg);
       border: 1px solid var(--border-strong);
@@ -508,11 +509,15 @@
             <button id="local-btn" class="mode-active" type="button" onclick="setMode('local')">Local demo mode</button>
           </div>
         </div>
+        <div class="field">
+          <label for="live-endpoint">Live API endpoint</label>
+          <input id="live-endpoint" type="text" value="/por/evaluate">
+        </div>
         <p class="note">
           Live API mode is the canonical runtime/API path when served from an allowed origin. Local mode is an approximate deterministic demo path.
         </p>
         <p class="note">
-          Live API mode requires same-origin deployment or a CORS-enabled API. If this file is opened directly, browser CORS policy may block the request.
+          Use /por/evaluate when serving this console from the same origin as the API. Use a full URL only when the target API allows browser CORS requests.
         </p>
         <p class="note">
           This is a demo/reviewer console, not production safety evidence. For reproducible evidence, use the repository benchmark and replay paths.
@@ -549,7 +554,6 @@
   </main>
 
   <script>
-    const LIVE_API_URL = 'https://silence-as-control.vibenest.net/por/evaluate';
     const HISTORY_KEY = 'sac_reviewer_console_history';
 
     let currentMode = 'local';
@@ -691,7 +695,8 @@
 
       if (currentMode === 'live') {
         try {
-          const resp = await fetch(LIVE_API_URL, {
+          const liveApiEndpoint = document.getElementById('live-endpoint').value.trim() || '/por/evaluate';
+          const resp = await fetch(liveApiEndpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
