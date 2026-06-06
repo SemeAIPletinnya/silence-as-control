@@ -46,9 +46,9 @@ This path does **not** claim:
 
 Fixture mode is deterministic evidence for the capture-to-replay mechanics and release-routing surface. Ollama mode is optional local generated-candidate evidence for the same replay path.
 
-## No-key fixture capture
+## Smoke path: 4-case no-key fixture capture
 
-From the repository root, run:
+The default task set is the bounded 4-case smoke set. From the repository root, run:
 
 ```bash
 python benchmarks/release_risk_v4_capture_candidates.py --mode fixture --output outputs/release_risk_v4_fixture_capture.jsonl
@@ -85,7 +85,7 @@ The capture records include replay-required fields such as:
 
 ## Optional local Ollama capture
 
-Fixture mode is the deterministic no-key evidence lane. Ollama mode is an optional local generated-candidate capture lane: it reads the same v4 prompt/task fixture rows used by fixture mode, sends each prompt to a local Ollama server, and writes replay-compatible JSONL for the existing replay script.
+Fixture mode is the deterministic no-key evidence lane. Ollama mode is an optional local generated-candidate capture lane. By default, it uses the same 4-case smoke prompt/task set as fixture mode, sends each prompt to a local Ollama server, and writes replay-compatible JSONL for the existing replay script.
 
 Ollama mode is intentionally bounded:
 
@@ -96,7 +96,7 @@ Ollama mode is intentionally bounded:
 - it does not require provider API keys;
 - it does not change the SaC policy, replay decisions, or replay metrics.
 
-Example local capture command:
+Example 4-case smoke local capture command:
 
 ```bash
 python benchmarks/release_risk_v4_capture_candidates.py --mode ollama --model qwen3:4b --output outputs/release_risk_v4_ollama_capture.jsonl
@@ -107,7 +107,27 @@ Optional arguments include:
 ```text
 --ollama-url http://localhost:11434
 --timeout 60
+--task-set smoke
+--task-set local25
 ```
+
+### Optional local25 Ollama path
+
+The `local25` task set is a bounded 25-case local prompt set for generated-candidate capture. It keeps the same replay-compatible schema and does not change SaC policy behavior, replay decision logic, or benchmark metrics.
+
+Capture 25 local Ollama-generated candidate records:
+
+```bash
+python benchmarks/release_risk_v4_capture_candidates.py --mode ollama --task-set local25 --model qwen3:4b --output outputs/release_risk_v4_ollama_local25_capture.jsonl
+```
+
+Replay those records through the unchanged v4 replay script:
+
+```bash
+python benchmarks/release_risk_v4_fixture_replay.py --input outputs/release_risk_v4_ollama_local25_capture.jsonl --results-dir outputs/release_risk_v4_ollama_local25_replay_results
+```
+
+The local25 evidence boundary is conservative: local25 remains local generated-candidate evidence only; it is not provider-backed evidence, not production safety evidence, not a universal model evaluation, and not a claim that thresholds generalize.
 
 If Ollama is unavailable, the command fails clearly instead of silently falling back to fixture mode. Per-case generation errors are recorded in replay-compatible records when the local API returns a response that cannot produce candidate text.
 
@@ -166,6 +186,8 @@ For the example commands above, the generated files live under `outputs/`, not u
 ```text
 outputs/release_risk_v4_fixture_capture.jsonl
 outputs/release_risk_v4_replay_results/
+outputs/release_risk_v4_ollama_local25_capture.jsonl
+outputs/release_risk_v4_ollama_local25_replay_results/
 ```
 
 This is intentional. The guide is meant to demonstrate a caller-controlled evidence path without overwriting committed artifacts.

@@ -219,7 +219,8 @@ python -m pytest tests/test_api.py -q
 
 Scope:
 
-- Deterministic no-key fixture capture and replay.
+- Deterministic no-key 4-case fixture capture and replay.
+- Optional 25-case local Ollama generated-candidate capture through the same replay script.
 
 Artifacts:
 
@@ -242,7 +243,8 @@ Interpretation boundaries:
 - No API keys required.
 - Not provider-backed evidence.
 - Not production safety evidence.
-- Optional local Ollama generated-candidate capture is supported for v4, but remains local-model evidence only.
+- Optional local Ollama generated-candidate capture is supported for v4, including the bounded local25 task set, but remains local-model evidence only.
+- local25 is not provider-backed evidence, production safety evidence, universal model evaluation, or a claim that thresholds generalize.
 - Provider-backed capture remains future work.
 
 ## LangChain/OpenAI action-risk Run 06 progression
