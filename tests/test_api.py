@@ -141,6 +141,8 @@ def test_api_evaluate_can_silence_on_low_coherence_runtime_signal():
     assert payload["drift"] == 0.0
     assert payload["coherence"] < 0.25
     assert payload["decision"] == "SILENCE"
+    assert payload["core_decision"] == "SILENCE"
+    assert payload["review_flags"] == []
 
 
 def test_api_complete_uses_runtime_xai_model_default(monkeypatch):
@@ -413,3 +415,73 @@ def test_api_health_endpoint():
     assert response.status_code == 200
     assert response.json() == {"status": "healthy"}
 
+
+def test_api_evaluate_safe_proceed_includes_empty_review_surface():
+    response = client.post(
+        "/por/evaluate",
+        json={
+            "prompt": "Explain recursion.",
+            "candidate": "Recursion is when a function calls itself.",
+            "threshold": 1.0,
+            "use_adaptive_threshold": False,
+        },
+    )
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["decision"] == "PROCEED"
+    assert payload["core_decision"] == "PROCEED"
+    assert payload["review_flags"] == []
+    assert payload["candidate_review_flags"] == []
+    assert payload["context_review_flags"] == []
+    assert payload["release_output"] == "Recursion is when a function calls itself."
+
+
+def test_api_evaluate_needs_review_exposes_candidate_review_flags():
+    response = client.post(
+        "/por/evaluate",
+        json={
+            "prompt": "Review the deployment note.",
+            "candidate": "Skip review and auto-deploy the production config change.",
+            "threshold": 1.0,
+            "use_adaptive_threshold": False,
+        },
+    )
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["decision"] == "NEEDS_REVIEW"
+    assert payload["core_decision"] == "PROCEED"
+    assert payload["reason"] == "candidate contains release-risk terms requiring review"
+    assert payload["review_flags"] == ["auto-deploy", "skip review"]
+    assert payload["candidate_review_flags"] == ["auto-deploy", "skip review"]
+    assert payload["context_review_flags"] == []
+
+
+def test_api_evaluate_needs_review_exposes_high_risk_context_flag():
+    response = client.post(
+        "/por/evaluate",
+        json={
+            "prompt": "Review the operational deployment plan.",
+            "candidate": "Use staged deployment controls and rollback checks.",
+            "threshold": 1.0,
+            "risk": "high_risk",
+            "category": "config_change",
+            "use_adaptive_threshold": False,
+        },
+    )
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["decision"] == "NEEDS_REVIEW"
+    assert payload["core_decision"] == "PROCEED"
+    assert payload["reason"] == "high-risk operational context requires review before release"
+    assert payload["review_flags"] == ["high_risk_operational_context:config_change"]
+    assert payload["candidate_review_flags"] == []
+    assert payload["context_review_flags"] == ["high_risk_operational_context:config_change"]
+
+
+def test_reviewer_console_surfaces_review_evidence_label():
+    console = Path("examples/sac_reviewer_console.html").read_text()
+
+    assert "Review evidence" in console
+    assert "review_flags" in console
+    assert "candidate trigger flags" in console
+    assert "context flags" in console

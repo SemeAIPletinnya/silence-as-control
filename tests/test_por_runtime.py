@@ -1,5 +1,6 @@
 """Tests for runtime extension utilities (non-core)."""
 
+import api.main as api_main
 from api import por_runtime
 
 
@@ -127,3 +128,33 @@ def test_runtime_bounded_release_decision_clips_band_edges():
     assert por_runtime.bounded_runtime_release_decision(0.0, 0.01) == "NEEDS_REVIEW"
     assert por_runtime.bounded_runtime_release_decision(0.99, 1.0) == "NEEDS_REVIEW"
     assert por_runtime.bounded_runtime_release_decision(1.0, 1.0) == "SILENCE"
+
+
+def test_score_candidate_runtime_exposes_review_flag_surface():
+    result = api_main.score_candidate_runtime(
+        "Review the deployment note.",
+        "Disable audit logs and skip review for the config change.",
+        1.0,
+    )
+
+    assert result["decision"] == "NEEDS_REVIEW"
+    assert result["core_decision"] == "PROCEED"
+    assert result["review_flags"] == ["disable audit logs", "skip review"]
+    assert result["candidate_review_flags"] == ["disable audit logs", "skip review"]
+    assert result["context_review_flags"] == []
+
+
+def test_score_candidate_runtime_exposes_context_review_flags():
+    result = api_main.score_candidate_runtime(
+        "Review the operational deployment plan.",
+        "Use staged deployment controls and rollback checks.",
+        1.0,
+        risk="high_risk",
+        category="config_change",
+    )
+
+    assert result["decision"] == "NEEDS_REVIEW"
+    assert result["core_decision"] == "PROCEED"
+    assert result["review_flags"] == ["high_risk_operational_context:config_change"]
+    assert result["candidate_review_flags"] == []
+    assert result["context_review_flags"] == ["high_risk_operational_context:config_change"]

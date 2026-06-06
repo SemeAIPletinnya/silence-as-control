@@ -773,6 +773,11 @@
           release_output: decision === 'PROCEED' ? candidate : null,
           silence_token: decision === 'SILENCE' ? '[SILENCE: UNSTABLE OUTPUT BLOCKED]' : null,
           notes,
+          core_decision: decision,
+          reason: decision === 'NEEDS_REVIEW' ? 'demo candidate is inside the review band' : 'demo runtime release decision',
+          review_flags: [],
+          candidate_review_flags: [],
+          context_review_flags: [],
           mode_note: 'approximate deterministic demo path'
         };
       }
@@ -795,6 +800,23 @@
       return Number.isFinite(Number(value)) ? Number(value).toFixed(4) : fallback;
     }
 
+    function splitReviewEvidence(data) {
+      const reviewFlags = Array.isArray(data.review_flags) ? data.review_flags : [];
+      const candidateFlags = Array.isArray(data.candidate_review_flags)
+        ? data.candidate_review_flags
+        : reviewFlags.filter((flag) => !String(flag).startsWith('high_risk_operational_context:'));
+      const contextFlags = Array.isArray(data.context_review_flags)
+        ? data.context_review_flags
+        : reviewFlags.filter((flag) => String(flag).startsWith('high_risk_operational_context:'));
+      return { candidateFlags, contextFlags };
+    }
+
+    function renderFlagList(flags) {
+      return flags.length
+        ? `<ul>${flags.map((flag) => `<li>${escapeHtml(flag)}</li>`).join('')}</ul>`
+        : '<span class="muted">—</span>';
+    }
+
     function renderResult(data, margin = 0.03) {
       const content = document.getElementById('result-content');
       const decision = data.decision || 'UNKNOWN';
@@ -807,6 +829,7 @@
       const upper = displayNumber(clamp(threshold + margin));
       const reviewBand = data.review_band_display || `${lower} — ${upper}`;
       const notes = (data.notes || []).map(escapeHtml).join(', ') || '—';
+      const { candidateFlags, contextFlags } = splitReviewEvidence(data);
       const rawJson = escapeHtml(JSON.stringify(data, null, 2));
 
       content.innerHTML = `
@@ -823,6 +846,11 @@
         </div>
         ${data.release_output ? `<div class="release-output"><strong>Release output:</strong><br>${escapeHtml(data.release_output)}</div>` : ''}
         ${data.silence_token ? `<div class="silence-output">${escapeHtml(data.silence_token)}</div>` : ''}
+        <section class="review-evidence" aria-label="Review evidence">
+          <strong>Review evidence:</strong>
+          <div><span class="muted">candidate trigger flags:</span> ${renderFlagList(candidateFlags)}</div>
+          <div><span class="muted">context flags:</span> ${renderFlagList(contextFlags)}</div>
+        </section>
         <p class="muted"><strong>Notes:</strong> ${notes}</p>
         <details>
           <summary class="muted">Raw JSON</summary>
