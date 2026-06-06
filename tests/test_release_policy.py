@@ -25,6 +25,21 @@ def test_apply_release_policy_routes_high_risk_operational_context_to_review():
     assert out.reason == "high-risk operational context requires review before release"
 
 
+def test_apply_release_policy_preserves_candidate_flags_with_high_risk_context():
+    out = apply_release_policy(
+        "PROCEED",
+        "Skip review and auto-deploy the production config change.",
+        risk="high_risk",
+        category="config_change",
+    )
+    assert out.decision == "NEEDS_REVIEW"
+    assert out.review_flags == [
+        "auto-deploy",
+        "skip review",
+        "high_risk_operational_context:config_change",
+    ]
+
+
 def test_apply_release_policy_preserves_critical_silence_before_context_review():
     out = apply_release_policy(
         "SILENCE",

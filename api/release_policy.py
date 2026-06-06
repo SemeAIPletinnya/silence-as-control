@@ -71,11 +71,12 @@ def apply_release_policy(
 
     review_flags = detect_review_flags(candidate)
     context_flags = _detect_high_risk_operational_context(risk=risk, category=category)
+    combined_review_flags = [*review_flags, *context_flags]
     if context_flags:
         return ReleasePolicyResult(
             decision="NEEDS_REVIEW",
             core_decision=core_decision,
-            review_flags=context_flags,
+            review_flags=combined_review_flags,
             reason="high-risk operational context requires review before release",
         )
 
