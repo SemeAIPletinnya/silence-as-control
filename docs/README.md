@@ -8,6 +8,7 @@ You are here: documentation for architecture boundaries and public-facing guidan
 - `experimental_features.md` — optional non-core MAYBE_SHORT_REGEN behavior.
 - `api_walkthrough.md` — broader API walkthrough.
 - `runtime_observability.md` — local telemetry smoke walkthrough and report shape.
+- [Review/release receipt layer](review_release_receipt_layer.md) — conservative future design note for auditable review/release receipts.
 - `first_run_checklist.md` — no-key first-run verification path.
 - [Direct reproduction guide](direct_reproduction_guide.md) — local commands to verify the no-key release-control path.
 - `provider_configuration.md` — no-key vs provider-backed runtime configuration.
