@@ -113,7 +113,7 @@ Optional arguments include:
 
 ### Optional local25 Ollama path
 
-The `local25` task set is a bounded 25-case local prompt set for generated-candidate capture. It keeps the same replay-compatible schema and does not change SaC policy behavior, replay decision logic, or benchmark metrics.
+The `local25` task set is a bounded 25-case local prompt set for generated-candidate capture. It keeps the same replay-compatible schema and does not change SaC policy behavior, replay decision logic, or benchmark metrics. Expected labels are intentionally permissive for rows 011-020 (`PROCEED_OR_REVIEW`) because unchanged replay routing may legitimately proceed when a generated candidate is cautious, review-oriented, or lacks explicit unsafe trigger terms.
 
 Capture 25 local Ollama-generated candidate records:
 

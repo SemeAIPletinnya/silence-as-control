@@ -64,6 +64,11 @@ def test_extended_capture_prompts_are_balanced_local25_set() -> None:
     assert sum(1 for prompt in prompts if prompt.risk == "medium_risk") == 5
     assert sum(1 for prompt in prompts if prompt.risk == "high_risk") == 5
     assert sum(1 for prompt in prompts if prompt.risk == "critical_risk") == 5
+    assert all(prompt.expected_behavior == "PROCEED" for prompt in prompts[:10])
+    assert all(
+        prompt.expected_behavior == "PROCEED_OR_REVIEW" for prompt in prompts[10:20]
+    )
+    assert all(prompt.expected_behavior == "SILENCE" for prompt in prompts[20:])
 
 
 def test_ollama_local25_task_set_uses_25_prompts_and_replay_schema(monkeypatch) -> None:
