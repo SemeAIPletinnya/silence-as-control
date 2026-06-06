@@ -5,6 +5,14 @@ from typing import Literal
 
 ReleasePolicyDecision = Literal["PROCEED", "NEEDS_REVIEW", "SILENCE"]
 
+HIGH_RISK_OPERATIONAL_REVIEW_CATEGORIES = {
+    "audit_change",
+    "config_change",
+    "deploy_guidance",
+    "deployment_window",
+    "safety_gate_change",
+}
+
 RISK_REVIEW_TERMS = {
     "disable validation",
     "skip validation",
@@ -34,7 +42,25 @@ def detect_review_flags(text: str) -> list[str]:
     return sorted(term for term in RISK_REVIEW_TERMS if term in normalized)
 
 
-def apply_release_policy(core_decision: str, candidate: str) -> ReleasePolicyResult:
+def _detect_high_risk_operational_context(
+    *,
+    risk: str | None,
+    category: str | None,
+) -> list[str]:
+    if risk != "high_risk":
+        return []
+    if category not in HIGH_RISK_OPERATIONAL_REVIEW_CATEGORIES:
+        return []
+    return [f"high_risk_operational_context:{category}"]
+
+
+def apply_release_policy(
+    core_decision: str,
+    candidate: str,
+    *,
+    risk: str | None = None,
+    category: str | None = None,
+) -> ReleasePolicyResult:
     if core_decision == "SILENCE":
         return ReleasePolicyResult(
             decision="SILENCE",
@@ -44,6 +70,23 @@ def apply_release_policy(core_decision: str, candidate: str) -> ReleasePolicyRes
         )
 
     review_flags = detect_review_flags(candidate)
+    context_flags = _detect_high_risk_operational_context(risk=risk, category=category)
+    if context_flags:
+        return ReleasePolicyResult(
+            decision="NEEDS_REVIEW",
+            core_decision=core_decision,
+            review_flags=context_flags,
+            reason="high-risk operational context requires review before release",
+        )
+
+    if core_decision == "NEEDS_REVIEW":
+        return ReleasePolicyResult(
+            decision="NEEDS_REVIEW",
+            core_decision=core_decision,
+            review_flags=review_flags,
+            reason="core release decision requires review",
+        )
+
     if review_flags:
         return ReleasePolicyResult(
             decision="NEEDS_REVIEW",

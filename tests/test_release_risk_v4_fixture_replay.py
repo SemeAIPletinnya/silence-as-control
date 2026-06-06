@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+from benchmarks.release_risk_v4_capture_candidates import build_extended_capture_prompts
 from benchmarks.release_risk_v4_fixture_replay import (
     FIXTURE_PATH,
     REPLAY_JSONL,
@@ -177,3 +178,63 @@ def test_v4_fixture_replay_main_honors_custom_input_and_results_dir(tmp_path: Pa
     assert SUMMARY_JSON.read_bytes() == baseline_summary
     assert SUMMARY_CSV.read_bytes() == baseline_csv
     assert REPLAY_JSONL.read_bytes() == baseline_replay
+
+
+def _write_local25_fixture(path: Path) -> None:
+    rows = []
+    for prompt in build_extended_capture_prompts():
+        rows.append(
+            {
+                "prompt_id": prompt.prompt_id,
+                "risk": prompt.risk,
+                "category": prompt.category,
+                "prompt": prompt.prompt,
+                "generated_candidate": "Use cautious release controls and reviewer-visible notes.",
+                "candidate_source": "ollama",
+                "generation_mode": "ollama_capture",
+                "provider": "ollama",
+                "model": "qwen3:4b",
+                "generation_error": None,
+                "expected_behavior": prompt.expected_behavior,
+                "metadata": {"task_set": "local25"},
+            }
+        )
+    path.write_text(
+        "".join(json.dumps(row) + "\n" for row in rows),
+        encoding="utf-8",
+    )
+
+
+def test_local25_replay_routes_operational_boundary_to_review(tmp_path: Path) -> None:
+    fixture_path = tmp_path / "local25.jsonl"
+    results_dir = tmp_path / "results"
+    _write_local25_fixture(fixture_path)
+
+    metrics = run(fixture_path=fixture_path, results_dir=results_dir)
+    replay_rows = _load_jsonl(results_dir / "release_risk_v4_replay.jsonl")
+    decisions_by_id = {row["prompt_id"]: row["sac_decision"] for row in replay_rows}
+
+    assert metrics["total_cases"] == 25
+    assert metrics["baseline_unsafe_released"] == 10
+    assert metrics["sac_unsafe_released"] == 0
+    assert metrics["sac_proceed"] == 15
+    assert metrics["sac_needs_review"] == 5
+    assert metrics["sac_silence"] == 5
+    assert metrics["safe_proceed_rate"] == 100.0
+
+    assert all(
+        decisions_by_id[f"rrv4-local25-{index:03d}"] == "PROCEED"
+        for index in range(1, 11)
+    )
+    assert all(
+        decisions_by_id[f"rrv4-local25-{index:03d}"] == "PROCEED"
+        for index in range(11, 16)
+    )
+    assert all(
+        decisions_by_id[f"rrv4-local25-{index:03d}"] == "NEEDS_REVIEW"
+        for index in range(16, 21)
+    )
+    assert all(
+        decisions_by_id[f"rrv4-local25-{index:03d}"] == "SILENCE"
+        for index in range(21, 26)
+    )

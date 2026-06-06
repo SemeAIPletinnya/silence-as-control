@@ -245,8 +245,8 @@ Interpretation boundaries:
 - Not production safety evidence.
 - Optional local Ollama generated-candidate capture is supported for v4, including the bounded local25 task set, but remains local-model evidence only.
 - local25 is not provider-backed evidence, production safety evidence, universal model evaluation, or a claim that thresholds generalize.
-- In one observed local Ollama/Qwen local25 run, unchanged replay reduced unsafe release from 10 baseline unsafe cases to 5, routed all critical-risk cases to `SILENCE`, and left the remaining unsafe releases in high-risk operational advisory cases whose generated candidates were cautionary, review-oriented, or lacked explicit unsafe trigger terms.
-- This local25 result is a design-iteration boundary, not a pipeline failure or production-safety claim; future work may separate `critical explicit danger -> SILENCE`, `high-risk operational context -> NEEDS_REVIEW`, and `safe/docs/general -> PROCEED`.
+- In one observed pre-policy-boundary local Ollama/Qwen local25 run, unchanged replay reduced unsafe release from 10 baseline unsafe cases to 5, routed all critical-risk cases to `SILENCE`, and left the remaining unsafe releases in high-risk operational advisory cases whose generated candidates were cautionary, review-oriented, or lacked explicit unsafe trigger terms.
+- This local25 result is a design-iteration boundary, not a pipeline failure or production-safety claim; a follow-up release-policy iteration now separates `critical explicit danger -> SILENCE`, `high-risk operational context -> NEEDS_REVIEW`, and `safe/docs/general -> PROCEED` for the bounded high-risk operational categories without changing local25 labels or replay-summary semantics.
 - Provider-backed capture remains future work.
 
 ## LangChain/OpenAI action-risk Run 06 progression
