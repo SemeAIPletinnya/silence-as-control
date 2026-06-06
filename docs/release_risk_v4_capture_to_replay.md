@@ -2,9 +2,9 @@
 
 ## Purpose
 
-This guide documents the deterministic, no-key release-risk v4 capture-to-replay path.
+This guide documents the deterministic, no-key release-risk v4 capture-to-replay path and the optional local Ollama generated-candidate capture mode.
 
-It shows how to create a generated-candidate JSONL with the v4 capture CLI, replay that JSONL through the v4 release-risk replay script, and verify the expected proof signals without provider access or API keys.
+It shows how to create a generated-candidate JSONL with the v4 capture CLI, replay that JSONL through the v4 release-risk replay script, and verify the expected proof signals. Fixture mode requires no provider access, local model, or API keys; Ollama mode is opt-in and requires a locally running Ollama server.
 
 Core framing:
 
@@ -16,6 +16,7 @@ The v4 no-key path keeps candidate creation and release evaluation separate:
 
 ```text
 fixture capture -> generated-candidate JSONL -> replay -> summary + replay artifacts
+optional Ollama capture -> generated-candidate JSONL -> same replay path
 ```
 
 ## What this path proves
@@ -26,15 +27,15 @@ This path proves that the repository has a reproducible, no-key evidence lane fo
 - replay can consume a caller-provided `--input` JSONL;
 - replay can write artifacts to a caller-provided `--results-dir`;
 - replay preserves the captured `generation_mode` and `model` metadata in the summary;
-- fixture capture and replay can run without OpenAI, provider calls, local model calls, or API keys.
+- fixture capture and replay can run without OpenAI, provider calls, local model calls, or API keys;
+- optional Ollama capture can write replay-compatible generated-candidate records from a local Ollama model without changing replay logic.
 
 ## What this path does not prove
 
 This path does **not** claim:
 
 - provider-backed evidence;
-- local-model evidence;
-- live generation quality;
+- production-model quality;
 - production safety;
 - exploit prevention;
 - universal AI safety;
@@ -43,7 +44,7 @@ This path does **not** claim:
 - hallucination elimination;
 - threshold generalization across all models or tasks.
 
-It is deterministic fixture evidence for the capture-to-replay mechanics and release-routing surface.
+Fixture mode is deterministic evidence for the capture-to-replay mechanics and release-routing surface. Ollama mode is optional local generated-candidate evidence for the same replay path.
 
 ## No-key fixture capture
 
@@ -81,6 +82,42 @@ The capture records include replay-required fields such as:
 - `generation_error`
 - `expected_behavior`
 - `metadata`
+
+## Optional local Ollama capture
+
+Fixture mode is the deterministic no-key evidence lane. Ollama mode is an optional local generated-candidate capture lane: it reads the same v4 prompt/task fixture rows used by fixture mode, sends each prompt to a local Ollama server, and writes replay-compatible JSONL for the existing replay script.
+
+Ollama mode is intentionally bounded:
+
+- it requires Ollama to be installed and running locally;
+- it calls the local Ollama HTTP API at `{ollama_url}/api/generate`;
+- it defaults to model `qwen3:4b`;
+- it does not call OpenAI or xAI;
+- it does not require provider API keys;
+- it does not change the SaC policy, replay decisions, or replay metrics.
+
+Example local capture command:
+
+```bash
+python benchmarks/release_risk_v4_capture_candidates.py --mode ollama --model qwen3:4b --output outputs/release_risk_v4_ollama_capture.jsonl
+```
+
+Optional arguments include:
+
+```text
+--ollama-url http://localhost:11434
+--timeout 60
+```
+
+If Ollama is unavailable, the command fails clearly instead of silently falling back to fixture mode. Per-case generation errors are recorded in replay-compatible records when the local API returns a response that cannot produce candidate text.
+
+Replay the Ollama capture through the unchanged v4 replay path:
+
+```bash
+python benchmarks/release_risk_v4_fixture_replay.py --input outputs/release_risk_v4_ollama_capture.jsonl --results-dir outputs/release_risk_v4_ollama_replay_results
+```
+
+Evidence boundary: Ollama capture is local generated-candidate evidence only. It is not provider-backed evidence, not production safety evidence, not a universal model evaluation, and not evidence that release controls generalize across all models or tasks.
 
 ## Replay captured candidates
 
@@ -154,11 +191,11 @@ If a run appears to use stale artifacts, delete the caller-controlled `outputs/r
 
 This guide documents the implemented no-key fixture capture-to-replay path.
 
-Provider/local capture remains separate and opt-in. See:
+Provider capture remains separate and unimplemented. Optional local Ollama capture is implemented as a generated-candidate capture lane only. See:
 
 - `docs/release_risk_v4_provider_capture_plan.md`
 
-Do not treat fixture capture as provider-backed evidence. The fixture path is the deterministic reproducibility lane for reviewers who want to inspect the capture/replay mechanics without secrets or network calls.
+Do not treat fixture capture as provider-backed evidence. Do not treat Ollama capture as provider-backed evidence or production safety evidence. The fixture path is the deterministic reproducibility lane for reviewers who want to inspect the capture/replay mechanics without secrets or network calls; Ollama capture is local-model evidence for generated candidates only.
 
 ## Suggested reading order
 
