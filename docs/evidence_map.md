@@ -242,7 +242,8 @@ Interpretation boundaries:
 - No API keys required.
 - Not provider-backed evidence.
 - Not production safety evidence.
-- Optional provider/local capture remains future work.
+- Optional local Ollama generated-candidate capture is supported for v4, but remains local-model evidence only.
+- Provider-backed capture remains future work.
 
 ## LangChain/OpenAI action-risk Run 06 progression
 
