@@ -38,6 +38,8 @@ Context flags are supplied by the release-policy context path. For example:
 
 Evidence boundary: these fields are review traceability. They are not production-safety evidence, provider-backed validation, or a universal model evaluation claim.
 
+For a conservative future design note on turning this evidence surface into auditable review/release receipts, see [Review/release receipt layer](review_release_receipt_layer.md).
+
 ## Review band formula
 
 The runtime computes an `instability` score and compares it with a resolved `threshold` using the current bounded review margin.

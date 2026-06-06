@@ -30,6 +30,7 @@ docs/
   ├─ pilot_evaluation_packet.md      ← bounded pilot evaluation path
   ├─ pilot_case_log_template.md       ← bounded pilot case logging
   ├─ runtime_observability.md        ← telemetry verification
+  ├─ review_release_receipt_layer.md ← future receipt/audit design note
   ├─ provider_configuration.md       ← API/provider setup
   ├─ release_control_services.md     ← pilot/integration interest
   └─ roadmap_2026.md                 ← milestone planning
@@ -57,6 +58,7 @@ issues/
 | Log pilot cases | [Pilot case log template](pilot_case_log_template.md) |
 | Follow project chronology | [Project chronology](chronology.md) |
 | Inspect runtime telemetry | [Runtime observability](runtime_observability.md) |
+| Understand future review/release receipts | [Review/release receipt layer](review_release_receipt_layer.md) |
 | Configure provider-backed completion | [Provider configuration](provider_configuration.md) |
 | Understand pilot/integration fit | [Release-control services](release_control_services.md) |
 | See milestone planning | [Roadmap 2026](roadmap_2026.md) |
