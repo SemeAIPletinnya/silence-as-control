@@ -81,7 +81,12 @@ def run(
             num_generation_failures += 1
 
         core_decision, core_reason = route_core_decision(row)
-        policy = apply_release_policy(core_decision=core_decision, candidate=candidate)
+        policy = apply_release_policy(
+            core_decision=core_decision,
+            candidate=candidate,
+            risk=str(row["risk"]),
+            category=str(row["category"]),
+        )
 
         if policy.decision == "PROCEED":
             sac_proceed += 1
