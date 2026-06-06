@@ -52,6 +52,20 @@ The reviewer-entered threshold is sent as the adaptive base when adaptive thresh
 
 In Live API mode, the review band is server-side policy. In Local demo mode, the review band is the threshold plus or minus the reviewer-entered review margin.
 
+`NEEDS_REVIEW` should also carry review evidence, not only a state label. The reviewer console shows a small **Review evidence** section that separates candidate trigger flags from context flags when the API returns them.
+
+Examples of candidate-level trigger flags include:
+
+- `auto-deploy`
+- `skip review`
+- `disable audit logs`
+
+An example context flag is:
+
+- `high_risk_operational_context:config_change`
+
+This evidence is for review traceability only. It is not production-safety evidence, provider-backed validation, or a universal model evaluation claim.
+
 ## 7. Evidence boundary
 
 Use the reviewer console for visual inspection only. Use the benchmark and replay documentation for reproducible evidence:

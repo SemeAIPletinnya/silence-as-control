@@ -29,6 +29,7 @@ from api.experimental_recovery import (
     get_experimental_margin,
     maybe_short_regen,
 )
+from api.release_policy import apply_release_policy
 from api.por_runtime import (
     RUNTIME_REVIEW_MARGIN,
     RuntimeDecision,
@@ -90,6 +91,8 @@ class EvaluateRequest(BaseModel):
     prompt: str
     candidate: str
     threshold: float | None = None
+    risk: str | None = None
+    category: str | None = None
     use_adaptive_threshold: bool = False
     recent_drifts: list[float] = Field(default_factory=list)
     recent_coherences: list[float] = Field(default_factory=list)
@@ -104,6 +107,11 @@ class EvaluateResponse(BaseModel):
     instability_score: float
     threshold: float
     decision: RuntimeResponseDecision
+    core_decision: RuntimeResponseDecision
+    reason: str
+    review_flags: list[str] = Field(default_factory=list)
+    candidate_review_flags: list[str] = Field(default_factory=list)
+    context_review_flags: list[str] = Field(default_factory=list)
     release_output: str | None = None
     silence_token: str | None = None
     notes: list[str]
@@ -112,6 +120,8 @@ class EvaluateResponse(BaseModel):
 class CompleteRequest(BaseModel):
     prompt: str
     threshold: float | None = None
+    risk: str | None = None
+    category: str | None = None
     use_adaptive_threshold: bool = False
     recent_drifts: list[float] = Field(default_factory=list)
     recent_coherences: list[float] = Field(default_factory=list)
@@ -132,6 +142,11 @@ class CompleteResponse(BaseModel):
     instability_score: float
     threshold: float
     decision: RuntimeResponseDecision
+    core_decision: RuntimeResponseDecision
+    reason: str
+    review_flags: list[str] = Field(default_factory=list)
+    candidate_review_flags: list[str] = Field(default_factory=list)
+    context_review_flags: list[str] = Field(default_factory=list)
     release_output: str | None = None
     silence_token: str | None = None
     notes: list[str]
@@ -156,9 +171,42 @@ class RuntimeScore(TypedDict):
     instability_score: float
     threshold: float
     decision: RuntimeDecision
+    core_decision: RuntimeDecision
+    reason: str
+    review_flags: list[str]
+    candidate_review_flags: list[str]
+    context_review_flags: list[str]
     release_output: str | None
     silence_token: str | None
     notes: list[str]
+
+
+def _with_release_surface_defaults(result: dict[str, Any]) -> dict[str, Any]:
+    """Fill reviewer-surface fields for legacy test doubles or older callers."""
+    decision = result.get("decision")
+    result.setdefault("core_decision", decision)
+    result.setdefault("reason", "release decision returned by runtime scorer")
+    result.setdefault("review_flags", [])
+    result.setdefault("candidate_review_flags", [])
+    result.setdefault("context_review_flags", [])
+    return result
+
+
+def _score_candidate_with_release_surface(
+    *args: Any,
+    risk: str | None = None,
+    category: str | None = None,
+    **kwargs: Any,
+) -> dict[str, Any]:
+    """Score a candidate while preserving older scorer test doubles.
+
+    Older tests monkeypatch ``score_candidate_runtime`` without release-policy
+    keyword parameters. Only pass context fields when callers supplied them.
+    """
+    if risk is not None or category is not None:
+        kwargs["risk"] = risk
+        kwargs["category"] = category
+    return _with_release_surface_defaults(score_candidate_runtime(*args, **kwargs))
 
 
 def check_json_validity(prompt: str, candidate: str) -> dict[str, Any]:
@@ -224,6 +272,9 @@ def score_candidate_runtime(
     candidate: str,
     threshold: float,
     candidate_samples: list[str] | None = None,
+    *,
+    risk: str | None = None,
+    category: str | None = None,
 ) -> RuntimeScore:
     """[RUNTIME] Score one candidate and apply the runtime release decision."""
     samples = candidate_samples or [candidate]
@@ -232,15 +283,33 @@ def score_candidate_runtime(
     instability = compute_instability_score(drift=drift, coherence=coherence)
     json_check = check_json_validity(prompt, candidate)
 
-    decision = bounded_runtime_release_decision(instability, threshold)
+    core_decision = bounded_runtime_release_decision(instability, threshold)
     notes = drift_notes + coherence_notes + json_check["notes"]
 
-    if decision == "NEEDS_REVIEW":
+    if core_decision == "NEEDS_REVIEW":
         notes.append(f"runtime_review_band:margin={RUNTIME_REVIEW_MARGIN:.2f}")
 
     if json_check["expects_json"] and json_check["is_valid_json"] is False:
-        decision = "SILENCE"
+        core_decision = "SILENCE"
         notes.append("forced_silence_invalid_json")
+
+    policy = apply_release_policy(
+        core_decision,
+        candidate,
+        risk=risk,
+        category=category,
+    )
+    decision = policy.decision
+    candidate_review_flags = [
+        flag
+        for flag in policy.review_flags
+        if not flag.startswith("high_risk_operational_context:")
+    ]
+    context_review_flags = [
+        flag
+        for flag in policy.review_flags
+        if flag.startswith("high_risk_operational_context:")
+    ]
 
     LOGGER.info(
         "por_runtime_scoring "
@@ -265,6 +334,11 @@ def score_candidate_runtime(
         "instability_score": round(instability, 4),
         "threshold": threshold,
         "decision": decision_result.status,
+        "core_decision": policy.core_decision,
+        "reason": policy.reason,
+        "review_flags": policy.review_flags,
+        "candidate_review_flags": candidate_review_flags,
+        "context_review_flags": context_review_flags,
         "release_output": decision_result.output,
         "silence_token": SILENCE_TOKEN if decision == "SILENCE" else None,
         "notes": decision_result.notes,
@@ -937,7 +1011,13 @@ def evaluate(req: EvaluateRequest) -> EvaluateResponse:
             recent_drifts=req.recent_drifts,
             recent_coherences=req.recent_coherences,
         )
-        result = score_candidate_runtime(req.prompt, req.candidate, threshold)
+        result = _score_candidate_with_release_surface(
+            req.prompt,
+            req.candidate,
+            threshold,
+            risk=req.risk,
+            category=req.category,
+        )
         _record_runtime_event(
             {
                 "event_type": "por.evaluate",
@@ -994,11 +1074,13 @@ def complete(req: CompleteRequest) -> CompleteResponse:
             )
 
         primary_candidate = candidates[0]
-        result = score_candidate_runtime(
+        result = _score_candidate_with_release_surface(
             prompt=req.prompt,
             candidate=primary_candidate,
             threshold=threshold,
             candidate_samples=candidates,
+            risk=req.risk,
+            category=req.category,
         )
 
         regenerated = False
@@ -1017,11 +1099,13 @@ def complete(req: CompleteRequest) -> CompleteResponse:
                     system_prompt=req.system_prompt,
                     temperature=min(req.temperature, 0.2),
                 )
-                regen_result = score_candidate_runtime(
+                regen_result = _score_candidate_with_release_surface(
                     prompt=req.prompt,
                     candidate=regen_candidate,
                     threshold=threshold,
                     candidate_samples=[regen_candidate],
+                    risk=req.risk,
+                    category=req.category,
                 )
                 regen_result["release_output"] = (
                     regen_candidate if regen_result["decision"] == "PROCEED" else None
@@ -1073,6 +1157,11 @@ def complete(req: CompleteRequest) -> CompleteResponse:
             instability_score=result["instability_score"],
             threshold=result["threshold"],
             decision=result["decision"],
+            core_decision=result["core_decision"],
+            reason=result["reason"],
+            review_flags=result["review_flags"],
+            candidate_review_flags=result["candidate_review_flags"],
+            context_review_flags=result["context_review_flags"],
             release_output=result["release_output"],
             silence_token=result["silence_token"],
             notes=result["notes"],

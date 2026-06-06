@@ -22,6 +22,22 @@ It describes release mediation at the runtime boundary. It does not redefine the
 
 For integrators, the operational rule is: only `PROCEED` carries releasable output. Both `NEEDS_REVIEW` and `SILENCE` withhold `release_output`, but they mean different downstream actions: review lane vs. silence/blocked output.
 
+## Review evidence surface
+
+`NEEDS_REVIEW` should carry review evidence, not only a state label. The runtime/API reviewer surface exposes the final `decision`, the pre-policy `core_decision` where available, a policy `reason`, combined `review_flags`, and split evidence fields for candidate-level and context-level flags.
+
+Candidate-level trigger flags are terms detected in the candidate text, such as:
+
+- `auto-deploy`
+- `skip review`
+- `disable audit logs`
+
+Context flags are supplied by the release-policy context path. For example:
+
+- `high_risk_operational_context:config_change`
+
+Evidence boundary: these fields are review traceability. They are not production-safety evidence, provider-backed validation, or a universal model evaluation claim.
+
 ## Review band formula
 
 The runtime computes an `instability` score and compares it with a resolved `threshold` using the current bounded review margin.
